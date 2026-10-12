@@ -3,16 +3,16 @@
 
 \input{tables/tab_rq1_end_to_end_summary.tex}
 
-Across the 28 evaluated cells, the full controller completed every run without Capture Timeout while retaining optional-stage execution.
+Across the 28 evaluated cells, our controller completed every run without Capture Timeout while retaining optional-stage execution.
 Table~\ref{tab:rq1_controller_behavior} reports one cell for each combination of device, capture condition, and starting overheat level.
 The table reports ten analyzed runs per cell, with stage-execution and pacing-activation counts averaged over those runs.
 The \texttt{@5} and \texttt{@30} columns cover the first five and all 30 captures, respectively; \(\mathit{delay}\)~P50 is the median of positive applied delays.
 
 \smallskip\noindent\textbf{Deadline safety.}
-All 280 controller runs completed all 30 captures without Capture Timeout.
-\emph{Baseline} enables \(M\) and \(S\) with admission and pacing disabled; parentheses report each cell's earliest timeout capture.
-Baseline completed only 55 of 280 runs and timed out in 26 of 28 cells, including all ten runs in 17 cells and as early as the third capture.
-These failures were not confined to high overheat levels: Baseline timed out in 14 of the 16 cells starting below level 4, where the static thermal guard would still allow optional stages.
+Our controller completed all 30 captures in all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
+\emph{Baseline} enables (M) and (S) with admission and pacing disabled; parentheses report each cell's earliest timeout capture.
+Baseline also timed out in 14 of the 16 cells starting below overheat level 4.
+Thus, even in conditions where the static thermal guard would permit optional-stage execution, our controller prevented Capture Timeout.
 
 \smallskip\noindent\textbf{Stage execution.}
 During the first five captures, the average execution counts per run were at least 4.5 for \(M\) and 4.6 for \(S\) in every cell; both executed on all five in 23 of the 28 cells.
