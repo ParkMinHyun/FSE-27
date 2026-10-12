@@ -1,10 +1,10 @@
 \subsection{RQ4: Pacing under Queue Pressure}
 \label{sec:rq4}
 
-Table~\ref{tab:rq4_pacing_sizing} evaluates pacing decisions from \emph{Full} runs in the 12MP normal condition, pooled over both devices.
-Panel~(a) groups decisions by the backlog \(B_i\) measured from the completed trace, as a fraction of the Capture Timeout budget.
-Panel~(b) reports pacing coverage for nested groups with limited slack, where slack is the deadline margin at draft sequence completion.
-Pacing activation is the fraction of all decisions in each group with a positive delay; the median delay-to-backlog ratio \(\mathit{delay}_i/B_i\) includes only these paced decisions.
+Table~\ref{tab:rq4_pacing_sizing} summarizes 3{,}050 pacing decisions recorded in \emph{Full} runs in the 12MP normal condition, pooled over both devices.
+Captures released without a pacing decision, mainly the first captures of each run, are excluded.
+Both panels group decisions by percentages of the Capture Timeout budget: Panel~(a) by the backlog \(B_i\) measured from the completed trace, and Panel~(b) by slack, the deadline margin at draft sequence completion.
+The ratio \(\mathit{delay}_i/B_i\) includes only paced decisions (\(\mathit{delay}_i>0\)).
 
 \input{tables/tab_rq4_pacing_sizing.tex}
 
