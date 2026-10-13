@@ -14,7 +14,7 @@ Running draft sequences concurrently would require buffering out-of-order result
 The original draft sequence saved an image without additional image processing.
 To reduce visual differences between draft and final images, Samsung later added single-frame stages, such as Filter and Watermark.
 
-As post-processing became more resource-intensive, its start was deferred for selected shot modes until the application entered the background to preserve foreground responsiveness.
+As post-processing became more resource-intensive, its start was deferred for certain shot modes until the application entered the background to preserve foreground responsiveness.
 In these modes, the draft image remains the user-visible result throughout the foreground session, making its visual quality more important.
 The draft--final visual gap is particularly pronounced in Super-resolution, Night, High-resolution, and Portrait modes.
 Figure~\ref{fig:draft-final-gap} shows an example from Portrait mode.

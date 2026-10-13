@@ -4,7 +4,7 @@
 
 The Samsung Galaxy camera publishes an initial user-visible image, the \emph{draft image}, for each capture and later replaces it with the final image from post-processing.
 Samsung refers to the processing stages that produce the draft image as the \emph{draft sequence}.
-For selected shot modes, post-processing is deferred until the user switches away from the camera application.
+For certain shot modes, post-processing is deferred until the user switches away from the camera application.
 The draft image then remains the user-visible result throughout the foreground session, making its visual quality more important.
 In the draft sequence, Samsung has already deployed single-frame stages to narrow the draft--final visual gap and implemented lightweight multi-frame composition to reduce it further.
 
@@ -33,11 +33,11 @@ A major challenge is deciding how much time to reserve for draft work: too littl
 \emph{Capture-Availability Pacing} delays the next capture opportunity when projected draft workload exceeds the draft queue's remaining timeout budget.
 Both use a shared duration predictor updated from measured durations in the current camera session, without per-device timing tables.
 
-Across 28 conditions on two commercial devices, the controller completed all 280 runs without Capture Timeout, whereas unguarded execution of all optional stages timed out in 225 of 280 runs.
+Across 28 conditions on two commercial devices, the controller completed all 280 runs without Capture Timeout, whereas uncontrolled execution of all optional stages timed out in 225 of 280 runs.
 Lightweight multi-frame composition ran on at least 4.5 of the first five captures per run on average in every condition, including those starting at or above the guard's cutoff.
 With production-default 12MP capture under normal memory conditions, pacing did not delay the first five captures at starting overheat levels below 4.
 Only the controller with both admission and pacing completed all captures on time in all three ablation conditions, while executing multi-frame composition 1.3--2.0 times as often as admission alone.
-The controller is undergoing release validation for a forthcoming Galaxy flagship line.
+The controller is integrated into the product branch and is undergoing release validation for a forthcoming Galaxy flagship line.
 
 \smallskip\noindent\textbf{Contributions.}
 \begin{itemize}[leftmargin=1.2em]
