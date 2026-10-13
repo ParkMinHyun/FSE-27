@@ -5,6 +5,6 @@
 Lightweight multi-frame composition can narrow the draft--final visual gap in the Samsung Galaxy camera.
 However, under parallel capture, its added work on the single draft worker can exhaust queued captures' timeout budgets.
 We presented the Budget-Aware Draft Controller, which coordinates remaining-sequence admission and capture-availability pacing using shared duration estimates updated online from completed draft sequences.
-In Portrait-mode experiments on two commercial devices, all controller runs completed without Capture Timeout, whereas uncontrolled execution of all optional stages timed out in most runs, including those starting below the static thermal guard's cutoff.
-Only the controller with both admission and pacing completed all planned captures on time in every ablation condition; it executed optional draft stages more often than admission alone.
+In Portrait-mode experiments on two commercial devices, all controller runs completed without Capture Timeout, whereas uncontrolled execution of all optional draft stages timed out in most runs, including those starting below the static thermal guard's cutoff.
+Only the controller with both admission and pacing completed all planned captures on time in every ablation condition; it executed optional stages more often than admission alone.
 The controller is undergoing release validation for a forthcoming Galaxy flagship line.
