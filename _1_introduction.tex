@@ -26,7 +26,7 @@ Skipping optional stages reduces remaining processing time but cannot recover ti
 Delaying the next capture opportunity limits further queue growth to preserve budget for subsequent captures.
 The two controls are coupled through the single draft worker: the delay required for subsequent captures depends on how much optional work is retained.
 
-In this paper, we present the Budget-Aware Draft Controller, which coordinates these two controls to enable lightweight multi-frame composition within per-capture deadlines.
+In this paper, we present the Budget-Aware Draft Controller, which coordinates these two controls to enable lightweight multi-frame composition in the draft sequence within per-capture deadlines.
 A major challenge is deciding how much time to reserve for draft work: too little risks a Capture Timeout, whereas too much needlessly suppresses optional processing or prolongs shot-to-shot intervals.
 To address this, \emph{Remaining-Sequence Admission} uses recent stage overruns to calibrate an empirical upper duration estimate for the entire remaining draft sequence and admits an optional stage when this estimate fits within the capture's remaining timeout budget.
 \emph{Capture-Availability Pacing} delays the next capture opportunity when projected draft workload exceeds the remaining timeout budget of the most recently enqueued capture.
