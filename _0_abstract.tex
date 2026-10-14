@@ -1,2 +1,15 @@
 \begin{abstract}
+We present the Budget-Aware Draft Controller, which coordinates optional-stage admission and capture pacing to enable lightweight multi-frame composition in the Samsung Galaxy camera's draft pipeline.
+In certain shot modes, the initial draft image stays visible because post-processing for the final image is deferred until the application enters the background.
+Samsung therefore added this composition to the draft sequence to improve draft quality.
+However, under parallel capture, added work on the single draft worker can exhaust queued captures' timeout budgets, causing Capture Timeout crashes that block release.
+The existing static thermal guard skips optional stages at or above an overheat cutoff.
+With all optional stages enabled and the guard bypassed, most uncontrolled runs starting below the cutoff timed out.
+At the same starting overheat level, timeout onset varied with resolution, stage configuration, and memory pressure.
+Thus, the cutoff alone cannot determine per-capture deadline safety.
+Instead, the controller admits optional stages when online empirical upper duration estimates for the remaining sequence fit each capture's remaining budget.
+It also delays the next capture opportunity when projected draft work exceeds the queue's remaining budget.
+Across 28 Portrait-mode conditions on two commercial devices with the guard bypassed, all 280 controller runs completed without Capture Timeout; uncontrolled execution timed out in 225 runs.
+Only coordinated control completed every ablation run, executing multi-frame composition up to 2.0 times as often as admission alone.
+The controller is undergoing release validation for a forthcoming Galaxy flagship line.
 \end{abstract}
