@@ -10,8 +10,8 @@ Each decision is thus scored against its realized outcome: feasible if its remai
 \input{figures/fig_rq3_unsafe_spike_anatomy.tex}
 
 \smallskip\noindent\textbf{Decision accuracy.}
-Among the evaluated approaches, only ours kept both feasible-skip and unsafe-admit rates below 3\% in the pooled audit.
-It admitted 97.3\% of feasible decisions, skipping 98 of 3{,}568 (2.7\%), while admitting only 5 of the 178 unsafe decisions (2.8\%).
+Among the evaluated approaches, only our approach kept both feasible-skip and unsafe-admit rates below 3\% in the pooled audit.
+It skipped 98 of 3{,}568 feasible decisions (2.7\%) and admitted 5 of 178 unsafe decisions (2.8\%).
 The naive approaches that sum the mean or maximum of each remaining stage's last three durations admitted 42 and 14 unsafe decisions, respectively.
 The naive approach summing each remaining stage's maximum prior duration admitted four unsafe decisions but skipped 224 feasible decisions, 2.3 times as many as our approach.
 
@@ -24,7 +24,7 @@ The average number of busy cores, calculated as CPU time divided by latency, con
 
 \smallskip\noindent\textbf{Safeguard replay.}
 Trace replay identified a safeguard response for all five unsafe admits using the recorded stage durations, budgets, upper estimates, and admission decisions.
-For M1 and M2, the admitted stage exceeded its watchdog budget, 1{,}460~ms against 1{,}202~ms and 1{,}648~ms against 889~ms, respectively, so fallback would trigger before the stage returned.
+For M1 and M2, stage durations exceeded watchdog budgets (1{,}460 vs.\ 1{,}202~ms and 1{,}648 vs.\ 889~ms, respectively), so fallback would trigger before the stages returned.
 For M3, the \(S\) decision later in the same capture would skip \(S\), reducing the remaining processing time.
 For S1 and S2, the \(M\) decision earlier in the same capture would skip \(M\), leaving more budget when execution reached \(S\).
 This replay does not establish end-to-end effectiveness with runtime-enforced safeguards.

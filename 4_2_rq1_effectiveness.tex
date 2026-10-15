@@ -9,20 +9,19 @@ The table reports ten analyzed runs per cell, with stage-execution and pacing-ac
 The \texttt{@5} and \texttt{@30} columns cover the first five and all 30 captures, respectively; \(\mathit{delay}\)~P50 is the median of positive applied delays.
 
 \smallskip\noindent\textbf{Deadline safety.}
-Our controller completed all 30 captures in all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
-\emph{Baseline} enables (M) and (S) with admission and pacing disabled; parentheses report each cell's earliest timeout capture.
+Our controller completed all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
+\emph{Baseline} enables \(M\) and \(S\) with admission and pacing disabled; parentheses report each cell's earliest timeout capture.
 Baseline also timed out in 14 of the 16 cells starting below overheat level 4.
-Thus, even in conditions where the static thermal guard would permit optional-stage execution, our controller prevented Capture Timeout.
+Thus, our controller avoided Capture Timeout in runs starting below the guard's cutoff.
 
 \smallskip\noindent\textbf{Stage execution.}
 During the first five captures, the average execution counts per run were at least 4.5 for \(M\) and 4.6 for \(S\) in every cell; both executed on all five in 23 of the 28 cells.
 In the twelve cells starting at or above the guard's level-4 cutoff, \(M\) still executed on 5.2--22.2 of 30 captures per run on average.
-Over 30 captures, stage execution generally decreased at higher starting overheat levels within the same device and capture condition.
-Runtime admission adjusted optional-stage execution across these thermal conditions.
+Over 30 captures, stage execution generally decreased with starting overheat level for each device and condition.
 
 \smallskip\noindent\textbf{Pacing cost.}
 Pacing was inactive during the first five captures on both devices in the 12MP normal cells starting below level~4.
 It activated on none of the four eligible transitions in 14 cells and on at most 1.8 transitions per run on average in any cell.
-Across cells with pacing during the first five captures, \(\mathit{delay}\)~P50 reached a maximum of 737~ms, about 55\% of the corresponding delay with parallel capture disabled.
+Across cells with pacing during the first five captures, \(\mathit{delay}\)~P50 reached a maximum of 737~ms, about 55\% of the corresponding shot-to-shot delay with parallel capture disabled.
 Over all 30 captures, pacing averaged up to 17.7 activations per run out of 29 eligible transitions, with \(\mathit{delay}\)~P50 of 127--538~ms in cells with pacing.
 Thus, pacing's responsiveness cost remained limited during early consecutive captures.
