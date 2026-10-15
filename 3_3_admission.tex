@@ -36,7 +36,7 @@ If \(\mathcal K\) contains a previously measured stage, admission computes the r
 The per-key maximum preserves each stage's overrun even when another stage finishes faster than predicted, ensuring \(\phi(\mathcal{K})\geq1\).
 Normalizing by the total predicted duration expresses stage overruns as a relative correction, making factors comparable across sequences with different predicted durations.
 
-When a completion yields factors, admission multiplies all existing weights in the sequence-specific histories and the cross-sequence pool by \(0.90\).
+When a completion yields factors, admission multiplies all existing weights in the sequence-specific histories and the cross-sequence pool by \(0.90\) to emphasize recent overruns.
 We selected this decay factor at the knee of the trade-off between the overrun rate and the magnitude of \(U\).
 Admission then inserts one factor per distinct measured sequence into the corresponding history and the pool, each with unit weight.
 Finally, it selects the weighted \(\tau\)-quantile of each history and of the pool as their residual factors \(\phi_\tau\).

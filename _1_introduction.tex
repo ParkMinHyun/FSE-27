@@ -9,10 +9,10 @@ The draft image then remains the user-visible result throughout the foreground s
 In the draft sequence, Samsung has already deployed single-frame stages to narrow the draft--final visual gap and implemented lightweight multi-frame composition to reduce it further.
 
 However, the added processing of lightweight multi-frame composition can violate the \emph{Capture Timeout}, a fixed per-capture deadline for producing the draft image.
-Because such a violation crashes the application by design and blocks release, the feature has not been deployed on any device.
-The feature must also coexist with parallel capture, which shortens shot-to-shot intervals by accepting the next shutter input before the preceding draft image is produced.
-Yet draft sequences still execute one at a time on a single draft worker, so later captures may have to wait for earlier draft sequences to finish.
-Since each capture's timeout clock starts at request acceptance, added work in an earlier draft sequence can consume queued captures' timeout budgets and cause them to miss their deadlines.
+This deadline becomes harder to meet under parallel capture, which shortens shot-to-shot intervals by accepting the next shutter input before the preceding draft image is produced.
+Yet draft sequences still execute one at a time on a single draft worker, so later captures may wait in the draft queue while their timeout clocks keep running.
+Added work in earlier draft sequences therefore lengthens this wait and can cause queued captures to miss their deadlines.
+Because a Capture Timeout violation crashes the application by design and blocks release, multi-frame composition has not been deployed on any device.
 
 Samsung already uses a static thermal guard to mitigate timeout risk from the deployed single-frame draft stages.
 The guard omits optional stages when configuring the draft sequence at overheat level~4 or higher on a 0--6 scale.

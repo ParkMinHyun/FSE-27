@@ -1,8 +1,7 @@
 \subsection{RQ4: Pacing under Queue Pressure}
 \label{sec:rq4}
 
-Table~\ref{tab:rq4_pacing_sizing} summarizes 3{,}050 pacing decisions recorded in \emph{Full} runs in the 12MP normal condition, pooled over both devices.
-Captures released without a pacing decision, mainly the first captures of each run, are excluded.
+Table~\ref{tab:rq4_pacing_sizing} summarizes 3{,}050 pacing decisions recorded under \emph{Full} in the production-default 12MP normal condition across both devices.
 Both panels group decisions by percentages of the Capture Timeout budget: Panel~(a) by the backlog \(B_i\) measured from the completed trace, and Panel~(b) by slack, the deadline margin at draft sequence completion.
 The ratio \(\mathit{delay}_i/B_i\) includes only paced decisions (\(\mathit{delay}_i>0\)).
 
@@ -20,8 +19,6 @@ In the \(\geq 50\%\) backlog group, 574 of 688 decisions were paced, leaving 114
 Of these 114, 58 had no projected excess over the queue-level budget used by pacing and occurred predominantly at lower overheat levels.
 For the other 56, an earlier admission skip had reduced the projected draft work to within this budget.
 
-Pacing was more frequent for captures finishing closer to the deadline.
-Among captures with slack below 20\%, 10\%, and 5\% of the budget, pacing engaged on 85.4\%, 92.3\%, and 95.7\%, respectively.
-For the six unpaced captures in the tightest group, predicted backlog underestimated measured backlog at the pacing decision.
+Pacing was more frequent among captures with less slack at draft completion, reaching 95.7\% in the \(<5\%\) slack group.
+For the six unpaced captures in this group, predicted backlog underestimated measured backlog at the pacing decision.
 Later admission skips reduced draft work, and all six captures completed within budget.
-Across these groups, median \(\mathit{delay}_i/B_i\) among paced decisions was 10.1--11.2\%.
