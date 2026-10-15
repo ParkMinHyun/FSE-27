@@ -4,16 +4,8 @@
   draftstage/.style={draw=blue!45!black, fill=blue!14},
   queued/.style={pattern=north east lines, pattern color=red!45, draw=red!35},
   overrun/.style={draw=red!80!black, fill=red!65},
-  swatch/.style={draw, minimum width=8pt, minimum height=6pt, inner sep=0pt},
   ddl/.style={red, dashed, thick},
   sig/.style={->, black!75}]
-
-  \node[anchor=east, inner sep=2pt] (lt2) at (9.70, 4.8)
-    {\footnotesize Draft-worker wait};
-  \node[swatch, queued, left=0mm of lt2] (lg2) {};
-  \node[anchor=east, inner sep=2pt, left=7mm of lg2] (lt1)
-    {\footnotesize frames \& metadata};
-  \node[swatch, collectstage, left=0mm of lt1] (lg1) {};
 
   \node[anchor=east] at (-0.2, 3.925) {capture $i$};
   \draw[very thick] (0, 3.55) -- (0, 4.30);
@@ -77,6 +69,6 @@
     (6.10, 1.10) -- (8.30, 1.10);
   \node[anchor=north] at (7.20, 0.88) {\footnotesize remaining budget};
 
-  \draw[->] (-1.3, 0.2) -- (9.7, 0.2) node[anchor=north east] {time};
+  \draw[->] (-1.3, 0.42) -- (9.7, 0.42) node[anchor=south east] {time};
 
 \end{tikzpicture}
