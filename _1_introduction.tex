@@ -16,7 +16,7 @@ Because a Capture Timeout violation crashes the application by design and blocks
 
 Samsung already uses a static thermal guard to mitigate timeout risk from the deployed single-frame draft stages.
 The guard omits optional stages when configuring the draft sequence at overheat level~4 or higher on a 0--6 scale.
-However, with the guard bypassed, even runs starting below the cutoff timed out; at the same starting level, the earliest timeout capture index varied with resolution, stage configuration, and memory pressure (Table~\ref{tab:timeout_index}).
+However, with composition enabled and the guard bypassed, even runs starting below the cutoff timed out; at the same starting level, the earliest timeout capture index varied with resolution, stage configuration, and memory pressure (Table~\ref{tab:timeout_index}).
 The overheat level reflects neither how much timeout budget a capture has left nor how much draft work remains.
 Deploying multi-frame composition under parallel capture therefore requires runtime control based on remaining timeout budgets and draft workload.
 
@@ -32,15 +32,15 @@ To address this, \emph{Remaining-Sequence Admission} uses recent stage overruns 
 \emph{Capture-Availability Pacing} delays the next capture opportunity when projected draft workload exceeds the remaining timeout budget of the most recently enqueued capture.
 Both use a shared duration predictor updated from measured durations in the current camera session, without per-device timing tables.
 
-Across 28 Portrait-mode conditions on two commercial devices, the controller completed all 280 runs without Capture Timeout, whereas uncontrolled execution of all optional stages timed out in 225 runs.
+Across 28 Portrait-mode conditions on two commercial devices with the guard bypassed, the controller completed all 280 runs without Capture Timeout, whereas uncontrolled execution of all optional stages timed out in 225 runs.
 Multi-frame composition executed on an average of at least 4.5 of the first five captures per run in every condition, including those starting at or above the guard's cutoff.
 With production-default 12MP capture under normal memory conditions, pacing did not delay the first five captures at starting overheat levels below 4.
-Only the controller with both admission and pacing completed all captures on time in all three ablation conditions, while executing multi-frame composition 1.3--2.0 times as often as admission alone.
+Only coordinated control completed all captures on time in all three ablation conditions, while executing multi-frame composition 1.3--2.0 times as often as admission alone.
 The controller is integrated into the product branch and is undergoing release validation for a forthcoming Galaxy flagship line.
 
 \smallskip\noindent\textbf{Contributions.}
 \begin{itemize}[leftmargin=1.2em]
-  \item We characterize how serialized draft execution under parallel capture creates a cross-capture deadline problem for lightweight multi-frame composition, and why a static thermal guard does not reflect per-capture deadline safety.
+  \item We characterize how serialized draft execution under parallel capture creates a cross-capture deadline problem for lightweight multi-frame composition, and why a static thermal cutoff cannot determine per-capture deadline safety.
   \item We present the Budget-Aware Draft Controller, which coordinates remaining-sequence admission with capture-availability pacing. To our knowledge, this is the first work to combine these controls in production camera software under a hard per-capture deadline.
   \item We evaluate the controller on two commercial devices, examining end-to-end effectiveness, component contribution, admission decision quality against naive approaches, and pacing under queue pressure.
 \end{itemize}
