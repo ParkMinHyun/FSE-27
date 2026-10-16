@@ -12,7 +12,7 @@ However, the added processing of lightweight multi-frame composition can violate
 This deadline becomes harder to meet under parallel capture, which shortens shot-to-shot intervals by accepting the next shutter input before the preceding draft image is produced.
 Yet draft sequences still execute one at a time on a single draft worker, so later captures may wait in the draft queue while their timeout clocks keep running.
 Added work in earlier draft sequences therefore lengthens this wait and can cause queued captures to miss their deadlines.
-Since Capture Timeout violations crash the application by design and block release, multi-frame composition could not be deployed in draft sequences.
+Since Capture Timeout violations crash the application and block release, multi-frame composition could not be deployed in draft sequences.
 
 Even for the deployed single-frame draft stages, Samsung uses a static thermal guard to mitigate timeout risk.
 The guard disables optional single-frame stages at overheat level~4 or higher on a 0--6 scale.
@@ -25,11 +25,11 @@ Prior work in mobile and server systems has studied workload control~\cite{appro
 However, the Samsung camera's draft pipeline can neither reject an accepted capture nor preempt a running stage.
 Skipping optional stages reduces remaining processing time but cannot recover timeout budget already consumed by queueing.
 Delaying the next capture opportunity allows the queue to drain, leaving subsequent captures more timeout budget for processing.
-The two controls are coupled through the single draft worker: the delay required for subsequent captures depends on how much optional work is retained.
+The two controls are coupled through the single draft worker: retained optional work increases the backlog that pacing must accommodate, while pacing preserves budget for optional processing in subsequent captures.
 
 In this paper, we present the Budget-Aware Draft Controller, which coordinates these two controls to enable lightweight multi-frame composition in the draft sequence within per-capture deadlines.
 A major challenge is deciding how much time to reserve for draft work: too little risks a Capture Timeout, whereas too much needlessly suppresses optional processing or prolongs shot-to-shot intervals.
-To address this, \emph{Remaining-Sequence Admission} uses recent stage overruns to calibrate an empirical upper duration estimate for the entire remaining draft sequence and admits an optional stage when this estimate fits within the capture's remaining timeout budget.
+To address this, \emph{Remaining-Sequence Admission} uses recent duration residuals to calibrate an empirical upper estimate for the entire remaining draft sequence and admits an optional stage when this estimate fits within the capture's remaining timeout budget.
 \emph{Capture-Availability Pacing} delays the next capture opportunity when projected draft workload exceeds the remaining timeout budget of the most recently enqueued capture.
 Both use a shared duration predictor updated from measured durations in the current camera session, without per-device timing tables.
 
