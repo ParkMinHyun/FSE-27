@@ -3,7 +3,7 @@
 
 Parallel capture allows the camera application to accept the next shutter input before the preceding capture has produced its draft image.
 This is possible because the hardware abstraction layer (HAL) can issue a capture-availability signal, \texttt{captureAvailable}, before the draft sequence completes.
-This signal tells the application when it may accept the next capture request, allowing a shorter shot-to-shot interval.
+This signal indicates the application when it may accept the next capture request, allowing a shorter shot-to-shot interval.
 
 Each accepted request starts its own Capture Timeout clock, but draft sequences execute one at a time on a single draft worker in capture order.
 When requests arrive faster than the worker completes them, later captures must wait for earlier ones to finish.

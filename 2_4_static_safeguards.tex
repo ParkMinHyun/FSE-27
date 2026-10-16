@@ -10,8 +10,8 @@ Because the draft sequence is implemented in a framework shared across device mo
 
 The overheat level does not indicate a capture's waiting time or remaining draft work.
 The guard may therefore skip optional stages even when enough time remains to complete the draft sequence.
-Ambient heat, charging, or preceding device workloads can also raise the overheat level to 4 during ordinary use.
-If a session starts at this level, the guard skips optional stages even for its first capture.
+For example, a session may start at the cutoff because of ambient heat, charging, or prior device workloads.
+The guard then skips optional stages even for its first capture.
 
 \smallskip\noindent\textbf{Motivating experiment.}
 We compared two Portrait configurations on the Galaxy S26 Ultra with the thermal guard bypassed.
