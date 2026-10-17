@@ -24,9 +24,15 @@ This avoids repeatedly toggling the group's visual effects across consecutive dr
 When the queue drains, both groups are enabled again.
 
 \smallskip\noindent\textbf{Upper-estimate calibration.}
-After the shared predictor is updated at draft completion, admission calibrates \(U\) for later decisions from observed stage overruns.
+Admission computes the upper estimate by multiplying the point estimate \(\hat P(\mathcal K)\) by an empirical residual factor \(\phi_\tau(\mathcal K)\geq1\):
+\begin{equation}
+  U(\mathcal{K})
+  =\hat P(\mathcal{K})\,\phi_{\tau}(\mathcal{K}).
+  \label{eq:upper-estimate}
+\end{equation}
+After the shared predictor is updated at draft completion, admission calibrates \(\phi_\tau\) for later decisions from observed stage overruns (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}).
 For each remaining sequence \(\mathcal K_{i,j}\), it forms a measured subsequence \(\mathcal K\) containing only executed stages (\(p_i(k)>0\)).
-If \(\mathcal K\) contains a previously measured stage, admission computes the residual factor using the stage-duration predictions \(\hat p_i(k)\) retained before execution:
+If \(\mathcal K\) contains a previously measured stage, admission computes a residual factor using the stage-duration predictions \(\hat p_i(k)\) retained before execution:
 \begin{equation}
   \phi(\mathcal{K})
   =\frac{\sum_{k\in\mathcal{K}}\max\{\hat p_i(k),p_i(k)\}}
@@ -36,11 +42,12 @@ If \(\mathcal K\) contains a previously measured stage, admission computes the r
 The per-key maximum preserves each stage's overrun even when another stage finishes faster than predicted, ensuring \(\phi(\mathcal{K})\geq1\).
 Normalizing by the total predicted duration expresses stage overruns as a relative correction, making factors comparable across sequences with different predicted durations.
 
-When a completion yields factors, admission multiplies all existing weights in the sequence-specific histories and the cross-sequence pool by \(0.90\) to emphasize recent overruns.
+Admission maintains a residual-factor history for each measured sequence.
+When a completion yields factors, admission multiplies all existing history weights by \(0.90\) to emphasize recent overruns.
 We selected this decay factor at the knee of the trade-off between the overrun rate and the magnitude of \(U\).
-Admission then inserts one factor per distinct measured sequence into the corresponding history and the pool, each with unit weight.
-Finally, it selects the weighted \(\tau\)-quantile of each history and of the pool as their residual factors \(\phi_\tau\).
-It determines \(\tau\) from the Kish effective sample size \(n_{\mathrm{eff}}\) of the current weights \(w_l\) in each history or the pool~\cite{kish-survey-sampling}:
+Admission then inserts one factor per distinct measured sequence into its history with unit weight.
+It selects each history's weighted \(\tau\)-quantile as its residual factor \(\phi_\tau\).
+It determines \(\tau\) from the Kish effective sample size \(n_{\mathrm{eff}}\) of the current weights \(w_l\) in that history~\cite{kish-survey-sampling}:
 \[
   n_{\mathrm{eff}}
   =\frac{(\sum_l w_l)^2}{\sum_l w_l^2},
@@ -50,24 +57,17 @@ It determines \(\tau\) from the Kish effective sample size \(n_{\mathrm{eff}}\) 
 This choice of \(\tau\) is motivated by the expected CDF position \(n/(n+1)\) of the maximum of \(n\) i.i.d. continuous samples~\cite{david-order-statistics}, with \(n_{\mathrm{eff}}\) substituting for the sample count.
 As the effective sample size grows, the selected quantile moves further into the observed upper tail.
 Setting \(\tau\) this way avoids a separately tuned target percentile.
-If the remaining sequence's history is nonempty, admission uses its residual factor.
-Otherwise, it uses the pool's factor; if the pool is also empty, it sets \(\phi_\tau(\mathcal K)=1\).
-Applying this factor to \(\hat P\) gives the upper estimate
-\begin{equation}
-  U(\mathcal{K})
-  =\hat P(\mathcal{K})\,\phi_{\tau}(\mathcal{K}).
-  \label{eq:upper-estimate}
-\end{equation}
+For a sequence without residual history, admission applies the same rule to residual factors pooled across sequences.
+If no residual factors have been observed, it sets \(\phi_\tau(\mathcal K)=1\).
 
 \smallskip\noindent\textbf{Watchdog fallback.}
 An admitted stage may still run longer than predicted, and it cannot be cancelled once it enters native image processing.
-The watchdog therefore limits how long the draft sequence waits for that stage:
+The watchdog therefore triggers fallback if the stage has not completed within the following time budget:
 \begin{equation}
   W_{i,j}=\max\{0,T_{i,j}-U(\mathcal{K}_{i,m})\},
   \label{eq:watchdog}
 \end{equation}
 where \(\mathcal{K}_{i,m}=(k_m)\), so \(U(\mathcal K_{i,m})\) reserves time for mandatory encoding and saving.
-If the watchdog expires, the draft pipeline falls back to encoding and saving the preserved original input.
-Fallback proceeds on a separate thread while the admitted stage continues running.
+Fallback encodes and saves the preserved original input on a separate thread while the admitted stage continues running.
 The resources held by the stage are released after it returns.
 Queued draft sequences also bypass optional processing until the queue drains, reducing the risk that an overrun propagates to subsequent captures.

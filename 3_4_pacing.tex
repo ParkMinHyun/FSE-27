@@ -48,7 +48,7 @@ Pacing applies the same recency weighting and selects \(\tau\) using the same ef
 With all configured stages enabled (\(\mathcal K^{\mathrm{adm}}=\mathcal K\)), pacing uses the larger of \(C_\tau\) and \(\hat P(\mathcal K)\) as its reserve.
 After admission disables optional work, pacing adds the positive excess of \(C_\tau\) over \(\hat P(\mathcal K)\) as headroom to the point estimate \(\hat P(\mathcal K^{\mathrm{adm}})\).
 
-Third, \(T_{\mathrm{queue}}\) denotes the remaining timeout budget of the most recently enqueued capture.
+Third, \(T_{\mathrm{queue}}\) denotes the remaining timeout budget of the most recently enqueued capture in the draft queue.
 At the pacing decision point, capture \(i+1\)'s timeout clock has not yet started.
 \(T_{\mathrm{queue}}\) therefore serves as a queue-level pressure reference for the projected workload \(\hat B_i+2\hat R\).
 Pacing uses this pressure to limit queue growth, aiming to preserve time for capture \(i+1\)'s draft processing after acceptance.
