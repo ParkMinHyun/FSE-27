@@ -25,7 +25,7 @@ The average number of busy cores, calculated as CPU time divided by latency, con
 \smallskip\noindent\textbf{Safeguard replay.}
 Trace replay identified a safeguard response for all five unsafe admits using the recorded stage durations, budgets, upper estimates, and admission decisions.
 For M1 and M2, stage durations exceeded watchdog budgets (1{,}460 vs.\ 1{,}202~ms and 1{,}648 vs.\ 889~ms, respectively), so fallback would trigger before the stages returned.
-For M3, the \(S\) decision later in the same capture would skip \(S\), reducing the remaining processing time.
-For S1 and S2, the \(M\) decision earlier in the same capture would skip \(M\), leaving more budget when execution reached \(S\).
+For M3, the recorded \(S\) decision later in the same capture was a skip; omitting \(S\) would complete the remaining sequence within the budget.
+For S1 and S2, the recorded \(M\) decisions earlier in the same captures were skips; omitting \(M\) would leave enough budget to complete the remaining sequence when execution reached \(S\).
 This replay does not establish end-to-end effectiveness with runtime-enforced safeguards.
 
