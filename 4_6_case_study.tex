@@ -1,22 +1,16 @@
 \subsection{Case Study}
 \label{sec:casestudy}
 
+To examine how admission and pacing interact under queue pressure, we selected a run on S26 Ultra with lower optional-stage execution and more frequent pacing than the peer medians (Table~\ref{tab:casestudy_selection}).
+The run used production-default 12MP under normal memory conditions and started at the guard's level-4 cutoff.
+Figure~\ref{fig:casestudy_12mp} traces the run over 30 captures.
+
+Our key observation is that pacing responded to rising queue pressure before admission began skipping optional stages.
+Pacing began at capture 5, and backlog growth slowed while it was active.
+Slack nevertheless narrowed to 2.1\% by capture 8; admission began skipping \(M\) at capture 9, after which backlog declined.
+With optional work reduced, pacing was inactive over captures 13--20, and slack recovered to 27.3\% by capture 15.
+When pressure rose again, pacing resumed at capture 21 before \(S\) skips began at capture 23; backlog then declined, and slack recovered to 45.6\% by capture 30.
+This case study demonstrates that pacing and admission can jointly recover timeout slack by moderating queue growth early and reducing optional work as budgets tighten.
+
 \input{tables/tab_casestudy_selection.tex}
 \input{figures/fig_casestudy_12mp.tex}
-
-Table~\ref{tab:casestudy_selection} summarizes the setting and compares the selected \emph{Full} run on S26 Ultra at 12MP with its peers.
-The run started at overheat level~4 under normal memory conditions and was selected to examine pacing activation, relaxation, and reactivation alongside admission skips.
-This run performed worse than the peer medians on all four metrics, making the control interactions more apparent.
-Figure~\ref{fig:casestudy_12mp} traces these interactions over 30 captures.
-The shaded interval marks Baseline first-timeout indices from separate runs.
-
-\smallskip\noindent\textbf{Control interaction.}
-Admission persistently reduced draft work, while pacing selectively delayed capture opportunities under queue pressure.
-During the initial pressure buildup, pacing began at capture 5, before the run reached its smallest slack.
-Backlog continued to rise more slowly, but slack still narrowed to 2.1\% of the timeout budget by capture 8.
-
-Admission began skipping \(M\) at capture 9, and backlog declined from capture 10.
-Pacing continued through capture 12; after capture 9's draft sequence completed and the projected workload decreased, it was inactive over captures 13--20.
-With \(M\) still skipped, slack recovered to 27.3\% by capture 15.
-As pressure rose again, pacing resumed at capture 21 and admission began skipping \(S\) at capture 23.
-Backlog declined from its 63.8\% peak, and slack reached 45.6\% by capture 30.

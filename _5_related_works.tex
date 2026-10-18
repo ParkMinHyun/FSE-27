@@ -14,14 +14,12 @@ Real-time schedulers stretch task periods or skip jobs~\cite{buttazzo-elastic-ta
 Preemptive scheduling can also reduce queueing delay by interrupting long-running requests~\cite{shinjuku-nsdi}.
 Our pacing regulates the next capture opportunity because accepted captures cannot be rejected and running stages cannot be preempted.
 
-\smallskip\noindent\textbf{Coordinating workload and arrivals.}
-Prior systems combine workload and arrival control.
+\smallskip\noindent\textbf{Coordinating workload and arrival control.}
+Prior work has also explored the joint control of workload and arrivals.
 Feedback-control schedulers adjust request admission and service levels using deadline-miss or utilization feedback~\cite{lu-feedback-control-edf,lu-feedback-control-scheduling}.
 Server overload control adjusts admission and service quality against percentile response-time targets and can reject requests~\cite{welsh-overload-control}.
 QoS negotiation selects among client-acceptable service levels and uses resource reservation and schedulability analysis to maintain real-time guarantees~\cite{abdelzaher-qos-negotiation}.
 Video analytics systems jointly adapt frame sampling rates and per-frame processing configurations to balance accuracy against resource limits~\cite{chameleon-sigcomm,videostorm-nsdi}.
 
-Our controller coordinates remaining-sequence admission and capture-availability pacing using duration estimates updated from completed draft sequences.
-The single draft worker couples these controls: optional work admitted for one capture can delay subsequent captures and shrink their remaining budgets.
-A Capture Timeout crashes the application, so deadline misses cannot serve as routine control feedback.
-Admission determines the optional work in pacing's forecast, while pacing limits queue growth to preserve budget for optional processing.
+Distinguished from these, our controller coordinates admission and pacing to meet per-capture deadlines without dropping accepted captures or requiring resource reservation.
+Instead, it couples the two controls: admission determines the optional work in pacing's forecast, while pacing limits queue growth to preserve budget for optional processing.
