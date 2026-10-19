@@ -15,7 +15,7 @@ Admission therefore uses an empirical upper estimate \(U(\mathcal K_{i,j})\) of 
   \label{eq:admission}
 \end{equation}
 When \(\hat P(\mathcal K_{i,j})=0\), the predictor has no prior timing measurements for the remaining enabled stages, so the optional stage is admitted to collect initial measurements.
-This rule assumes that each configuration can complete an isolated first capture within the Capture Timeout.
+This rule assumes that each configuration can complete an isolated first capture within the Capture Timeout, a stage-level requirement enforced by release validation (Section~\ref{sec:release-process}).
 
 Admission treats \(M\) and \(S\) as separate groups.
 Once an \(M\) or \(S\) stage is rejected, admission disables the optional stages in that group.
