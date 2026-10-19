@@ -6,11 +6,11 @@ It used production-default 12MP under normal memory conditions and started at th
 Figure~\ref{fig:casestudy_12mp} traces the 30-capture run, and its shaded band marks where \emph{Baseline} runs under the same conditions first timed out.
 
 Our key observation is that pacing responded to rising queue pressure before admission reduced optional work.
-Pacing began at capture 5 while all optional stages still executed, and backlog growth slowed.
-Slack nevertheless fell to 2.1\% at capture 8, the start of the shaded band.
-Admission began skipping \(M\) at capture 9, where backlog peaked before declining.
-With \(M\) disabled, pacing paused even as backlog rose again, since the projected workload did not exceed \(T_{\mathrm{queue}}\).
-The pattern then repeated: pacing resumed at capture 21, \(S\) skips began at capture 23, and slack recovered.
+As draft sequences accumulated in the queue, pacing began at capture 5 and slowed backlog growth.
+Yet continued queueing left only 2.1\% slack at capture 8, the start of the shaded band.
+Admission began skipping \(M\) at capture 9, reducing workload and allowing slack to recover.
+After capture 9's draft sequence completed, pacing rebased its backlog forecast without \(M\) and paused over captures 13--20.
+The pattern then repeated: pacing resumed at capture 21 before \(S\) skips began at capture 23.
 This case study demonstrates that pacing slows queue growth while optional stages still execute, and admission skips them only when the remaining budget can no longer cover them.
 
 \input{tables/tab_casestudy_selection.tex}
