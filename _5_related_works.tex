@@ -21,5 +21,5 @@ Server overload control adjusts admission and service quality against percentile
 QoS negotiation selects among client-acceptable service levels and uses resource reservation and schedulability analysis to maintain real-time guarantees~\cite{abdelzaher-qos-negotiation}.
 Video analytics systems jointly adapt frame sampling rates and processing configurations to balance accuracy against latency and resource limits~\cite{chameleon-sigcomm,videostorm-nsdi,chanakya-neurips}.
 
-Distinguished from these, our controller coordinates admission and pacing for a single draft worker to meet per-capture deadlines without dropping accepted captures or requiring resource reservation.
+Our controller brings such joint control to a single draft worker, coordinating admission and pacing to meet per-capture deadlines without dropping accepted captures or requiring resource reservation.
 With duration estimates from completed draft sequences, admission skips reduce the estimated backlog for subsequent pacing decisions, while pacing limits queue growth so that admission can retain more optional work.
