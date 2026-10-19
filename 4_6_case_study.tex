@@ -3,7 +3,7 @@
 
 To examine how admission and pacing interact under queue pressure, we selected an S26 Ultra run with lower optional-stage execution and more frequent pacing than the peer medians (Table~\ref{tab:casestudy_selection}).
 It used production-default 12MP under normal memory conditions and started at the guard's level-4 cutoff.
-Figure~\ref{fig:casestudy_12mp} traces the run; its shaded band marks where \emph{Baseline} runs under the same conditions first timed out.
+Figure~\ref{fig:casestudy_12mp} traces the 30-capture run, and its shaded band marks where \emph{Baseline} runs under the same conditions first timed out.
 
 Our key observation is that pacing responded to rising queue pressure before admission reduced optional work.
 Pacing began at capture 5 while all optional stages still executed, and backlog growth slowed.

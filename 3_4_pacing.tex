@@ -6,7 +6,8 @@ It extends this forecast after each decision and rebases it as draft sequences c
 
 \smallskip\noindent\textbf{Delay rule.}
 When the \texttt{captureAvailable} callback for capture \(i\) is ready for delivery, \(\mathit{controller}.\textsc{DecidePacingDelay}\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:pacing}) determines the callback delivery delay.
-Pacing returns zero delay if the draft queue is empty or no draft sequence has completed; otherwise, it applies
+Pacing returns zero delay if the draft queue is empty or no draft sequence has completed.
+Otherwise, it applies
 \begin{equation}
   \mathit{delay}_i
   =

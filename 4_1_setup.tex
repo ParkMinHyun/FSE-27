@@ -7,7 +7,8 @@
 The draft sequence's lightweight multi-frame composition targets Portrait mode and requires coordinated support from the HAL and image-processing components.
 We evaluate end-to-end binaries incorporating this support on the Galaxy S26 Ultra and Galaxy S26.
 Table~\ref{tab:setup} summarizes these platforms and their common run conditions.
-To isolate controller behavior, both evaluation binaries bypass the static thermal guard; the Exynos-based Galaxy S26 also bypasses its parallel-capture restriction when either \(M\) or \(S\) is enabled.
+To isolate controller behavior, both evaluation binaries bypass the static thermal guard.
+The Exynos-based Galaxy S26 also bypasses its parallel-capture restriction when either \(M\) or \(S\) is enabled.
 Within each experimental condition, all control configurations use the same production-derived capture implementation and differ only in policy.
 Optional-stage skipping and pacing delays therefore reflect controller policy.
 
@@ -15,7 +16,8 @@ Optional-stage skipping and pacing delays therefore reflect controller policy.
 On each device, we evaluate two operating points: the production-default 12MP configuration under normal memory conditions and a 24MP configuration under memory pressure.
 These are the low- and high-load endpoints of the four collected resolution--memory combinations.
 We induce memory pressure by running AnTuTu Benchmark~11.1.4 concurrently with capture.
-The 24MP condition denotes the requested capture mode; at overheat level~5 and above, the production camera stack falls back to 12MP.
+The 24MP condition denotes the requested capture mode.
+At overheat level~5 and above, the production camera stack falls back to 12MP.
 
 \smallskip\noindent\textbf{Run protocol.}
 We first reach each target starting overheat level (0--6) through repeated captures or idle cooling.
