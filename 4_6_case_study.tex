@@ -1,16 +1,17 @@
 \subsection{Case Study}
 \label{sec:casestudy}
 
-To examine how admission and pacing interact under queue pressure, we selected a run on S26 Ultra with lower optional-stage execution and more frequent pacing than the peer medians (Table~\ref{tab:casestudy_selection}).
-The run used production-default 12MP under normal memory conditions and started at the guard's level-4 cutoff.
-Figure~\ref{fig:casestudy_12mp} traces the run over 30 captures.
+To examine how admission and pacing interact under queue pressure, we selected an S26 Ultra run with lower optional-stage execution and more frequent pacing than the peer medians (Table~\ref{tab:casestudy_selection}).
+It used production-default 12MP under normal memory conditions and started at the guard's level-4 cutoff.
+Figure~\ref{fig:casestudy_12mp} traces the run; its shaded band marks where \emph{Baseline} runs under the same conditions first timed out.
 
-Our key observation is that pacing responded to rising queue pressure before admission began skipping optional stages.
-Pacing began at capture 5, and backlog growth slowed while it was active.
-Slack nevertheless narrowed to 2.1\% by capture 8; admission began skipping \(M\) at capture 9, after which backlog declined.
-With optional work reduced, pacing was inactive over captures 13--20, and slack recovered to 27.3\% by capture 15.
-When pressure rose again, pacing resumed at capture 21 before \(S\) skips began at capture 23; backlog then declined, and slack recovered to 45.6\% by capture 30.
-This case study demonstrates that pacing and admission can jointly recover timeout slack by moderating queue growth early and reducing optional work as budgets tighten.
+Our key observation is that pacing responded to rising queue pressure before admission reduced optional work.
+Pacing began at capture 5 while all optional stages still executed, and backlog growth slowed.
+Slack nevertheless fell to 2.1\% at capture 8, the start of the shaded band.
+Admission began skipping \(M\) at capture 9, where backlog peaked before declining.
+With \(M\) disabled, pacing paused even as backlog rose again, since the projected workload did not exceed \(T_{\mathrm{queue}}\).
+The pattern then repeated: pacing resumed at capture 21, \(S\) skips began at capture 23, and slack recovered.
+This case study demonstrates that pacing slows queue growth while optional stages still execute, and admission skips them only when the remaining budget can no longer cover them.
 
 \input{tables/tab_casestudy_selection.tex}
 \input{figures/fig_casestudy_12mp.tex}
