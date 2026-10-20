@@ -40,10 +40,9 @@ Responsiveness has higher priority because added shot-to-shot delay is irreversi
 
 Let \(\mu_i\) be the time left before capture \(i\)'s deadline at draft completion, \(\delta_i\) the interval between acceptance of requests \(i-1\) and \(i\), and \(\pi_i\) the interval between their draft completions.
 With a fixed timeout duration,
-\begin{equation}
+\begin{equation*}
   \mu_i=\mu_{i-1}+\delta_i-\pi_i .
-  \label{eq:margin-recursion}
-\end{equation}
+\end{equation*}
 When \(\pi_i>\delta_i\), the deadline margin shrinks.
 Repeated decreases can exhaust the deadline margin and cause a Capture Timeout.
 Admission can shorten \(\pi_i\) by skipping optional stages but cannot change \(\delta_i\) after capture \(i\) is accepted.

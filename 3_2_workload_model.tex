@@ -12,13 +12,12 @@ The predictor models each stage duration as a key-specific base duration \(\hat 
 The base duration captures timing differences among stages and configurations, while \(\gamma\) provides a shared adjustment for changes in runtime conditions.
 At line~\ref{alg:pe:init}, Algorithm~\ref{alg:shared-predictor} initializes every base duration to zero and \(\gamma\) to one.
 For a workload sequence \(\mathcal K\), \textsc{ComputePointEstimate} (line~\ref{alg:pe:compute}) returns the point estimate \(\hat P(\mathcal K)\), the sum of the predicted stage durations \(\hat p(k)\):
-\begin{equation}
+\begin{equation*}
   \hat P(\mathcal{K})
   =\sum_{k\in\mathcal{K}}\hat p(k),
   \qquad
   \hat p(k)=\hat b(k)\,\gamma .
-  \label{eq:point-estimate}
-\end{equation}
+\end{equation*}
 
 \smallskip\noindent\textbf{Online predictor update.}
 The base duration \(\hat b(k)\) accumulates normalized measurements of its key, whereas \(\gamma\) reflects the latest available measurement-to-base ratios.

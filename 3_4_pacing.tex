@@ -8,7 +8,7 @@ It extends this forecast after each decision and rebases it as draft sequences c
 When the \texttt{captureAvailable} callback for capture \(i\) is ready for delivery, \(\mathit{controller}.\textsc{DecidePacingDelay}\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:pacing}) determines the callback delivery delay.
 Pacing returns zero delay if the draft queue is empty or no draft sequence has completed.
 Otherwise, it applies
-\begin{equation}
+\begin{equation*}
   \mathit{delay}_i
   =
   \left\lceil
@@ -16,18 +16,16 @@ Otherwise, it applies
       \max\{0,\hat B_i+2\hat R-T_{\mathrm{queue}}\}
     }{2}
   \right\rceil.
-  \label{eq:pacing}
-\end{equation}
+\end{equation*}
 
 First, the predicted backlog \(\hat B_i\) estimates the time needed to drain draft work from earlier captures.
 At each pacing decision, pacing computes this backlog as
-\begin{equation}
+\begin{equation*}
   \hat B_i
   =
   \max\{0,\hat t_{\mathrm{drain}}-\mathit{now}\},
-  \label{eq:backlog}
-\end{equation}
-where \(\hat t_{\mathrm{drain}}\) is the predicted drain time maintained by accumulating point estimates of draft work.
+\end{equation*}
+where \(\hat t_{\mathrm{drain}}\) is the predicted drain time, computed from point estimates of draft work and updated by Equations~\eqref{eq:clock-update} and~\eqref{eq:clock-rebase}.
 
 Second, pacing uses a conservative duration reserve \(\hat R\) per capture to project the draft workload added by the current capture \(i\) and the next capture \(i+1\) enabled by this callback.
 Because \(\hat B_i\) does not yet include draft work for either capture, pacing adds \(\hat R\) for each, giving the projected workload \(\hat B_i+2\hat R\).
@@ -36,14 +34,13 @@ Their draft sequences execute after the existing backlog and may encounter furth
 Pacing therefore augments the point estimate for the currently enabled stages with empirical headroom to account for possible increases in processing time.
 Let \(\mathcal K^{\mathrm{adm}}\) denote the subsequence of the configured sequence \(\mathcal K\) excluding optional work disabled by admission.
 Pacing computes the sequence reserve from the latest timing state as
-\begin{equation}
+\begin{equation*}
   \hat R
   =
   \hat P(\mathcal K^{\mathrm{adm}})
   +
   \max\!\left(0,C_\tau-\hat P(\mathcal K)\right),
-  \label{eq:reserve}
-\end{equation}
+\end{equation*}
 where \(C_\tau\) is the recency-weighted \(\tau\)-quantile of completed draft-sequence durations.
 Pacing applies the same recency weighting and selects \(\tau\) using the same effective-sample-size-based rule as admission does for residual factors in Section~\ref{sec:admission}.
 With all configured stages enabled (\(\mathcal K^{\mathrm{adm}}=\mathcal K\)), pacing uses the larger of \(C_\tau\) and \(\hat P(\mathcal K)\) as its reserve.
