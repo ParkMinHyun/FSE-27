@@ -29,11 +29,7 @@ where \(\hat t_{\mathrm{drain}}\) is the predicted drain time, computed from poi
 
 Second, pacing uses a conservative duration reserve \(\hat R\) per capture to project the draft workload added by the current capture \(i\) and the next capture \(i+1\) enabled by this callback.
 Because \(\hat B_i\) does not yet include draft work for either capture, pacing adds \(\hat R\) for each, giving the projected workload \(\hat B_i+2\hat R\).
-
-Their draft sequences execute after the existing backlog and may encounter further thermal throttling.
-Pacing therefore augments the point estimate for the currently enabled stages with empirical headroom to account for possible increases in processing time.
-Let \(\mathcal K^{\mathrm{adm}}\) denote the subsequence of the configured sequence \(\mathcal K\) excluding optional work disabled by admission.
-Pacing computes the sequence reserve from the latest timing state as
+Pacing computes the reserve as
 \begin{equation*}
   \hat R
   =
@@ -41,8 +37,9 @@ Pacing computes the sequence reserve from the latest timing state as
   +
   \max\!\left(0,C_\tau-\hat P(\mathcal K)\right),
 \end{equation*}
-where \(C_\tau\) is the recency-weighted \(\tau\)-quantile of completed draft-sequence durations.
+where \(\mathcal K^{\mathrm{adm}}\) is the subsequence of the configured sequence \(\mathcal K\) excluding optional work disabled by admission, and \(C_\tau\) is the recency-weighted \(\tau\)-quantile of completed draft-sequence durations.
 Pacing applies the same recency weighting and selects \(\tau\) using the same effective-sample-size-based rule as admission does for residual factors in Section~\ref{sec:admission}.
+The second term \(\max(0,C_\tau-\hat P(\mathcal K))\) adds empirical headroom because the draft sequences of captures \(i\) and \(i+1\) execute after the existing backlog and may encounter further thermal throttling.
 With all configured stages enabled (\(\mathcal K^{\mathrm{adm}}=\mathcal K\)), pacing uses the larger of \(C_\tau\) and \(\hat P(\mathcal K)\) as its reserve.
 After admission disables optional work, pacing adds the positive excess of \(C_\tau\) over \(\hat P(\mathcal K)\) as headroom to the point estimate \(\hat P(\mathcal K^{\mathrm{adm}})\).
 
@@ -55,9 +52,9 @@ Finally, pacing sets the callback delivery delay to half of the projected worklo
 This heuristic aims to limit irreversible shot-to-shot latency, leaving workload reduction to admission.
 
 \smallskip\noindent\textbf{Backlog extension.}
-In the parallel capture workflow, a subsequent pacing decision may occur before capture \(i\)'s draft sequence is enqueued.
-Pacing therefore provisionally extends \(\hat t_{\mathrm{drain}}\) after each decision to include this work in subsequent delay calculations.
-It uses \(\hat P^{\mathrm{last}}\), the point estimate of \(\mathcal K^{\mathrm{adm}}\) retained from the latest completion update:
+In the parallel capture workflow, the pacing decision for capture \(i+1\) may occur before capture \(i\)'s draft sequence is enqueued.
+Pacing therefore provisionally extends \(\hat t_{\mathrm{drain}}\) after computing \(\mathit{delay}_i\) to include this work in subsequent delay calculations.
+It uses \(\hat P^{\mathrm{last}}\), the value of \(\hat P(\mathcal K^{\mathrm{adm}})\) evaluated at the most recent draft completion:
 \begin{equation}
   \hat t_{\mathrm{drain}}
   \gets
@@ -65,11 +62,12 @@ It uses \(\hat P^{\mathrm{last}}\), the point estimate of \(\mathcal K^{\mathrm{
   +\lceil\hat P^{\mathrm{last}}\rceil.
   \label{eq:clock-update}
 \end{equation}
-The \(\max\) term anchors this provisional forecast to the later of the existing drain forecast and \(\mathit{now}+\mathit{delay}_i\), the callback delivery time.
+The \(\max\) term anchors this provisional forecast to the later of the existing drain forecast \(\hat t_{\mathrm{drain}}\) and the callback delivery time \(\mathit{now}+\mathit{delay}_i\).
 This keeps at least one draft sequence's predicted processing time in the provisional backlog when the next capture opportunity opens.
+In this way, this extension accounts for the possibility that capture \(i\)'s draft sequence has not started by the callback delivery time.
 
 \smallskip\noindent\textbf{Backlog rebase.}
-Pacing rebases the backlog at each draft completion because provisional extensions use earlier point estimates that can become stale as durations and admission state change.
+Pacing rebases the backlog at each draft completion because provisional backlog extensions use earlier point estimates that can become stale as durations and admission state change.
 After the shared predictor and admission update their states (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}), pacing re-anchors the drain forecast at \(\mathit{now}\):
 \begin{equation}
   \hat t_{\mathrm{drain}}
@@ -83,4 +81,4 @@ After the shared predictor and admission update their states (Algorithm~\ref{alg
 Here, \(N_{\mathrm{pend}}\) is the number of captures whose pacing decisions have occurred but whose draft sequences have not yet started.
 Pacing increments this count after each pacing decision and decrements it when the corresponding draft sequence starts.
 All pending captures share the configured sequence \(\mathcal K\), which cannot change until the draft queue drains.
-Rebase therefore refreshes the forecast for all pending captures using the latest duration estimates and admission state.
+Backlog rebase therefore refreshes the forecast for all pending captures using the latest duration estimates and admission state.
