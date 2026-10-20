@@ -41,8 +41,8 @@ Normalizing by the total predicted duration expresses stage overruns as a relati
 
 To obtain \(\phi_\tau(\mathcal K)\), admission maintains a history of residual factors \(\phi(\mathcal K)\) for each measured sequence \(\mathcal K\).
 When a draft completion yields any \(\phi(\mathcal K)\), admission first multiplies all existing history weights by \(0.90\) to emphasize recent overruns.
-We selected this decay factor at the knee of the trade-off between the overrun rate and the magnitude of \(U\).
-Admission then inserts one \(\phi(\mathcal K)\) per distinct measured sequence \(\mathcal K\) into its history with unit weight.
+We selected this decay factor at the knee of the trade-off between the rate at which \(U\) is exceeded.
+Admission then adds each new \(\phi(\mathcal K)\) to its history once, with unit weight.
 Finally, it selects the weighted \(\tau\)-quantile of each history as \(\phi_\tau(\mathcal K)\).
 Admission determines \(\tau\) from the Kish effective sample size \(n_{\mathrm{eff}}\) of the current weights \(w_l\in\{1,0.90,0.90^2,\ldots\}\) in that history~\cite{kish-survey-sampling}:
 \[
