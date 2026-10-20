@@ -64,10 +64,10 @@ It uses \(\hat P^{\mathrm{last}}\), the value of \(\hat P(\mathcal K^{\mathrm{ad
 \end{equation}
 The \(\max\) term anchors this provisional forecast to the later of the existing drain forecast \(\hat t_{\mathrm{drain}}\) and the callback delivery time \(\mathit{now}+\mathit{delay}_i\).
 This keeps at least one draft sequence's predicted processing time in the provisional backlog when the next capture opportunity opens.
-In this way, this extension accounts for the possibility that capture \(i\)'s draft sequence has not started by the callback delivery time.
+The extension thus accounts for the possibility that capture \(i\)'s draft sequence has not started by the callback delivery time.
 
 \smallskip\noindent\textbf{Backlog rebase.}
-Pacing rebases the backlog at each draft completion because provisional backlog extensions use earlier point estimates that can become stale as durations and admission state change.
+Pacing rebases \(\hat t_{\mathrm{drain}}\) at each draft completion because provisional backlog extensions use earlier point estimates that can become stale as durations and admission state change.
 After the shared predictor and admission update their states (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}), pacing re-anchors the drain forecast at \(\mathit{now}\):
 \begin{equation}
   \hat t_{\mathrm{drain}}
