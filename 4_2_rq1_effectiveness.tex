@@ -13,7 +13,7 @@ Here, \(\mathit{delay}\)~P50 is the median of positive applied delays, measuring
 Our controller completed all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
 \emph{Baseline} enables \(M\) and \(S\) with admission and pacing disabled.
 Baseline also timed out in 14 of the 16 cells starting below the guard's cutoff.
-Thus, our controller avoided these timeouts, with watchdog fallback during \(M\) in 2 of 280 runs (0.7\%), both under memory pressure.
+In contrast, our controller avoided these timeouts, with watchdog fallback during \(M\) in 2 of 280 runs (0.7\%), both under memory pressure.
 
 \smallskip\noindent\textbf{Stage execution.}
 During the first five captures, the average execution counts per run were at least 4.5 for \(M\) and 4.6 for \(S\) in every cell.

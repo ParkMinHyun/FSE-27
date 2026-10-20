@@ -24,7 +24,7 @@ Deploying multi-frame composition under parallel capture therefore requires runt
 Prior work in mobile and server systems has studied workload control~\cite{approxdet-sensys,timecard-sosp,klein-brownout} and arrival control~\cite{seda-sosp,dagor-socc,breakwater-osdi} to manage latency.
 However, the Samsung camera's draft pipeline can neither reject an accepted capture nor preempt a running stage.
 Skipping optional stages reduces remaining processing time but cannot recover timeout budget already consumed by queueing.
-Delaying the next capture opportunity allows the queue to drain, leaving subsequent captures more timeout budget for processing.
+In contrast, delaying the next capture opportunity allows the queue to drain, leaving subsequent captures more timeout budget for processing.
 The two controls are coupled through the single draft worker.
 Admitted optional work increases the backlog that pacing must accommodate, while pacing preserves budget for optional processing in subsequent captures.
 
