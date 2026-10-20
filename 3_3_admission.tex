@@ -2,7 +2,7 @@
 \label{sec:admission}
 
 Immediately before each optional stage, \emph{Admission} compares the capture's remaining timeout budget with the estimated duration of the entire remaining draft sequence, including mandatory encoding and saving.
-This timing accounts for the budget consumed by queueing and earlier stages.
+Deciding at this point accounts for the budget consumed by queueing and earlier stages.
 
 \smallskip\noindent\textbf{Admission rule.}
 The point estimate \(\hat P(\mathcal K_{i,j})\) may underestimate the time needed to finish the remaining sequence.

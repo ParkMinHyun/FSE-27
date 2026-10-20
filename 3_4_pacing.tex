@@ -46,10 +46,10 @@ After admission disables optional work, pacing adds the positive excess of \(C_\
 Third, \(T_{\mathrm{queue}}\) denotes the remaining timeout budget of the most recently enqueued capture in the draft queue.
 At the pacing decision point, capture \(i+1\)'s timeout clock has not yet started.
 \(T_{\mathrm{queue}}\) therefore serves as a queue-level pressure reference for the projected workload \(\hat B_i+2\hat R\).
-Pacing uses this pressure to limit queue growth, aiming to preserve time for capture \(i+1\)'s draft processing after acceptance.
+Pacing uses this budget to limit queue growth, aiming to preserve time for capture \(i+1\)'s draft processing after acceptance.
 
 Finally, pacing sets the callback delivery delay to half of the projected workload excess over the queue-level budget.
-This heuristic aims to limit irreversible shot-to-shot latency, leaving workload reduction to admission.
+This heuristic aims to limit irreversible shot-to-shot delay, leaving workload reduction to admission.
 
 \smallskip\noindent\textbf{Backlog extension.}
 In the parallel capture workflow, the pacing decision for capture \(i+1\) may occur before capture \(i\)'s draft sequence is enqueued.
