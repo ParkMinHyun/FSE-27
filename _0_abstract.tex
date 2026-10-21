@@ -3,11 +3,11 @@ We present the Budget-Aware Draft Controller, which coordinates optional-stage a
 In certain shot modes, the initial draft image stays visible because post-processing for the final image is deferred until the application enters the background.
 Samsung therefore deployed single-frame stages in the draft sequence and then implemented a multi-frame composition stage to further improve draft image quality.
 The existing static thermal guard omits these optional stages at or above a cutoff to prevent Capture Timeout crashes that block release.
-However, under parallel capture, added composition work on the single draft worker exhausted queued captures' timeout budgets, causing timeouts even in runs starting below the cutoff.
+However, under parallel capture, added composition work prolonged captures' waits for the single draft worker while timeout clocks ran, causing timeouts even in runs starting below the cutoff.
 Timeout onset also varied with resolution, stage configuration, and memory pressure.
 The static cutoff therefore cannot account for differences in draft workload and remaining timeout budgets.
 Instead, our controller admits an optional stage only when an empirical upper duration estimate for the remaining sequence fits within the capture's remaining budget.
-It also delays the next capture opportunity when estimated draft workload threatens the latest queued capture's deadline.
+It also limits queue growth by delaying the next capture opportunity because stage skipping cannot recover time spent queueing.
 Across 28 evaluated settings on two commercial devices with the guard bypassed, all 280 controller runs completed without timeout.
 Only coordinated control completed every ablation run, executing multi-frame composition up to 2.0 times as often as admission alone.
 The controller is undergoing release validation for a forthcoming Galaxy flagship line.
