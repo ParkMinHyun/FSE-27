@@ -8,14 +8,14 @@ During pre-release validation, throttling at level 4 delayed a single-frame draf
 The failure recurred despite optimization, so Samsung introduced a thermal guard that skips optional stages at level 4 or higher.
 Because the draft sequence is implemented in a framework shared across device models, the same cutoff applies to all supported models.
 
-The overheat level does not indicate a capture's waiting time or remaining draft work.
+However, the overheat level does not indicate a capture's waiting time or remaining draft work.
 The guard may therefore skip optional stages even when enough time remains to complete the draft sequence.
 For example, a session may start at the cutoff because of ambient heat, charging, or prior device workloads.
 The guard then skips optional stages even for its first capture.
 
 \smallskip\noindent\textbf{Motivating experiment.}
 We compared two Portrait configurations on the Galaxy S26 Ultra with the thermal guard bypassed.
-The optional stages are the lightweight multi-frame draft stage (\(M\)) and the deployed single-frame stages (collectively \(S\)).
+The optional stages are the multi-frame composition stage (\(M\)) and the deployed single-frame stages (collectively \(S\)).
 Both \(M\) alone and \(M+S\) retain the same mandatory encoding and saving stages.
 We tested 12MP and 24MP capture under normal memory conditions and under memory pressure.
 For each condition in Table~\ref{tab:timeout_index}, we ran ten trials of up to 30 consecutive captures.
@@ -34,4 +34,5 @@ Skipping optional stages shortens that capture's processing but cannot recover t
 Executing them can also lengthen the wait for later captures.
 Delaying the next capture can limit queue growth, but lengthens the shot-to-shot interval.
 These constraints motivate coordinated runtime control of optional stages and capture arrivals.
-Such control must decide how much time to reserve for draft work that has not yet executed: reserving too little risks a Capture Timeout, whereas reserving too much needlessly sacrifices draft image quality or capture responsiveness.
+Such control must decide how much time to reserve for draft work that has not yet executed.
+Reserving too little risks a Capture Timeout, whereas reserving too much needlessly sacrifices draft image quality or capture responsiveness.

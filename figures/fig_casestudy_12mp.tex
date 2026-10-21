@@ -47,7 +47,7 @@
         xticklabels at=edge bottom,
       },
       scale only axis=true,
-      width=0.78\columnwidth,
+      width=0.745\columnwidth,
       xmin=0.5,xmax=30.5,
       xtick={5,10,15,20,25,30},
       tick label style={font=\scriptsize},
@@ -86,7 +86,7 @@
       \node[anchor=south,font=\tiny,align=center,
             text=red!70!black,inner sep=1pt]
         at ([yshift=1pt]axis cs:10,2.6)
-        {baseline\\first-timeout window};
+        {baseline\\first-timeout range};
 
       \nextgroupplot[
         height=0.135\columnwidth,
@@ -99,8 +99,8 @@
         {\caseStudyDataDir/12mp_normal_backlog.csv};
 
       \nextgroupplot[
-        height=0.22\columnwidth,
-        ylabel={Applied delay\\(ms)},
+        height=0.16\columnwidth,
+        ylabel={Applied\\delay (ms)},
         ymin=0,ymax=1100,
         ytick={0,500,1000},
       ]

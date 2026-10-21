@@ -12,18 +12,17 @@ The predictor models each stage duration as a key-specific base duration \(\hat 
 The base duration captures timing differences among stages and configurations, while \(\gamma\) provides a shared adjustment for changes in runtime conditions.
 At line~\ref{alg:pe:init}, Algorithm~\ref{alg:shared-predictor} initializes every base duration to zero and \(\gamma\) to one.
 For a workload sequence \(\mathcal K\), \textsc{ComputePointEstimate} (line~\ref{alg:pe:compute}) returns the point estimate \(\hat P(\mathcal K)\), the sum of the predicted stage durations \(\hat p(k)\):
-\begin{equation}
+\begin{equation*}
   \hat P(\mathcal{K})
   =\sum_{k\in\mathcal{K}}\hat p(k),
   \qquad
   \hat p(k)=\hat b(k)\,\gamma .
-  \label{eq:point-estimate}
-\end{equation}
+\end{equation*}
 
 \smallskip\noindent\textbf{Online predictor update.}
 The base duration \(\hat b(k)\) accumulates normalized measurements of its key, whereas \(\gamma\) reflects the latest available measurement-to-base ratios.
 At draft completion, \(\mathit{controller}.\textsc{Update}\) first updates the predictor using measured stage durations \(p_i(k)\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}).
-For each key with \(p_i(k)>0\), the predictor collects \(p_i(k)/\hat b(k)\) in \(\mathit{ratios}\) if \(\hat b(k)>0\), before updating the base duration (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:ratio}).
-It then incorporates \(p_i(k)/\gamma_{\mathrm{old}}\), where \(\gamma_{\mathrm{old}}\) is the pre-update scale, into the cumulative average \(\hat b(k)\) (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:base}).
-Finally, if \(\mathit{ratios}\) is nonempty, the predictor replaces \(\gamma\) with their median (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:gamma}).
-The cumulative average \(\hat b(k)\) dampens isolated spikes in a key's duration history, and when multiple ratios are available, their median limits the influence of a deviation confined to one stage.
+For each key with \(p_i(k)>0\), the predictor collects \(p_i(k)/\hat b(k)\) in \(\mathit{ratios}\) if \({\hat b(k)>0}\), before updating the base duration (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:ratio}).
+It then incorporates \(p_i(k)/\gamma_{\mathrm{old}}\), where \(\gamma_{\mathrm{old}}\) is \(\gamma\) before this update, into the cumulative average \(\hat b(k)\) (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:base}).
+Finally, if \(\mathit{ratios}\) is nonempty, the predictor replaces \(\gamma\) with the median of \(\mathit{ratios}\) (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:gamma}).
+The cumulative average \(\hat b(k)\) dampens isolated spikes in a key's duration history, and when multiple ratios are available, their median \(\gamma\) limits the influence of a single-stage deviation.

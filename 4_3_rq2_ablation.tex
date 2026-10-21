@@ -9,16 +9,17 @@ Table~\ref{tab:rq2_ablation} compares admission and pacing separately and togeth
 The Captures column reports the percentage of the 30 planned captures per run completed on time.
 The \(M\) and \(S\) columns report the percentages completed on time with the corresponding stage executed, using the same denominator.
 
-\smallskip\noindent\textbf{Single-component control.}
+\smallskip\noindent\textbf{Limits of single-component control.}
 Only \emph{Full} completed all planned captures on time in all three cells.
-\emph{No control} completed \mbox{24.3--42.3\%} of planned captures, while \emph{Pacing only} completed \mbox{28.1--61.4\%}.
-\emph{Admission only} completed all planned captures in the S26 Ultra 12MP cell, but 87.3--90.7\% in the other cells.
+On-time completion rates were \mbox{24.3--42.3\%} for \emph{No control} and \mbox{28.1--61.4\%} for \emph{Pacing only}.
+\emph{Admission only} reached 100\% in the S26 Ultra 12MP cell but 87.3--90.7\% in the other two cells.
 
-\smallskip\noindent\textbf{Limits of admission alone.}
-In the S26 Ultra 12MP cell, \(M\) and \(S\) execution rates under \emph{Admission only} were only 29.3\% and 33.7\%, respectively, compared with 58.0\% and 95.7\% under \emph{Full}.
-In the S26 12MP cell, \emph{Admission only} had lower \(M\) and \(S\) execution rates than \emph{Full}, yet Capture Timeout still occurred.
+In the S26 Ultra 12MP cell, \emph{Admission only} met every deadline while skipping each optional stage in most captures.
+Its \(M\) and \(S\) execution rates were 29.3\% and 33.7\%, compared with 58.0\% and 95.7\% under \emph{Full}.
+In the S26 Ultra 24MP and S26 12MP cells, \emph{Admission only} also executed both stages less often than \emph{Full}, yet Capture Timeout still occurred.
 
 \smallskip\noindent\textbf{Coordinated control.}
 \emph{Full} executed both \(M\) and \(S\) more often than \emph{Admission only} in every cell.
-This higher retention came with a responsiveness cost: \emph{Full} activated pacing on 36.7--53.1\% of transitions, with a median positive applied delay of 297--437~ms.
-These medians were 37--45\% of the shot-to-shot delay that disabling parallel capture would impose.
+However, this retention came with a responsiveness cost.
+\emph{Full} activated pacing on 36.7--53.1\% of transitions, with a median positive applied delay of 297--437~ms.
+These medians were 37--45\% of the corresponding shot-to-shot intervals with parallel capture disabled.

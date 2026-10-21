@@ -20,7 +20,7 @@
     \If{$\hat b(k)>0$} \label{alg:pe:observed}
       \State $\mathit{ratios}\gets\mathit{ratios}\uplus\{p_i(k)/\hat b(k)\}$ \label{alg:pe:ratio}
     \EndIf
-    \State $\hat b(k)\gets$ cumulative average of $p_i(k)/\gamma_{\mathrm{old}}$ \label{alg:pe:base}
+    \State $\hat b(k)\gets$ cumulative average including $p_i(k)/\gamma_{\mathrm{old}}$ \label{alg:pe:base}
   \EndFor
   \If{$\mathit{ratios}\neq\emptyset$} \label{alg:pe:condition}
     \State $\gamma\gets\operatorname{median}(\mathit{ratios})$ \label{alg:pe:gamma}

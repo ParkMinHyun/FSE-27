@@ -10,7 +10,7 @@
   {\scriptsize
   \setlength{\arrayrulewidth}{0.35pt}%
   \setlength{\doublerulesep}{0.8pt}%
-  \renewcommand{\arraystretch}{1.08}%
+  \renewcommand{\arraystretch}{1.04}%
   \newlength{\rqsurvivedwidth}%
   \settowidth{\rqsurvivedwidth}{\textbf{10/10} (--)}%
   \newcommand{\rqsurvived}[1]{\makebox[\rqsurvivedwidth][r]{#1}}%
@@ -33,9 +33,9 @@
     \cline{5-5}\cline{6-14}
     & & & &
     \multicolumn{1}{c||}{\multirow{2}{*}[-0.4ex]{%
-      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}}}} &
+      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}\textsuperscript{*}}}} &
     \multicolumn{1}{c||}{\multirow{2}{*}[-0.4ex]{%
-      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}}}} &
+      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}\textsuperscript{*}}}} &
     \multicolumn{2}{c|}{\makecell[c]{\mbox{\boldmath$M$}\\\textbf{(captures)}}} &
     \multicolumn{2}{c||}{\makecell[c]{\mbox{\boldmath$S$}\\\textbf{(captures)}}} &
     \multicolumn{2}{c|}{\makecell[c]{\textbf{Activated}\\\textbf{(transitions)}}} &
@@ -168,5 +168,7 @@
   \end{tabular}}%
   \fittabcolsep{\rqtabbox}{\rqtabular}{\textwidth}{28}%
   \rqtabular
+  \par
+  \makebox[\textwidth][l]{\textsuperscript{*}Timeout onset (in parentheses) is the earliest capture index at which a timeout occurred across runs.}
   }
 \end{table*}
