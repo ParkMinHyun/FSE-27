@@ -33,9 +33,9 @@
     \cline{5-5}\cline{6-14}
     & & & &
     \multicolumn{1}{c||}{\multirow{2}{*}[-0.4ex]{%
-      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}}}} &
+      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}\textsuperscript{*}}}} &
     \multicolumn{1}{c||}{\multirow{2}{*}[-0.4ex]{%
-      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}}}} &
+      \makecell[c]{\textbf{Survived runs}\\\textbf{(timeout onset)}\textsuperscript{*}}}} &
     \multicolumn{2}{c|}{\makecell[c]{\mbox{\boldmath$M$}\\\textbf{(captures)}}} &
     \multicolumn{2}{c||}{\makecell[c]{\mbox{\boldmath$S$}\\\textbf{(captures)}}} &
     \multicolumn{2}{c|}{\makecell[c]{\textbf{Activated}\\\textbf{(transitions)}}} &
@@ -94,7 +94,7 @@
         & \textbf{4.7} & 10.5 & \textbf{4.7} & 16.3
         & \textbf{1.0} & 11.0 & \textbf{616} & 418 \\
     \cline{3-14}
-      & & Lv4 & 10 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}\rlap{\textsuperscript{*}}
+      & & Lv4 & 10 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}
         & \textbf{4.7} & 13.4 & \textbf{5.0} & 23.1
         & \textbf{1.5} & 10.6 & \textbf{458} & 400 \\
     \cline{3-14}
@@ -102,7 +102,7 @@
         & \textbf{4.8} & 5.2 & \textbf{5.0} & 15.8
         & \textbf{1.6} & 8.5 & \textbf{737} & 367 \\
     \cline{3-14}
-      & & Lv6 & 10 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}\rlap{\textsuperscript{*}}
+      & & Lv6 & 10 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}
         & \textbf{4.5} & 7.5 & \textbf{4.6} & 14.0
         & \textbf{1.8} & 8.5 & \textbf{685} & 525 \\
     \Xcline{1-14}{0.7pt}
@@ -169,8 +169,6 @@
   \fittabcolsep{\rqtabbox}{\rqtabular}{\textwidth}{28}%
   \rqtabular
   \par
-  \makebox[\textwidth][l]{Timeout onset (in parentheses) is the earliest timeout capture index across runs.}
-  \par
-  \makebox[\textwidth][l]{\textsuperscript{*}Watchdog fallback occurred in one run per marked cell, during \(M\).}
+  \makebox[\textwidth][l]{\textsuperscript{*}Timeout onset (in parentheses) is the earliest capture index at which a timeout occurred across runs.}
   }
 \end{table*}
