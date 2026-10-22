@@ -3,13 +3,13 @@
   \centering
   \setlength{\tabcolsep}{1pt}%
   % Both views are the same 1:1 frame (1080 bp source);
-  % the zoom box keeps the source region x 162--702, y 677--893 bp from the bottom.
+  % the zoom box keeps the source region x 162--702, y 695--875 bp from the bottom.
   \begin{tabular}{@{}cc@{}}
     \begin{tikzpicture}
       \node[inner sep=0, anchor=south west] (im) at (0,0)
         {\includegraphics[width=0.485\columnwidth]{figures/fig_draft_final_gap_draft.jpg}};
       \begin{scope}[x={(im.south east)}, y={(im.north west)}]
-        \draw[orange, line width=0.8pt] (0.15,0.6269) rectangle (0.65,0.8269);
+        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
         \node[anchor=north west, fill=black, fill opacity=0.55, text opacity=1, text=white,
               rounded corners=1.5pt, inner xsep=2.5pt, inner ysep=1.5pt, font=\scriptsize\sffamily] at (0.02,0.98) {Draft image};
       \end{scope}
@@ -18,13 +18,13 @@
       \node[inner sep=0, anchor=south west] (im) at (0,0)
         {\includegraphics[width=0.485\columnwidth]{figures/fig_draft_final_gap_final.jpg}};
       \begin{scope}[x={(im.south east)}, y={(im.north west)}]
-        \draw[orange, line width=0.8pt] (0.15,0.6269) rectangle (0.65,0.8269);
+        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
         \node[anchor=north west, fill=black, fill opacity=0.55, text opacity=1, text=white,
               rounded corners=1.5pt, inner xsep=2.5pt, inner ysep=1.5pt, font=\scriptsize\sffamily] at (0.02,0.98) {Final image};
       \end{scope}
     \end{tikzpicture} \tabularnewline
-    \includegraphics[width=0.485\columnwidth, trim=162 677 378 187, clip]{figures/fig_draft_final_gap_draft.jpg} &
-    \includegraphics[width=0.485\columnwidth, trim=162 677 378 187, clip]{figures/fig_draft_final_gap_final.jpg}
+    \includegraphics[width=0.485\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_draft.jpg} &
+    \includegraphics[width=0.485\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_final.jpg}
   \end{tabular}
   \caption{Draft and final images in Portrait mode.}
   \label{fig:draft-final-gap}
