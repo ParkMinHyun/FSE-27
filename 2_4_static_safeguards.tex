@@ -33,6 +33,6 @@ The thermal cutoff does not capture how earlier draft sequences consume a later 
 Skipping optional stages shortens that capture's processing but cannot recover time already spent waiting.
 Executing them can also lengthen the wait for later captures.
 Delaying the next capture can limit queue growth, but lengthens the shot-to-shot interval.
-These constraints motivate coordinated runtime control of optional stages and capture arrivals.
+These constraints motivate coordinated runtime control of optional-stage execution and capture arrivals.
 Such control must decide how much time to reserve for draft work that has not yet executed.
 Reserving too little risks a Capture Timeout, whereas reserving too much needlessly sacrifices draft image quality or capture responsiveness.
