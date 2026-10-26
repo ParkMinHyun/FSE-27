@@ -7,7 +7,7 @@ This signal indicates when the application may accept the next capture request, 
 
 However, draft sequences execute one at a time on a single draft worker to preserve capture order and limit peak memory demand.
 When capture requests arrive faster than the worker completes draft sequences, later captures must wait in the draft queue.
-Since each capture's timeout clock starts when its request is accepted, this wait consumes part of its timeout budget before its draft sequence starts.
+Since each capture's timeout clock starts at request acceptance, this wait consumes part of its timeout budget before its draft sequence starts.
 Figure~\ref{fig:overlap} illustrates how this waiting time grows across successive captures even when their draft sequences take equally long.
 Accumulated waiting time can therefore cause later captures to miss their deadlines, especially when lightweight multi-frame composition increases the draft processing time of earlier captures.
 

@@ -1,12 +1,10 @@
 \subsection{Limitations of the Thermal Guard}
 \label{sec:guard-limit}
-The goal is to enable lightweight multi-frame composition under parallel capture whenever the draft sequence can finish within its deadline.
 
-\smallskip\noindent\textbf{Production thermal guard.}
-Samsung's overheat level is an ordinal thermal indicator on a 0--6 scale, where larger values denote stronger throttling.
-During pre-release validation, throttling at level 4 delayed a single-frame draft stage and caused a Capture Timeout.
-The failure recurred despite optimization, so Samsung introduced a thermal guard that skips optional stages at level 4 or higher.
-Because the draft sequence is implemented in a framework shared across device models, the same cutoff applies to all supported models.
+Samsung uses a static thermal guard to prevent Capture Timeout violations in deployed single-frame draft stages.
+The guard uses Samsung's overheat level, an ordinal thermal indicator on a 0--6 scale, where larger values denote stronger throttling.
+During pre-release validation, throttling at level~4 repeatedly delayed a single-frame draft stage and caused Capture Timeout violations despite optimization.
+The guard therefore skips optional single-frame stages at level~4 or higher.
 
 However, the overheat level does not indicate a capture's waiting time or remaining draft work.
 The guard may therefore skip optional stages even when enough time remains to complete the draft sequence.
@@ -14,7 +12,8 @@ For example, ambient heat, charging, or prior heavy device workloads can readily
 The guard then skips optional stages on the session's first capture, even when its remaining timeout budget is sufficient.
 
 \smallskip\noindent\textbf{Motivating experiment.}
-We compared two Portrait configurations on the Galaxy S26 Ultra with the thermal guard bypassed.
+To examine the timeout risk of enabling lightweight multi-frame composition in the draft sequence, we compared two Portrait configurations on the Galaxy S26 Ultra.
+We bypassed the thermal guard so that configured optional stages could execute regardless of the overheat level.
 The optional stages are the multi-frame composition stage (\(M\)) and the deployed single-frame stages (collectively \(S\)).
 Both \(M\) alone and \(M+S\) retain the same mandatory encoding and saving stages.
 We tested 12MP and 24MP capture under normal memory conditions and under memory pressure.
@@ -24,15 +23,16 @@ The table reports the earliest timeout capture index across the ten trials, grou
 
 \input{tables/tab_timeout_index.tex}
 
-With \(M+S\), timeouts occurred across the full range of starting overheat levels, including runs that started below the guard's cutoff.
-Even on the same device, the earliest timeout varied with resolution, memory pressure, and draft sequence configuration.
-Using \(M\) alone delayed the earliest timeout or resulted in no observed timeout within 30 captures, so which optional stages execute also affects deadline safety.
+The overheat level alone was insufficient to explain timeout onset.
+With \(M+S\), timeouts occurred even in runs starting below the guard's cutoff.
+Conversely, every \(M+S\) trial starting at level~4 or higher completed its first capture without a timeout.
+At the same starting level on the same device, the earliest timeout varied with resolution, memory pressure, and draft configuration.
+In particular, compared with \(M+S\), using \(M\) alone delayed the earliest timeout or resulted in no observed timeout within 30 captures.
 
 \smallskip\noindent\textbf{Need for runtime control.}
-The thermal cutoff does not capture how earlier draft sequences consume a later capture's timeout budget.
-Skipping optional stages shortens that capture's processing but cannot recover time already spent waiting.
-Executing them can also lengthen the wait for later captures.
-Delaying the next capture can limit queue growth, but lengthens the shot-to-shot interval.
-These constraints motivate coordinated runtime control of optional-stage execution and capture arrivals.
-Such control must decide how much time to reserve for draft work that has not yet executed.
+The experiment shows that reducing optional draft work can delay timeout onset.
+However, skipping optional stages can widen the draft--final visual gap and cannot recover timeout budget already spent waiting.
+Delaying the next capture opportunity can limit draft queue growth and preserve budget for optional processing, at the cost of a longer shot-to-shot interval.
+These trade-offs motivate coordinated runtime control of optional-stage execution and capture arrivals.
+To determine how much timeout budget to reserve, both decisions require estimating the time needed for the remaining draft work.
 Reserving too little risks a Capture Timeout, whereas reserving too much needlessly sacrifices draft image quality or capture responsiveness.
