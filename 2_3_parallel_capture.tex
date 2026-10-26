@@ -5,14 +5,11 @@ Parallel capture allows the camera application to accept the next shutter input 
 This is possible because the hardware abstraction layer (HAL) can issue a capture-availability signal, \texttt{captureAvailable}, before the draft sequence completes.
 This signal indicates when the application may accept the next capture request, allowing a shorter shot-to-shot interval.
 
-Each accepted request starts its own Capture Timeout clock, but draft sequences execute one at a time on a single draft worker in capture order.
-When requests arrive faster than the worker completes them, later captures must wait in the draft queue for earlier ones to finish.
-Their timeout clocks continue to run during this wait, leaving less time to produce their draft images.
+However, draft sequences execute one at a time on a single draft worker to preserve capture order and limit peak memory demand.
+When capture requests arrive faster than the worker completes draft sequences, later captures must wait in the draft queue.
+Since each capture's timeout clock starts when its request is accepted, this wait consumes part of the budget available for its draft processing.
 Figure~\ref{fig:overlap} illustrates how this waiting time grows across successive captures even when their draft sequences take equally long.
-Thus, earlier requests can cause a capture to miss its deadline even when its own draft processing has not slowed.
-
-% Lightweight multi-frame composition can keep the single draft worker occupied for longer, increasing the waiting time for subsequent captures.
-% Under parallel capture, the added composition work can therefore threaten later captures' deadlines as well as the current capture's deadline.
+Accumulated waiting time can therefore cause later captures to miss their deadlines.
 
 \begin{figure}[t]
   \centering
