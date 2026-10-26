@@ -1,19 +1,27 @@
 \subsection{Draft Sequence}
 \label{sec:draft-background}
 
-For each capture, the Samsung camera publishes an initial user-visible draft image through the draft sequence, while the post-processing pipeline produces the final image.
-When post-processing completes, the final image replaces the draft image if one has been published.
-To preserve capture order and limit peak compute and memory demand, the current pipeline executes draft sequences one at a time on a single draft worker.
+The Samsung Galaxy camera produces the final image through a post-processing pipeline that includes multi-frame composition.
+Samsung introduced the draft sequence alongside this pipeline to provide capture results promptly, allowing users to view them before post-processing completes.
+The draft sequence comprises the processing stages that produce the draft image, which is replaced by the final image when post-processing completes.
+Until this replacement, the draft image cannot be shared or edited.
 
-As post-processing became more resource-intensive, its start was deferred for certain shot modes until the application entered the background to preserve foreground responsiveness.
-In these modes, the draft image remains the user-visible result throughout the foreground session, making its visual quality more important.
-
-Yet the original draft sequence saved an image without additional image processing, and advances in post-processing widened the visual gap between draft and final images.
-This draft--final visual gap is particularly pronounced in Super-resolution, Night, High-resolution, and Portrait modes, and Figure~\ref{fig:draft-final-gap}(a) and~(c) show an example from Portrait mode.
+\smallskip\noindent\textbf{Extending the draft sequence.}
+Visual differences between the draft and final images can make the replacement noticeable to users.
+These differences are particularly pronounced for captures with Filter or Watermark enabled.
+To apply these effects to the draft image as well, Samsung added the corresponding single-frame stages to the draft sequence.
 
 \input{figures/fig_draft_final_gap.tex}
 
-\smallskip\noindent\textbf{Extending the draft sequence.}
-To reduce this gap, Samsung first added single-frame stages, such as Filter and Watermark, to the draft sequence.
-Samsung then implemented lightweight multi-frame composition for Portrait mode to reduce the gap further (Figure~\ref{fig:draft-final-gap}(b)).
-However, this additional processing can cause a Capture Timeout, particularly under parallel capture (Section~\ref{sec:parallel-capture}), so the feature has not been deployed on any device model.
+Advances in post-processing improved final image quality.
+The draft image was based on the original image, so the visual gap between draft and final images grew wider.
+Figure~\ref{fig:draft-final-gap}(a) and~(c) show an example of this gap in Portrait mode.
+Post-processing also required more computation and resources.
+To preserve foreground responsiveness, Samsung deferred the start of post-processing in certain shot modes until the camera application entered the background.
+This delayed start can prolong the display of the draft image for users who view a photo soon after capture.
+This makes reducing the visual gap between draft and final images more important.
+
+To narrow this visual gap, Samsung extended the draft pipeline to support a lightweight version of the multi-frame composition used in post-processing.
+Figure~\ref{fig:draft-final-gap}(b) shows the draft image produced with lightweight multi-frame composition, allowing a less noticeable transition to the final image in~(c).
+However, the added composition work increased draft processing time and the risk of a Capture Timeout.
+Samsung has therefore not deployed lightweight multi-frame composition in the draft sequence on any device model.
