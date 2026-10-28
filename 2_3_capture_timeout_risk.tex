@@ -11,11 +11,11 @@ Because a single Capture Timeout violation blocks release, Samsung has not deplo
 \begin{figure}[t]
   \centering
   \resizebox{\columnwidth}{!}{\input{figures/fig_parallel_capture_overlap.tex}}
-  \caption{Timeout budget consumed by queueing under parallel capture.}
+  \caption{Timeout budget consumed under parallel capture.}
   \label{fig:overlap}
 \end{figure}
 
-\smallskip\noindent\textbf{Existing thermal guard.}
+\myparagraph{Existing thermal guard}
 Samsung uses a static thermal guard to prevent Capture Timeout violations in deployed single-frame draft stages.
 The guard uses Samsung's overheat level, an ordinal thermal indicator on a 0--6 scale, where larger values denote stronger throttling.
 During pre-release validation, throttling at level~4 or higher repeatedly delayed draft sequences and caused Capture Timeout violations despite optimization.
@@ -23,7 +23,7 @@ The guard therefore skips optional single-frame stages at these levels.
 However, the overheat level does not indicate a capture's waiting time or remaining draft work.
 The guard therefore cannot directly assess whether the remaining timeout budget is sufficient for that work.
 
-\smallskip\noindent\textbf{Motivating experiment.}
+\myparagraph{Motivating experiment}
 To examine the timeout risk of enabling lightweight multi-frame composition in the draft sequence, we compared two Portrait configurations on the Galaxy S26 Ultra.
 We bypassed the thermal guard so that configured optional stages could execute regardless of the overheat level.
 The optional stages are the multi-frame composition stage (\(M\)) and the deployed single-frame stages (collectively \(S\)).

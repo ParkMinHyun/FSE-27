@@ -9,19 +9,19 @@ The table reports ten analyzed runs per cell, with stage-execution and pacing-ac
 The \texttt{@5} and \texttt{@30} columns cover the first five and all 30 captures, respectively.
 Here, \(\mathit{delay}\)~P50 is the median of positive applied delays, measuring delay size only when pacing activates.
 
-\smallskip\noindent\textbf{Deadline safety.}
+\myparagraph{Deadline safety}
 Our controller completed all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
 \emph{Baseline} enables \(M\) and \(S\) with admission and pacing disabled.
 Baseline also timed out in 14 of the 16 cells starting below the guard's cutoff.
 In contrast, our controller avoided these timeouts, with watchdog fallback during \(M\) in 2 of 280 runs (0.7\%), both under memory pressure.
 
-\smallskip\noindent\textbf{Stage execution.}
+\myparagraph{Stage execution}
 During the first five captures, the average execution counts per run were at least 4.5 for \(M\) and 4.6 for \(S\) in every cell.
 Both executed on all five in 23 of the 28 cells.
 In the twelve cells starting at or above the guard's level-4 cutoff, \(M\) still executed on 5.2--22.2 of 30 captures per run on average.
 Over 30 captures, stage execution generally decreased with starting overheat level for each device and condition.
 
-\smallskip\noindent\textbf{Pacing cost.}
+\myparagraph{Pacing cost}
 Pacing was inactive during the first five captures on both devices in the 12MP normal cells starting below overheat level~4.
 It activated on none of the four shot-to-shot transitions in 14 of the 28 cells and on at most 1.8 transitions per run on average in any cell.
 Across cells, the maximum \(\mathit{delay}\)~P50 for the first five captures was 737~ms, about 55\% of the corresponding shot-to-shot interval with parallel capture disabled.

@@ -10,20 +10,20 @@ Each decision is thus scored against its realized outcome as feasible if its rem
 \input{tables/tab_rq3_admission_quality.tex}
 \input{figures/fig_rq3_unsafe_spike_anatomy.tex}
 
-\smallskip\noindent\textbf{Decision accuracy.}
+\myparagraph{Decision accuracy}
 Among the evaluated approaches, only our approach kept both feasible-skip and unsafe-admit rates below 3\% in the pooled audit.
 It skipped 98 of 3{,}568 feasible decisions (2.7\%) and admitted 5 of 178 unsafe decisions (2.8\%).
 The naive approaches that sum the mean or maximum of each remaining stage's last three durations admitted 42 and 14 unsafe decisions, respectively.
 The naive approach summing each remaining stage's maximum prior duration admitted four unsafe decisions but skipped 224 feasible decisions, 2.3 times as many as our approach.
 
-\smallskip\noindent\textbf{Unsafe admits.}
+\myparagraph{Unsafe admits}
 The five unsafe admits coincided with latency increases not captured by the decision-time estimates.
 Figure~\ref{fig:rq3_unsafe_spike_anatomy} compares the remaining-sequence latency and CPU time of these five decisions with those of the preceding capture.
 M1--M3 and S1--S2 label the multi-frame and single-frame decisions, respectively.
 For M1 and M2, latency rose to 2.32\(\times\) and 1.95\(\times\), whereas CPU time rose only to 1.41\(\times\) and 1.15\(\times\).
 The average number of busy cores, calculated as CPU time divided by latency, consequently fell to 0.60\(\times\) and 0.59\(\times\).
 
-\smallskip\noindent\textbf{Safeguard replay.}
+\myparagraph{Safeguard replay}
 Trace replay identified a safeguard response for all five unsafe admits using the recorded stage durations, budgets, upper estimates, and admission decisions.
 For M1 and M2, stage durations exceeded watchdog budgets (1{,}460 vs.\ 1{,}202~ms and 1{,}648 vs.\ 889~ms, respectively), so the replayed watchdog triggered fallback before the stages returned.
 For M3, the recorded decision for a later \(S\) stage in the same capture was a skip.

@@ -1,7 +1,11 @@
-\documentclass[10pt,conference]{IEEEtran}
+% FSE 2027 Industry Papers track (companion proceedings, ACM sigconf).
+% Double-anonymous review is optional for this track. For an anonymous
+% submission, use \documentclass[sigconf,screen,review,anonymous]{acmart}.
+\PassOptionsToPackage{table}{xcolor}
+\documentclass[sigconf,screen]{acmart}
 \usepackage{makecell, multirow, url}
 \usepackage{pifont}
-\usepackage[table]{xcolor}
+\usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{algorithm}
@@ -25,34 +29,45 @@
 \exhyphenpenalty=1000
 \hyphenation{light-weight}
 
-\title{Enabling Multi-Frame Composition \\
-in a Camera Draft Pipeline: Coordinated Admission \\
-and Pacing under Capture Deadlines}
-% \affil{Anonymous Affiliation}
+% Companion-proceedings metadata, following the FSE 2026 guidelines;
+% confirm against the FSE 2027 Format and Submission Guidelines.
+\acmConference[FSE Companion '27]{35th ACM International Conference on the Foundations of Software Engineering}{July 12--16, 2027}{Shenzhen, China}
+\acmBooktitle{Companion Proceedings of the 35th ACM International Conference on the Foundations of Software Engineering (FSE Companion '27), July 12--16, 2027, Shenzhen, China}
 
-\author{
-  \IEEEauthorblockN{Minhyun Park}
-  \IEEEauthorblockA{\textit{Samsung Electronics}\\
-  \textit{Sungkyunkwan University}\\
-  Suwon, Republic of Korea\\
-  mhyun2.park@samsung.com}
-  
-  \and 
-  
-  \IEEEauthorblockN{Sooyoung Cha}
-  \thanks{Corresponding author}
-  \IEEEauthorblockA{\textit{Sungkyunkwan University}\\
-  Suwon, Republic of Korea\\
-  sooyoung.cha@skku.edu}
-}
+%%%%% Remove for the final paper
+\setcopyright{none} % to remove the copyright notice
+\settopmatter{printacmref=false} % to remove the ACM Reference Format
+\renewcommand\footnotetextcopyrightpermission[1]{}
+%%%%%
+\settopmatter{printfolios=true} % page numbers for review
 
 \begin{document}
-\pagestyle{plain}
+\input{macros}
+
+\title[Enabling Multi-Frame Composition in a Camera Draft Pipeline]{Enabling Multi-Frame Composition \\
+in a Camera Draft Pipeline: Coordinated Admission \\
+and Pacing under Capture Deadlines}
+
+\author{Minhyun Park}
+\affiliation{%
+  \institution{Samsung Electronics}
+  \institution{Sungkyunkwan University}
+  \city{Suwon}
+  \country{Republic of Korea}}
+\email{mhyun2.park@samsung.com}
+
+\author{Sooyoung Cha}
+\authornote{Corresponding author.}
+\affiliation{%
+  \institution{Sungkyunkwan University}
+  \city{Suwon}
+  \country{Republic of Korea}}
+\email{sooyoung.cha@skku.edu}
+
+\input{_0_abstract}
 
 \maketitle
 
-\input{macros}
-\input{_0_abstract}
 \input{_1_introduction}
 \input{_2_preliminary}
 \input{_3_approach}
@@ -60,7 +75,7 @@ and Pacing under Capture Deadlines}
 \input{_5_related_works}
 \input{_6_conclusion}
 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{ACM-Reference-Format}
 \bibliography{refs}
 
 \end{document}

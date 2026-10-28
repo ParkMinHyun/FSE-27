@@ -6,7 +6,7 @@ To detect capture failures early, the latest development builds are automaticall
 In addition to this daily testing, the camera-validation team and development engineers periodically stress-test the latest builds to identify timing- and memory-related failures, diagnose their root causes, and verify fixes.
 Together, these activities form the core validation process for capture reliability.
 
-\smallskip\noindent\textbf{Capture Timeout.}
+\myparagraph{Capture Timeout}
 A key reliability criterion in this validation process is a fixed internal deadline, referred to as the \emph{Capture Timeout}.
 For each capture request, the timeout clock starts at request acceptance, and the ``draft sequence" must produce an initial user-visible draft image before the deadline.
 A timeout violation intentionally crashes the application, making the failure immediately observable during testing.

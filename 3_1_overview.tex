@@ -33,7 +33,7 @@ Finally, \textsf{CompleteDraftSequence} performs the mandatory encoding and savi
 Along with \(\mathit{draft}_i\), \textsf{CompleteDraftSequence} returns the measured durations \(p_i(k)\) of the executed stages in \(\mathcal K_i\) and the draft sequence duration \(C_i\).
 At line~\ref{alg:ov:update}, \(\mathit{controller}.\textsc{Update}\) uses these measurements to update the shared predictor and the admission and pacing states for subsequent decisions.
 
-\smallskip\noindent\textbf{Control objective.}
+\myparagraph{Control objective}
 The control objective is to complete each capture's draft sequence before its Capture Timeout deadline and, within that constraint, to weigh capture responsiveness more heavily than optional-stage retention.
 Deadline safety comes first because a single Capture Timeout violation blocks the release.
 Responsiveness has higher priority because added shot-to-shot delay is irreversible, whereas skipping optional stages lowers draft quality but leaves the final image unaffected.

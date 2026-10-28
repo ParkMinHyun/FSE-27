@@ -7,7 +7,7 @@ Algorithm~\ref{alg:shared-predictor} shows how the predictor computes and update
 
 \input{figures/alg_shared_predictor.tex}
 
-\smallskip\noindent\textbf{Point estimate.}
+\myparagraph{Point estimate}
 The predictor models each stage duration as a key-specific base duration \(\hat b(k)\) scaled by a factor \(\gamma\) shared across keys.
 The base duration captures timing differences among stages and configurations, while \(\gamma\) provides a shared adjustment for changes in runtime conditions.
 At line~\ref{alg:pe:init}, Algorithm~\ref{alg:shared-predictor} initializes every base duration to zero and \(\gamma\) to one.
@@ -19,7 +19,7 @@ For a workload sequence \(\mathcal K\), \textsc{ComputePointEstimate} (line~\ref
   \hat p(k)=\hat b(k)\,\gamma .
 \end{equation*}
 
-\smallskip\noindent\textbf{Online predictor update.}
+\myparagraph{Online predictor update}
 The base duration \(\hat b(k)\) accumulates normalized measurements of its key, whereas \(\gamma\) reflects the latest available measurement-to-base ratios.
 At draft completion, \(\mathit{controller}.\textsc{Update}\) first updates the predictor using measured stage durations \(p_i(k)\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}).
 For each key with \(p_i(k)>0\), the predictor collects \(p_i(k)/\hat b(k)\) in \(\mathit{ratios}\) if \({\hat b(k)>0}\), before updating the base duration (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:ratio}).

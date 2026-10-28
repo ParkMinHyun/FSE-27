@@ -1,6 +1,6 @@
 # Project Rules
 
-This repository is a LaTeX paper project for SEIP 2027.
+This repository is a LaTeX paper project for the FSE 2027 Industry Papers track (long paper: 10 pages of text and figures plus 2 pages of references). It was originally prepared for SEIP 2027, which was not submitted.
 
 ## Shared Context
 
@@ -11,7 +11,8 @@ This repository is a LaTeX paper project for SEIP 2027.
 
 ## Repository Layout
 
-- Main entry point: `paper.tex`
+- Main entry point: `paper.tex` (ACM `acmart` class, `sigconf` two-column format, `ACM-Reference-Format` bibliography style)
+- ACM template files: `acmart.cls`, `ACM-Reference-Format.bst`
 - Macros and reusable commands: `macros.tex`
 - Bibliography: `refs.bib`
 - Section files: `_*.tex`, `2_*.tex`, `3_*.tex`, `4_*.tex`, `discussion.tex`, and appendix files.
@@ -27,6 +28,7 @@ This repository is a LaTeX paper project for SEIP 2027.
 ## Collaboration Rules
 
 - Before broad rewrites, inspect the relevant section files and preserve the author's intended argument.
+- Before providing manuscript feedback or proposed revisions, self-review the surrounding text and section boundaries for causal continuity, repetition, terminology, and alignment with the author's intended argument. Present only the reviewed recommendation.
 - Prefer small, reviewable edits over sweeping rewrites.
 - For writing tasks, summarize what changed and name the edited files.
 - For research-content tasks, distinguish clearly between facts found in the manuscript, in references, and in inference.

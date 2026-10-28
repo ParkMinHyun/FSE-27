@@ -4,7 +4,7 @@
 \emph{Pacing} maintains a running forecast of draft workload to regulate the next capture opportunity.
 It extends this forecast after each decision and rebases it as draft sequences complete.
 
-\smallskip\noindent\textbf{Delay rule.}
+\myparagraph{Delay rule}
 When the \texttt{captureAvailable} callback for capture \(i\) is ready for delivery, \(\mathit{controller}.\textsc{DecidePacingDelay}\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:pacing}) determines the callback delivery delay.
 Pacing returns zero delay if the draft queue is empty or no draft sequence has completed.
 Otherwise, it applies
@@ -51,7 +51,7 @@ Pacing uses this budget to limit queue growth, aiming to preserve time for captu
 Finally, pacing sets the callback delivery delay to half of the projected workload excess over the queue-level budget.
 This heuristic aims to limit irreversible shot-to-shot delay, leaving workload reduction to admission.
 
-\smallskip\noindent\textbf{Backlog extension.}
+\myparagraph{Backlog extension}
 In the parallel capture workflow, the pacing decision for capture \(i+1\) may occur before capture \(i\)'s draft sequence is enqueued.
 Pacing therefore provisionally extends \(\hat t_{\mathrm{drain}}\) after computing \(\mathit{delay}_i\) to include this work in subsequent delay calculations.
 It uses \(\hat P^{\mathrm{last}}\), the value of \(\hat P(\mathcal K^{\mathrm{adm}})\) evaluated at the most recent draft completion:
@@ -66,7 +66,7 @@ The \(\max\) term anchors this provisional forecast to the later of the existing
 This keeps at least one draft sequence's predicted processing time in the provisional backlog when the next capture opportunity opens.
 The extension thus accounts for the possibility that capture \(i\)'s draft sequence has not started by the callback delivery time.
 
-\smallskip\noindent\textbf{Backlog rebase.}
+\myparagraph{Backlog rebase}
 Pacing rebases \(\hat t_{\mathrm{drain}}\) at each draft completion because provisional backlog extensions use earlier point estimates that can become stale as durations and admission state change.
 After the shared predictor and admission update their states (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}), pacing re-anchors the drain forecast at \(\mathit{now}\):
 \begin{equation}

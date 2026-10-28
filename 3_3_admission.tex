@@ -4,7 +4,7 @@
 Immediately before each optional stage, \emph{Admission} compares the capture's remaining timeout budget with the estimated duration of the entire remaining draft sequence, including mandatory encoding and saving.
 Deciding at this point accounts for the budget consumed by queueing and earlier stages.
 
-\smallskip\noindent\textbf{Admission rule.}
+\myparagraph{Admission rule}
 The point estimate \(\hat P(\mathcal K_{i,j})\) may underestimate the time needed to finish the remaining sequence.
 Admission therefore uses an empirical upper estimate \(U(\mathcal K_{i,j})\) of the remaining processing time for the budget comparison.
 \(\mathit{controller}.\textsc{DecideAdmission}\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:admission}) admits an optional stage \(k_j\) when
@@ -22,7 +22,7 @@ Until the draft queue drains, admission skips those stages and excludes them fro
 This avoids repeatedly toggling the group's visual effects across consecutive draft images.
 When the queue drains, both groups are enabled again.
 
-\smallskip\noindent\textbf{Upper-estimate calibration.}
+\myparagraph{Upper-estimate calibration}
 Admission computes the upper estimate by multiplying the point estimate \(\hat P(\mathcal K)\) by an empirical residual factor \(\phi_\tau(\mathcal K)\geq1\):
 \begin{equation*}
   U(\mathcal{K})
@@ -57,7 +57,7 @@ Setting \(\tau\) this way avoids a separately tuned target percentile.
 For a sequence \(\mathcal K\) without residual history, admission selects \(\phi_\tau(\mathcal K)\) by the same rule from residual factors pooled across sequences.
 If the pool is also empty, it sets \(\phi_\tau(\mathcal K)=1\), so that \(U(\mathcal K)=\hat P(\mathcal K)\).
 
-\smallskip\noindent\textbf{Watchdog fallback.}
+\myparagraph{Watchdog fallback}
 An admitted stage may still run longer than predicted, and it cannot be cancelled once it enters native image processing.
 The watchdog therefore triggers fallback if the stage has not completed within the following time budget:
 \begin{equation*}

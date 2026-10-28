@@ -6,7 +6,7 @@ The Samsung Galaxy camera improves final image quality through post-processing t
 This processing typically includes multi-frame composition, which combines complementary information from multiple frames captured for a single shutter input.
 In addition, the draft sequence provides users with prompt visual feedback before post-processing completes, and parallel capture substantially shortens the shot-to-shot interval by allowing capture requests to overlap.
 
-\smallskip\noindent\textbf{Draft sequence.}
+\myparagraph{Draft sequence}
 The draft sequence comprises the processing stages that produce the draft image, which is later replaced by the final image.
 The draft image was based on a single captured frame and therefore did not benefit from multi-frame composition.
 The resulting visual differences between the draft and final images can make the replacement noticeable to users.
@@ -16,7 +16,7 @@ To apply these effects to the draft image as well, Samsung added the correspondi
 \input{figures/fig_draft_final_gap.tex}
 
 Advances in post-processing improved final image quality over the years, widening the visual gap between the draft and final images.
-Figure~\ref{fig:draft-final-gap}(a) and~(c) show an example of this gap in Portrait mode.
+Figure~\ref{fig:draft-final-gap}(a) and~(c) illustrate this gap in Portrait mode.
 Post-processing also came to require more computation and resources.
 To preserve foreground responsiveness, Samsung deferred the start of post-processing in certain shot modes until the camera application entered the background.
 This delay can prolong the display of the draft image for users checking a photo soon after capture.
@@ -24,9 +24,9 @@ Reducing the draft--final visual gap therefore became more important.
 
 To narrow this visual gap, Samsung extended the draft sequence to support a lightweight version of the multi-frame composition used in post-processing.
 Figure~\ref{fig:draft-final-gap}(b) shows the draft image produced with lightweight multi-frame composition.
-It is closer to the final image in~(c) than the draft image in~(a), so the replacement is less noticeable.
+It is closer to the final image in~(c) than the original draft image in~(a), so the replacement is less noticeable.
 
-\smallskip\noindent\textbf{Parallel capture.}
+\myparagraph{Parallel capture}
 \label{sec:parallel-capture}
 Parallel capture allows the camera application to accept the next shutter input before the preceding capture has produced its draft image.
 This is enabled by a capture-availability signal, \texttt{captureAvailable}, from the hardware abstraction layer (HAL).
