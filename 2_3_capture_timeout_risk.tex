@@ -18,8 +18,8 @@ Because a single Capture Timeout violation blocks release, Samsung has not deplo
 \smallskip\noindent\textbf{Existing thermal guard.}
 Samsung uses a static thermal guard to prevent Capture Timeout violations in deployed single-frame draft stages.
 The guard uses Samsung's overheat level, an ordinal thermal indicator on a 0--6 scale, where larger values denote stronger throttling.
-During pre-release validation, throttling at level~4 repeatedly delayed a single-frame draft stage and caused Capture Timeout violations despite optimization.
-The guard therefore skips optional single-frame stages at level~4 or higher.
+During pre-release validation, throttling at level~4 or higher repeatedly delayed draft sequences and caused Capture Timeout violations despite optimization.
+The guard therefore skips optional single-frame stages at these levels.
 However, the overheat level does not indicate a capture's waiting time or remaining draft work.
 The guard therefore cannot directly assess whether the remaining timeout budget is sufficient for that work.
 
@@ -36,7 +36,7 @@ The table reports the earliest timeout capture index across the ten trials, grou
 \input{tables/tab_timeout_index.tex}
 
 With the thermal guard bypassed, \(M+S\) timed out in 13 of the 16 conditions with starting levels below the guard's cutoff.
-Every \(M+S\) trial starting at level~4 or higher nevertheless completed its first capture without a timeout, even though the guard would have skipped \(S\) from that capture.
+Every \(M+S\) trial starting at level~4 or higher nevertheless completed its first capture without a timeout, even though the guard would have skipped the optional stages for that capture.
 Even at the same starting level, the earliest timeout varied with resolution, memory pressure, and draft configuration.
 Compared with \(M+S\), using \(M\) alone delayed the earliest timeout or resulted in no observed timeout within 30 captures.
-Together, these observations motivate deciding at runtime which optional stages to execute based on each capture's remaining timeout budget and draft workload, rather than on the overheat level alone.
+Together, these observations motivate deciding at runtime which optional stages to execute based on each capture's remaining timeout budget and draft workload, rather than the overheat level alone.
