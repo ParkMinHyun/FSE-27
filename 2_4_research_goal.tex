@@ -1,0 +1,9 @@
+\subsection{Goal}
+\label{sec:research-goal}
+
+Our goal is to enable multi-frame composition in the draft sequence under parallel capture to narrow the draft--final visual gap while completing each capture before its Capture Timeout deadline.
+Meeting this goal requires controlling both optional draft work and capture arrivals.
+Skipping optional stages can reduce processing time but cannot recover timeout budget already spent waiting.
+Delaying the next capture opportunity can limit draft queue growth and preserve budget for optional processing.
+To determine how much timeout budget to reserve, both decisions require estimating the time needed for the remaining draft work.
+Reserving too little time risks a Capture Timeout, whereas reserving too much needlessly sacrifices draft image quality or capture responsiveness.

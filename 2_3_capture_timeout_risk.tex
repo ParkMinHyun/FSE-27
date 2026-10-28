@@ -1,0 +1,42 @@
+\subsection{Capture Timeout Risk}
+\label{sec:capture-timeout-risk}
+\label{sec:guard-limit}
+
+Enabling lightweight multi-frame composition in the draft sequence increases the risk of a Capture Timeout, especially under parallel capture.
+Since each capture's timeout clock starts at request acceptance, waiting in the draft queue consumes part of its timeout budget before its draft sequence starts.
+Figure~\ref{fig:overlap} illustrates how this waiting time grows across successive captures even when their draft sequences take equally long.
+Lightweight multi-frame composition can keep the worker occupied for longer, increasing the waiting time of later captures and causing them to miss their deadlines.
+Because a single Capture Timeout violation blocks release, Samsung has not deployed this feature on any device model.
+
+\begin{figure}[t]
+  \centering
+  \resizebox{\columnwidth}{!}{\input{figures/fig_parallel_capture_overlap.tex}}
+  \caption{Timeout budget consumed by queueing under parallel capture.}
+  \label{fig:overlap}
+\end{figure}
+
+\smallskip\noindent\textbf{Existing thermal guard.}
+Samsung uses a static thermal guard to prevent Capture Timeout violations in deployed single-frame draft stages.
+The guard uses Samsung's overheat level, an ordinal thermal indicator on a 0--6 scale, where larger values denote stronger throttling.
+During pre-release validation, throttling at level~4 repeatedly delayed a single-frame draft stage and caused Capture Timeout violations despite optimization.
+The guard therefore skips optional single-frame stages at level~4 or higher.
+However, the overheat level does not indicate a capture's waiting time or remaining draft work.
+The guard therefore cannot directly assess whether the remaining timeout budget is sufficient for that work.
+
+\smallskip\noindent\textbf{Motivating experiment.}
+To examine the timeout risk of enabling lightweight multi-frame composition in the draft sequence, we compared two Portrait configurations on the Galaxy S26 Ultra.
+We bypassed the thermal guard so that configured optional stages could execute regardless of the overheat level.
+The optional stages are the multi-frame composition stage (\(M\)) and the deployed single-frame stages (collectively \(S\)).
+Both \(M\) alone and \(M+S\) retain the same mandatory encoding and saving stages.
+We tested 12MP and 24MP capture under normal memory conditions and under memory pressure.
+For each condition in Table~\ref{tab:timeout_index}, we ran ten trials of up to 30 consecutive captures.
+We chose 30 captures to extend testing beyond the earlier level-4 validation failure near the 20th consecutive capture.
+The table reports the earliest timeout capture index across the ten trials, grouped by starting overheat level.
+
+\input{tables/tab_timeout_index.tex}
+
+With the thermal guard bypassed, \(M+S\) timed out in 13 of the 16 conditions with starting levels below the guard's cutoff.
+Every \(M+S\) trial starting at level~4 or higher nevertheless completed its first capture without a timeout, even though the guard would have skipped \(S\) from that capture.
+Even at the same starting level, the earliest timeout varied with resolution, memory pressure, and draft configuration.
+Compared with \(M+S\), using \(M\) alone delayed the earliest timeout or resulted in no observed timeout within 30 captures.
+Together, these observations motivate deciding at runtime which optional stages to execute based on each capture's remaining timeout budget and draft workload, rather than on the overheat level alone.
