@@ -29,6 +29,6 @@ It is closer to the final image in~(c) than the original draft image in~(a), so 
 \myparagraph{Parallel capture}
 \label{sec:parallel-capture}
 Parallel capture allows the camera application to accept the next shutter input before the preceding capture has produced its draft image.
-This is enabled by a capture-availability signal, \texttt{captureAvailable}, from the hardware abstraction layer (HAL).
+The camera framework receives a capture-availability signal, \texttt{captureAvailable}, from the hardware abstraction layer (HAL) and forwards it to the application, opening the next capture opportunity.
 However, draft sequences execute one at a time on a single draft worker to preserve capture order and limit peak memory demand.
 Later captures must therefore wait in the draft queue when capture requests arrive faster than the worker completes draft sequences.
