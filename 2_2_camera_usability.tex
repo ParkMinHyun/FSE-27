@@ -2,24 +2,24 @@
 \label{sec:camera-usability}
 \label{sec:draft-background}
 
-The Samsung Galaxy camera improves final image quality through post-processing tailored to the scene.
-This processing typically includes multi-frame composition, which combines complementary information from multiple frames captured for a single shutter input.
-In addition, the draft sequence provides users with prompt visual feedback before post-processing completes, and parallel capture substantially shortens the shot-to-shot interval by allowing capture requests to overlap.
+The Samsung Galaxy camera must provide high-quality final images and a responsive capture experience.
+To improve final image quality, the camera uses scene-adaptive post-processing that typically includes multi-frame composition, which combines complementary information from multiple frames captured for a single shutter input.
+For capture responsiveness, the draft sequence provides users with prompt visual feedback before post-processing completes, and parallel capture substantially shortens the shot-to-shot interval by allowing capture requests to overlap.
 
 \myparagraph{Draft sequence}
 The draft sequence comprises the processing stages that produce the draft image, which is later replaced by the final image.
-The draft image was based on a single captured frame and therefore did not benefit from multi-frame composition.
-The resulting visual differences between the draft and final images can make the replacement noticeable to users.
+The draft image was originally generated from a single captured frame without multi-frame composition.
+The draft and final images could therefore differ in appearance, making the replacement noticeable to users.
 These differences were particularly pronounced for captures with the Filter or Watermark option enabled, because these effects were applied only to the final image.
 To apply these effects to the draft image as well, Samsung added the corresponding single-frame stages to the draft sequence.
 
 \input{figures/fig_draft_final_gap.tex}
 
-Advances in post-processing improved final image quality over the years, widening the visual gap between the draft and final images.
+As post-processing advanced over the years and improved final image quality, the visual gap between the draft and final images widened.
 Figure~\ref{fig:draft-final-gap}(a) and~(c) illustrate this gap in Portrait mode.
 Post-processing also came to require more computation and resources.
 To preserve foreground responsiveness, Samsung deferred the start of post-processing in certain shot modes until the camera application entered the background.
-This delay can prolong the display of the draft image for users checking a photo soon after capture.
+This delays the generation of the final image, so users checking a photo after capture may see the draft image for longer.
 Reducing the draft--final visual gap therefore became more important.
 
 To narrow this visual gap, Samsung extended the draft sequence to support a lightweight version of the multi-frame composition used in post-processing.

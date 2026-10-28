@@ -96,7 +96,7 @@ function Show-And-SyncRepo {
 }
 
 $candidates = @(
-    @{ Name = "SEIP-27 paper"; Path = $ScriptRoot },
+    @{ Name = "FSE-27 paper"; Path = $ScriptRoot },
     @{ Name = "ML implementation (external)"; Path = Join-Path $ScriptRoot "external\ML" },
     @{ Name = "ML implementation (sibling)"; Path = Join-Path $ScriptRoot "..\ML" }
 )
