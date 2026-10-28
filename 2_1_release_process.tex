@@ -8,7 +8,7 @@ Together, these activities form the core validation process for capture reliabil
 
 \smallskip\noindent\textbf{Capture Timeout.}
 A key reliability criterion in this validation process is a fixed internal deadline, referred to as the \emph{Capture Timeout}.
-For each capture request, the timeout clock starts when the framework accepts the request and stops when the ``draft sequence" produces an initial user-visible draft image.
+For each capture request, the timeout clock starts when the request is accepted and stops when the ``draft sequence" produces an initial user-visible draft image.
 A timeout violation intentionally crashes the application, making the failure immediately observable during testing.
 Any such violation blocks the release until developers address its root cause or restrict the affected feature under the conditions that trigger the violation.
 Therefore, identifying and resolving Capture Timeout violations is an important reliability task in Samsung's camera development process.
