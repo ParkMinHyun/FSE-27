@@ -15,7 +15,7 @@ To apply these effects to the draft image as well, Samsung added the correspondi
 
 \input{figures/fig_draft_final_gap.tex}
 
-As post-processing advanced over the years and improved final image quality, the visual gap between the draft and final images widened.
+As post-processing has advanced over the years and improved final image quality, the visual gap between the draft and final images has continued to widen.
 Figure~\ref{fig:draft-final-gap}(a) and~(c) illustrate this gap in Portrait mode.
 Post-processing also came to require more computation and resources.
 To preserve foreground responsiveness, Samsung deferred the start of post-processing in certain shot modes until the camera application entered the background.
@@ -31,4 +31,5 @@ It is closer to the final image in~(c) than the original draft image in~(a), so 
 Parallel capture allows the camera application to accept the next shutter input before the preceding capture has produced its draft image.
 The camera framework receives a capture-availability signal, \texttt{captureAvailable}, from the hardware abstraction layer (HAL) and forwards it to the application, opening the next capture opportunity.
 However, draft sequences execute one at a time on a single draft worker to preserve capture order and limit peak memory demand.
+Each draft sequence enters the draft queue after its input frames and metadata have been collected.
 Later captures must therefore wait in the draft queue when capture requests arrive faster than the worker completes draft sequences.
