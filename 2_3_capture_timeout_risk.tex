@@ -1,27 +1,30 @@
-\subsection{Capture Timeout Risk}
+\subsection{Challenges}
 \label{sec:capture-timeout-risk}
 \label{sec:guard-limit}
 
-Enabling lightweight multi-frame composition in the draft sequence increases the risk of a Capture Timeout, especially under parallel capture.
-Since each capture's timeout clock starts at request acceptance, waiting in the draft queue consumes part of its timeout budget before its draft sequence starts.
-Figure~\ref{fig:overlap} illustrates how this waiting time grows across successive captures even when their draft sequences take equally long.
-The additional processing required for lightweight multi-frame composition can lengthen these waits and cause later captures to miss their deadlines.
-Because a single Capture Timeout violation blocks release, Samsung has not deployed this feature on any device model.
+Enabling MFC in the draft sequence under parallel capture has caused frequent Capture Timeout violations during pre-release validation.
+Although parallel capture allows consecutive capture requests to overlap, their draft sequences execute sequentially on a single draft worker.
+For each accepted capture request, the camera collects the required input frames and metadata before enqueueing the corresponding draft sequence. The sequence may then wait in the queue while the capture's timeout clock continues to run.
+Figure~\ref{fig:overlap} illustrates how successive captures can have progressively less time to execute their draft sequences, even when all draft sequences take equally long.
+In particular, capture $i+2$ exceeds its deadline because the preceding captures consume much of its timeout budget through queueing.
+The additional processing required for MFC can further increase queueing delays and cause more Capture Timeout violations.
+Consequently, Samsung has not deployed MFC in the draft sequence of commercial devices, including the Galaxy S26 series.
+
 
 \begin{figure}[t]
   \centering
   \resizebox{\columnwidth}{!}{\input{figures/fig_parallel_capture_overlap.tex}}
-  \caption{Timeout budget consumed under parallel capture.}
+  \caption{Capture Timeout caused by accumulated waiting time under parallel capture.}
   \label{fig:overlap}
 \end{figure}
 
-\myparagraph{Existing thermal guard}
-Samsung uses a static thermal guard to prevent Capture Timeout violations in deployed single-frame draft stages.
-The guard uses Samsung's overheat level, an ordinal thermal indicator on a 0--6 scale, where larger values denote stronger throttling.
-During pre-release validation, throttling at level~4 or higher repeatedly delayed draft sequences and caused Capture Timeout violations despite optimization.
-The guard therefore skips optional single-frame stages at these levels.
-However, the overheat level does not indicate a capture's waiting time or remaining draft work.
-The guard therefore cannot directly assess whether the remaining timeout budget is sufficient for that work.
+\myparagraph{Current Strategy}
+Even without MFC, Capture Timeout violations can occur under parallel capture, particularly in camera modes with computationally intensive draft sequences.
+To mitigate these violations, Samsung uses a static thermal guard that skips optional image-processing stages (e.g., filter and watermark processing) in the draft sequence when the overheat level reaches 4 or higher.
+Samsung's overheat level is a thermal indicator ranging from 0 to 6, with higher levels indicating stronger throttling.
+However, the overheat level does not account for the time already spent waiting in the draft queue or the processing work remaining in the draft sequence.
+Therefore, the thermal guard cannot reliably determine whether additional processing, including MFC, can complete within a capture's remaining timeout budget.
+
 
 \myparagraph{Motivating experiment}
 To examine the timeout risk of enabling lightweight multi-frame composition in the draft sequence, we compared two Portrait configurations on the Galaxy S26 Ultra.
