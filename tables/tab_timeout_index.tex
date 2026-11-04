@@ -1,8 +1,8 @@
 % Notes: docs/exhibits.md#tab_timeout_index
-\providecolor{tmoS1}{RGB}{252,227,220} %
-\providecolor{tmoS2}{RGB}{239,160,140} %
-\providecolor{tmoS3}{RGB}{201,80,63}  %
-\providecolor{tmoS4}{RGB}{143,36,32}  %
+\providecolor{tmoS1}{RGB}{252,227,220}
+\providecolor{tmoS2}{RGB}{239,160,140}
+\providecolor{tmoS3}{RGB}{201,80,63}
+\providecolor{tmoS4}{RGB}{143,36,32}
 
 \newcolumntype{H}{>{\centering\arraybackslash}m{1.20cm}}
 \newcolumntype{P}{>{\centering\arraybackslash}m{0.67cm}}
@@ -13,19 +13,21 @@
 
 \begin{table}[t]
  \centering
- \caption{Capture index of the earliest timeout.}
+ \caption{Earliest capture number with a Capture Timeout.}
  \label{tab:timeout_index}
  {\scriptsize\setlength{\tabcolsep}{1.3pt}%
  \begin{tabular}{@{}HPP|PP||PP|PP@{}}
  \toprule
  \multirow[c]{3}{=}[-10pt]{\makecell[c]{\textbf{Starting}\\\textbf{overheat}\\\textbf{level}}} &
  \multicolumn{4}{c||}{\raisebox{-3pt}{\textbf{Normal capture}}} &
- \multicolumn{4}{c@{}}{\raisebox{-3pt}{\textbf{Memory-pressure capture}}} \\[6pt] \cmidrule(lr){2-5}\cmidrule(l){6-9}
+ \multicolumn{4}{c@{}}{\raisebox{-3pt}{\textbf{Memory-pressure capture}}} \\[6pt]
+ \cmidrule(lr){2-5}\cmidrule(l){6-9}
  &
  \multicolumn{2}{c|}{\raisebox{-3pt}{\textbf{12MP}}} &
  \multicolumn{2}{c||}{\raisebox{-3pt}{\textbf{24MP}}} &
  \multicolumn{2}{c|}{\raisebox{-3pt}{\textbf{12MP}}} &
- \multicolumn{2}{c@{}}{\raisebox{-3pt}{\textbf{24MP}}} \\[6pt] \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(l){8-9}
+ \multicolumn{2}{c@{}}{\raisebox{-3pt}{\textbf{24MP}}} \\[6pt]
+ \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(l){8-9}
  & \raisebox{-2pt}{\textbf{M{+}S}} & \raisebox{-2pt}{\textbf{M}} &
  \raisebox{-2pt}{\textbf{M{+}S}} & \raisebox{-2pt}{\textbf{M}} &
  \raisebox{-2pt}{\textbf{M{+}S}} & \raisebox{-2pt}{\textbf{M}} &
@@ -38,7 +40,8 @@
  \tmoNone & \tmoNone & \tmoFirst{tmoS1}{29} & \tmoNone &
  \tmoFirst{tmoS1}{24} & \tmoNone & \tmoFirst{tmoS2}{19} & \tmoNone \\
  Lv2 &
- \tmoFirst{tmoS1}{24} & \tmoNone & \tmoFirst{tmoS2}{18} & \tmoNone &
+ \tmoFirst{tmoS1}{24} & \tmoNone &
+ \tmoFirst{tmoS2}{18} & \tmoNone &
  \tmoFirst{tmoS2}{15} & \tmoFirst{tmoS1}{29} &
  \tmoFirst{tmoS2}{14} & \tmoFirst{tmoS1}{25} \\
  Lv3 &
@@ -68,8 +71,12 @@
  \par\vspace{3pt}
  {\scriptsize\begin{minipage}{0.933\columnwidth}
  \raggedright\setlength{\fboxsep}{1.8pt}%
- Timeout capture index:~%
- \colorbox{tmoS1}{\strut\,${\geq}\,20$\,}\colorbox{tmoS2}{\strut\,10--19\,}\colorbox{tmoS3}{\strut\,\textcolor{white}{6--9}\,}\colorbox{tmoS4}{\strut\,\textcolor{white}{${\leq}\,5$}\,}\par
+ Earliest timeout capture number:~%
+ \colorbox{tmoS1}{\strut\,${\geq}\,20$\,}%
+ \colorbox{tmoS2}{\strut\,10--19\,}%
+ \colorbox{tmoS3}{\strut\,\textcolor{white}{6--9}\,}%
+ \colorbox{tmoS4}{\strut\,\textcolor{white}{${\leq}\,5$}\,}\par
  --: no timeout observed within 30 captures.\par
+ \(S\)-only: no timeout observed in any of the 28 settings.\par
  \end{minipage}}
 \end{table}
