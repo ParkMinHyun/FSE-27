@@ -1,0 +1,142 @@
+\section{Industrial Context and Motivation}
+\label{sec:background}
+
+\subsection{Image Capture Reliability}
+\label{sec:release-process}
+
+The Samsung camera software is a privileged system application whose image-capture workflow spans multiple system-level components across the Android software stack.
+Consequently, capture failures discovered late in the release cycle may require firmware-level changes involving cross-component coordination and extensive revalidation.
+To detect capture failures early, the latest development builds are automatically tested each day across camera workflows, device models, and OS versions.
+In addition to this daily testing, the camera-validation team and development engineers periodically stress-test the latest builds to identify timing- and memory-related failures, diagnose their root causes, and verify fixes.
+Together, these activities form the core validation process for capture reliability.
+
+A key reliability criterion in this validation process is a fixed internal deadline, referred to as the \emph{Capture Timeout}.
+For each capture request, the timeout clock starts when the framework accepts the request, and the draft sequence must produce an initial user-visible image, called the \emph{draft image}, before the deadline.
+If the draft sequence fails to produce the draft image within this deadline, the application intentionally crashes to make the violation observable.
+Identifying and resolving such violations is therefore an important part of Samsung's pre-release validation process.
+
+% Notes: docs/exhibits.md#fig_draft_final_gap
+\begin{figure}[!ht]
+  \centering
+  \setlength{\tabcolsep}{1pt}%
+  % All views are the same 1:1 frame (1080 bp source);
+  % the zoom box keeps the source region x 162--702, y 695--875 bp from the bottom.
+  % TODO: Replace the middle panel and its crop with the actual draft image
+  % produced by lightweight multi-frame composition. Both temporarily reuse
+  % fig_draft_final_gap_final.jpg; the caption explicitly marks this placeholder.
+  \begin{tabular}{@{}ccc@{}}
+    \begin{tikzpicture}
+      \node[inner sep=0, anchor=south west] (im) at (0,0)
+        {\includegraphics[width=0.325\columnwidth]{figures/fig_draft_final_gap_draft.jpg}};
+      \begin{scope}[x={(im.south east)}, y={(im.north west)}]
+        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
+      \end{scope}
+    \end{tikzpicture} &
+    \begin{tikzpicture}
+      \node[inner sep=0, anchor=south west] (im) at (0,0)
+        {\includegraphics[width=0.325\columnwidth]{figures/fig_draft_final_gap_final.jpg}};
+      \begin{scope}[x={(im.south east)}, y={(im.north west)}]
+        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
+      \end{scope}
+    \end{tikzpicture} &
+    \begin{tikzpicture}
+      \node[inner sep=0, anchor=south west] (im) at (0,0)
+        {\includegraphics[width=0.325\columnwidth]{figures/fig_draft_final_gap_final.jpg}};
+      \begin{scope}[x={(im.south east)}, y={(im.north west)}]
+        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
+      \end{scope}
+    \end{tikzpicture} \tabularnewline[1pt]
+    \includegraphics[width=0.325\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_draft.jpg} &
+    \includegraphics[width=0.325\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_final.jpg} &
+    \includegraphics[width=0.325\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_final.jpg}
+    \tabularnewline[2pt]
+    \parbox[t]{0.325\columnwidth}{\centering\scriptsize (a) Draft image} &
+    \makebox[0.325\columnwidth][c]{%
+      \parbox[t]{0.41\columnwidth}{\centering\scriptsize
+        (b) Draft image with \\lightweight multi-frame composition}} &
+    \parbox[t]{0.325\columnwidth}{\centering\scriptsize (c) Final image}
+  \end{tabular}
+  \caption{Draft--final visual differences in Portrait mode.}
+  \label{fig:draft-final-gap}
+\end{figure}
+
+
+
+\subsection{Camera Usability}
+\label{sec:camera-usability}
+\label{sec:draft-background}
+
+To enhance camera usability, Samsung aims to provide users with draft images as quickly as possible, support rapid consecutive captures, and minimize the visual difference between draft and final images.
+To achieve these goals, Samsung employs a draft sequence, parallel capture, and lightweight multi-frame composition, respectively.
+
+\myparagraph{Draft Sequence}
+The draft sequence produces a draft image that users can view before computationally intensive post-processing generates the final image.
+Once post-processing completes, the final image replaces the draft image.
+To maintain responsiveness, Samsung delays final image generation until the camera application moves to the background in certain shot modes.
+Consequently, users may view the draft image for an extended period, making it important to minimize the visual difference between draft and final images.
+
+\myparagraph{Parallel Capture}
+Parallel capture reduces the shot-to-shot interval by allowing a new capture request to be accepted before the preceding capture produces its draft image.
+This is enabled by a capture-availability signal, \texttt{captureAvailable}, sent from the hardware abstraction layer (HAL) through the camera framework to the application.
+By allowing consecutive captures to overlap, parallel capture enables users to take multiple photos in quick succession.
+
+\myparagraph{Lightweight Multi-Frame Composition}
+To reduce the visual difference between draft and final images, Samsung developed lightweight multi-frame composition (MFC) for the draft sequence.
+MFC combines information from multiple captured frames to improve the draft image before it is displayed to users.
+This difference is particularly noticeable in Portrait mode, where the background remains relatively sharp in the original draft image (Figure~\ref{fig:draft-final-gap}(a)), whereas it is blurred in the final image (Figure~\ref{fig:draft-final-gap}(c)).
+With MFC, the draft image (Figure~\ref{fig:draft-final-gap}(b)) exhibits background blur that more closely resembles the final image.
+
+\subsection{Challenges in Enabling MFC}
+\label{sec:capture-timeout-risk}
+\label{sec:guard-limit}
+
+Enabling MFC in the draft sequence under parallel capture has caused frequent Capture Timeout violations during pre-release validation.
+Although parallel capture allows consecutive capture requests to overlap, their draft sequences execute sequentially on a single draft worker.
+For each accepted capture request, the camera collects the required input frames and metadata before enqueueing the corresponding draft sequence. The sequence may then wait in the queue while the capture's timeout clock continues to run.
+Figure~\ref{fig:overlap} illustrates how successive captures can have progressively less time to execute their draft sequences, even when all draft sequences take equally long.
+In particular, capture $i+2$ exceeds its deadline because its draft sequence must wait for the preceding draft sequences to complete.
+The additional processing required for MFC can further increase queueing delays and cause more Capture Timeout violations.
+Consequently, Samsung has not deployed MFC in the draft sequence of commercial devices, including the Galaxy S26 series.
+
+
+\begin{figure}[t]
+  \centering
+  \resizebox{\columnwidth}{!}{\input{figures/fig_parallel_capture_overlap.tex}}
+  \caption{Capture Timeout caused by accumulated waiting time under parallel capture.}
+  \label{fig:overlap}
+\end{figure}
+
+\myparagraph{Existing Strategy}
+Even without MFC, Capture Timeout violations can occur under parallel capture, particularly on less powerful Samsung devices.
+Because the camera framework is shared across device models, Samsung uses a common static thermal guard rather than introducing model-specific safeguards.
+The guard skips optional image-processing stages (e.g., filter and watermark processing) in the draft sequence when the overheat level reaches 4 or higher.
+Samsung's overheat level is a thermal indicator ranging from 0 to 6, with higher levels indicating stronger throttling.
+However, the thermal guard cannot reliably determine whether additional processing, including MFC, can complete within a capture's remaining timeout budget based solely on the overheat level.
+
+\myparagraph{Motivating Experiment}
+To investigate whether adding MFC to the deployed draft sequence causes Capture Timeout violations under parallel capture, we conducted an experiment on the Galaxy S26 Ultra in Portrait mode.
+We compared three draft configurations: \(S\), representing the currently deployed configuration with optional image-processing stages (e.g., filter and watermark processing); \(M+S\), which adds MFC \((M)\) to \(S\); and \(M\), which enables MFC without \(S\).
+All three configurations retain the same mandatory encoding and saving stages.
+We disabled the thermal guard so that the configured optional stages could execute even at overheat level~4 or higher, allowing us to examine timeout behavior across different thermal conditions.
+We varied capture resolution (12MP and 24MP), memory conditions (normal and memory pressure), and starting overheat levels (0--6), resulting in 28 experimental settings.
+For each configuration and setting, we conducted ten trials of up to 30 consecutive captures.
+Table~\ref{tab:timeout_index} reports the earliest capture number at which a Capture Timeout occurred across the ten trials for \(M+S\) and \(M\), with a dash indicating no observed timeout within 30 captures.
+The \(S\)-only results are summarized in the table note.
+
+\input{tables/tab_timeout_index.tex}
+
+No Capture Timeout was observed with \(S\) alone across all 28 settings on the Galaxy S26 Ultra, although such violations can occur on less powerful Samsung devices. In contrast, adding MFC \((M+S)\) caused at least one timeout in 25 of the 28 settings, including 13 of the 16 settings starting below the thermal guard's level-4 cutoff.
+This demonstrates that enabling MFC can cause frequent timeouts even when the initial overheat level is below the existing cutoff.
+Conversely, all trials starting at level~4 or higher completed their first capture without a timeout, suggesting that the thermal guard may unnecessarily skip optional processing.
+Moreover, even at the same starting overheat level, the earliest timeout occurred at different capture numbers depending on capture resolution, memory conditions, and draft configuration.
+Executing \(M\) alone also increased the number of consecutive captures before the first Capture Timeout or avoided timeouts entirely within 30 captures, compared with \(M+S\).
+These findings show that the number of consecutive captures that can safely complete is difficult to predict from the overheat level alone.
+Therefore, the existing static thermal guard is insufficient for controlling MFC under parallel capture, motivating runtime control based on each capture's remaining timeout budget and processing workload.
+
+\subsection{Goal}
+\label{sec:research-goal}
+
+Our goal is to reduce the visual gap between draft and final images by enabling MFC in the draft sequence under parallel capture while meeting each capture's Capture Timeout deadline.
+Specifically, we aim to execute the optional stages---MFC (\(M\)) and existing image-processing stages (\(S\))---as often as possible without exceeding each capture's deadline.
+Because draft sequences share a single worker, achieving this goal requires coordinating decisions on whether to execute these stages for each capture and when to allow the next capture request.
+These decisions must also minimize delays between consecutive captures to preserve capture responsiveness.
