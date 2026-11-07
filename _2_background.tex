@@ -15,52 +15,7 @@ For each capture request, the timeout clock starts when the framework accepts th
 If the draft sequence fails to produce the draft image within this deadline, the application intentionally crashes to make the violation observable.
 Identifying and resolving such violations is therefore an important part of Samsung's pre-release validation process.
 
-% Notes: docs/exhibits.md#fig_draft_final_gap
-\begin{figure}[!ht]
-  \centering
-  \setlength{\tabcolsep}{1pt}%
-  % All views are the same 1:1 frame (1080 bp source);
-  % the zoom box keeps the source region x 162--702, y 695--875 bp from the bottom.
-  % TODO: Replace the middle panel and its crop with the actual draft image
-  % produced by lightweight multi-frame composition. Both temporarily reuse
-  % fig_draft_final_gap_final.jpg; the caption explicitly marks this placeholder.
-  \begin{tabular}{@{}ccc@{}}
-    \begin{tikzpicture}
-      \node[inner sep=0, anchor=south west] (im) at (0,0)
-        {\includegraphics[width=0.325\columnwidth]{figures/fig_draft_final_gap_draft.jpg}};
-      \begin{scope}[x={(im.south east)}, y={(im.north west)}]
-        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
-      \end{scope}
-    \end{tikzpicture} &
-    \begin{tikzpicture}
-      \node[inner sep=0, anchor=south west] (im) at (0,0)
-        {\includegraphics[width=0.325\columnwidth]{figures/fig_draft_final_gap_final.jpg}};
-      \begin{scope}[x={(im.south east)}, y={(im.north west)}]
-        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
-      \end{scope}
-    \end{tikzpicture} &
-    \begin{tikzpicture}
-      \node[inner sep=0, anchor=south west] (im) at (0,0)
-        {\includegraphics[width=0.325\columnwidth]{figures/fig_draft_final_gap_final.jpg}};
-      \begin{scope}[x={(im.south east)}, y={(im.north west)}]
-        \draw[orange, line width=0.8pt] (0.15,0.6435) rectangle (0.65,0.8102);
-      \end{scope}
-    \end{tikzpicture} \tabularnewline[1pt]
-    \includegraphics[width=0.325\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_draft.jpg} &
-    \includegraphics[width=0.325\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_final.jpg} &
-    \includegraphics[width=0.325\columnwidth, trim=162 695 378 205, clip]{figures/fig_draft_final_gap_final.jpg}
-    \tabularnewline[2pt]
-    \parbox[t]{0.325\columnwidth}{\centering\scriptsize (a) Draft image} &
-    \makebox[0.325\columnwidth][c]{%
-      \parbox[t]{0.41\columnwidth}{\centering\scriptsize
-        (b) Draft image with \\lightweight multi-frame composition}} &
-    \parbox[t]{0.325\columnwidth}{\centering\scriptsize (c) Final image}
-  \end{tabular}
-  \caption{Draft--final visual differences in Portrait mode.}
-  \label{fig:draft-final-gap}
-\end{figure}
-
-
+\input{figures/fig_draft_final_gap}
 
 \subsection{Camera Usability}
 \label{sec:camera-usability}
@@ -98,13 +53,7 @@ In particular, capture $i+2$ exceeds its deadline because its draft sequence mus
 The additional processing required for MFC can further increase queueing delays and cause more Capture Timeout violations.
 Consequently, Samsung has not deployed MFC in the draft sequence of commercial devices, including the Galaxy S26 series.
 
-
-\begin{figure}[t]
-  \centering
-  \resizebox{\columnwidth}{!}{\input{figures/fig_parallel_capture_overlap.tex}}
-  \caption{Capture Timeout caused by accumulated waiting time under parallel capture.}
-  \label{fig:overlap}
-\end{figure}
+\input{figures/fig_parallel_capture_overlap}
 
 \myparagraph{Existing Strategy}
 Even without MFC, Capture Timeout violations can occur under parallel capture, particularly on less powerful Samsung devices.
