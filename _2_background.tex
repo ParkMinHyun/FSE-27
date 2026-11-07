@@ -67,7 +67,7 @@ To investigate whether adding MFC to the deployed draft sequence causes Capture 
 We compared three draft configurations: \(S\), representing the currently deployed configuration with optional image-processing stages (e.g., filter and watermark processing); \(M+S\), which adds MFC \((M)\) to \(S\); and \(M\), which enables MFC without \(S\).
 All three configurations retain the same mandatory encoding and saving stages.
 We disabled the thermal guard so that the configured optional stages could execute even at overheat level~4 or higher, allowing us to examine timeout behavior across different thermal conditions.
-We varied capture resolution (12MP and 24MP), memory conditions (normal and memory pressure), and starting overheat levels (0--6), resulting in 28 experimental settings.
+We varied capture resolution (12MP and 24MP), \textcolor{red}{concurrent computational stress (without and with AnTuTu Benchmark running during capture)}, and starting overheat levels (0--6), resulting in 28 experimental settings.
 For each configuration and setting, we conducted ten trials of up to 30 consecutive captures.
 Table~\ref{tab:timeout_index} reports the earliest capture number at which a Capture Timeout occurred across the ten trials for \(M+S\) and \(M\), with a dash indicating no observed timeout within 30 captures.
 The \(S\)-only results are summarized in the table note.
@@ -77,7 +77,7 @@ The \(S\)-only results are summarized in the table note.
 No Capture Timeout was observed with \(S\) alone across all 28 settings on the Galaxy S26 Ultra, although such violations can occur on less powerful Samsung devices. In contrast, adding MFC \((M+S)\) caused at least one timeout in 25 of the 28 settings, including 13 of the 16 settings starting below the thermal guard's level-4 cutoff.
 This demonstrates that enabling MFC can cause frequent timeouts even when the initial overheat level is below the existing cutoff.
 Conversely, all trials starting at level~4 or higher completed their first capture without a timeout, suggesting that the thermal guard may unnecessarily skip optional processing.
-Moreover, even at the same starting overheat level, the earliest timeout occurred at different capture numbers depending on capture resolution, memory conditions, and draft configuration.
+Moreover, even at the same starting overheat level, the earliest timeout occurred at different capture numbers depending on capture resolution, \textcolor{red}{concurrent computational stress}, and draft configuration.
 Executing \(M\) alone also increased the number of consecutive captures before the first Capture Timeout or avoided timeouts entirely within 30 captures, compared with \(M+S\).
 These findings show that the number of consecutive captures that can safely complete is difficult to predict from the overheat level alone.
 Therefore, the existing static thermal guard is insufficient for controlling MFC under parallel capture, motivating runtime control based on each capture's remaining timeout budget and processing workload.
