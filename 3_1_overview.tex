@@ -1,18 +1,20 @@
 \subsection{Overview}
 \label{sec:objective}
 
-Figure~\ref{fig:controller-overview} illustrates how the \emph{Budget-Aware Draft Controller} coordinates decisions on when to allow the next capture request and whether to execute optional stages in the draft sequence.
-The controller implements these decisions at existing points in the capture workflow, preserving the draft pipeline structure and the HAL and application interfaces.
+Figure~\ref{fig:controller-overview} illustrates how the \emph{Budget-Aware Draft Controller} coordinates two controls.
+\emph{Capture-Availability Pacing} determines when the next capture request can be accepted, while \emph{Remaining-Sequence Admission} decides whether optional stages execute in the draft sequence.
+A \emph{shared duration predictor} supplies processing-time estimates for both controls.
+The controller implements these controls at existing points in the capture workflow, preserving the draft pipeline structure and the HAL and application interfaces.
 
-To control when the next capture request can be accepted, \emph{Capture-Availability Pacing} (orange arrows) schedules delivery of \texttt{captureAvailable} to the application.
+Pacing (orange arrows) schedules delivery of \texttt{captureAvailable} to the application.
 For capture \(i\), pacing sends the signal with \(\mathit{delay}_i=0\), allowing the application to accept capture \(i+1\) immediately.
 For capture \(i+1\), the estimated processing workload indicates that accepting next capture could increase queueing delays and the risk of a Capture Timeout.
 Pacing therefore delays the signal by \(\mathit{delay}_{i+1}\), giving the draft worker more time to execute preceding draft sequences before capture \(i+2\) can be accepted.
 
-For captures already accepted, \emph{Remaining-Sequence Admission} (blue arrows) compares the capture's remaining timeout budget with the estimated time needed to complete the draft sequence, including mandatory encoding and saving, before each optional stage in \(M\) or \(S\).
+For captures already accepted, admission (blue arrows) compares the capture's remaining timeout budget with the estimated time needed to complete the draft sequence, including mandatory encoding and saving, before each optional stage in \(M\) or \(S\).
 In particular, capture \(i+2\)'s wait in the queue has reduced its remaining timeout budget below the estimated time needed to complete the draft sequence with both \(M\) and \(S\).
 Admission therefore skips \(M\), reducing the remaining processing time enough to execute \(S\) and complete encoding and saving before the deadline.
-After each draft sequence completes, the controller updates \emph{shared duration predictor} using the measured processing times.
+After each draft sequence completes, the controller updates the predictor using the measured processing times.
 These updates allow pacing and admission to respond to changes in draft processing time during consecutive captures.
 
 \myparagraph{Control objective}
