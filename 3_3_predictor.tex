@@ -1,0 +1,59 @@
+
+\subsection{Shared Duration Predictor}
+\label{sec:model}
+
+The controller's \emph{shared duration predictor} provides stage-duration estimates for both admission and pacing.
+Because draft processing time varies with stage configuration and runtime conditions, the predictor updates these estimates online from completed draft sequences.
+Admission applies them to the remaining sequence \(\mathcal K_{i,j}\), while pacing uses them to predict queued and upcoming draft work.
+Algorithm~\ref{alg:shared-predictor} shows how the predictor computes and updates these estimates.
+
+\myparagraph{Point estimate}
+For a workload sequence \(\mathcal K\), the predictor computes a point estimate \(\hat P(\mathcal K)\) of its total processing duration as the sum of the predicted stage durations \(\hat p(k)\).
+Its \textsc{ComputePointEstimate} function (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:compute}) multiplies each key's base duration \(\hat b(k)\) by a factor \(\gamma\) shared across keys and returns
+\begin{equation*}
+  \hat P(\mathcal{K})
+  =\sum_{k\in\mathcal{K}}\hat p(k),
+  \qquad
+  \hat p(k)=\hat b(k)\,\gamma .
+\end{equation*}
+Each base duration is maintained as a cumulative average of normalized measurements for its stage and configuration, providing a stable timing reference.
+The shared factor \(\gamma\) adjusts predictions across stages to reflect recent runtime conditions.
+
+\myparagraph{Online predictor update}
+At draft completion, \textsc{Update} first updates the predictor's base durations \(\hat b(k)\) and shared factor \(\gamma\) using capture \(i\)'s configured sequence \(\mathcal K_i\) and measured stage durations \(p_i(k)\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}).
+The predictor starts with an empty collection of base durations \(\hat b\) and initializes \(\gamma\) to one (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:init}).
+For each executed stage (\(p_i(k)>0\)) with prior measurements (\(\hat b(k)>0\)), it collects \(p_i(k)/\hat b(k)\) in \(\mathit{ratios}\) to estimate \(\gamma\) under current runtime conditions (Algorithm~\ref{alg:shared-predictor}, lines~\ref{alg:pe:loop}--\ref{alg:pe:ratio}).
+For every executed stage, it also incorporates \(p_i(k)/\gamma_{\mathrm{old}}\) into the cumulative average \(\hat b(k)\), where \(\gamma_{\mathrm{old}}\) is the shared factor before this update (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:base}).
+Finally, if \(\mathit{ratios}\) is nonempty, the predictor replaces \(\gamma\) with its median (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:gamma}).
+Cumulative averaging dampens isolated duration spikes, while the median limits the influence of a single-stage deviation when multiple ratios are available.
+
+\input{figures/alg_shared_predictor.tex}
+
+% \subsection{Shared Duration Predictor}
+% \label{sec:model}
+% The controller's \emph{shared duration predictor} provides stage-duration estimates for both admission and pacing.
+% Because draft processing time varies with stage configuration and runtime conditions, the predictor updates these estimates online from completed draft sequences.
+% Admission applies them to the remaining sequence \(\mathcal K_{i,j}\), while pacing uses them to predict queued and upcoming draft work.
+% Algorithm~\ref{alg:shared-predictor} shows how the predictor computes and updates these estimates.
+
+% \myparagraph{Point estimate}
+% For a workload sequence \(\mathcal K\), the predictor computes a point estimate \(\hat P(\mathcal K)\) of its total processing duration as the sum of the predicted stage durations \(\hat p(k)\).
+% Its \textsc{ComputePointEstimate} function (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:compute}) multiplies each key's base duration \(\hat b(k)\) by a factor \(\gamma\) shared across keys and returns
+% \begin{equation*}
+%   \hat P(\mathcal{K})
+%   =\sum_{k\in\mathcal{K}}\hat p(k),
+%   \qquad
+%   \hat p(k)=\hat b(k)\,\gamma .
+% \end{equation*}
+% Each base duration is maintained as a cumulative average of normalized measurements for its stage and configuration, providing a stable timing reference.
+% The shared factor \(\gamma\) adjusts predictions across stages to reflect recent runtime conditions.
+
+% \myparagraph{Online predictor update}
+% At draft completion, \(\mathit{controller}.\textsc{Update}\) first updates the predictor's base durations \(\hat b(k)\) and shared factor \(\gamma\) using measured stage durations \(p_i(k)\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}).
+% The predictor initially sets every base duration to zero and \(\gamma\) to one (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:init}).
+% For each executed key (\(p_i(k)>0\)) with prior measurements (\(\hat b(k)>0\)), it collects \(p_i(k)/\hat b(k)\) in \(\mathit{ratios}\) to estimate \(\gamma\) under current runtime conditions (Algorithm~\ref{alg:shared-predictor}, lines~\ref{alg:pe:loop}--\ref{alg:pe:ratio}).
+% For every executed key, it also incorporates \(p_i(k)/\gamma_{\mathrm{old}}\) into the cumulative average \(\hat b(k)\), where \(\gamma_{\mathrm{old}}\) is the shared factor before this update (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:base}).
+% Finally, if \(\mathit{ratios}\) is nonempty, the predictor replaces \(\gamma\) with its median (Algorithm~\ref{alg:shared-predictor}, line~\ref{alg:pe:gamma}).
+% Cumulative averaging dampens isolated duration spikes, while the median limits the influence of a single-stage deviation when multiple ratios are available.
+
+% \input{figures/alg_shared_predictor.tex}
