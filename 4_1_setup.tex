@@ -13,9 +13,9 @@ Within each experimental condition, all control configurations use the same prod
 Optional-stage skipping and pacing delays therefore reflect controller policy.
 
 \myparagraph{Workload conditions}
-On each device, we evaluate two operating points: the production-default 12MP configuration under normal memory conditions and a 24MP configuration under memory pressure.
-These are the low- and high-load endpoints of the four collected resolution--memory combinations.
-We induce memory pressure by running AnTuTu Benchmark~11.1.4 concurrently with capture.
+On each device, we evaluate two operating points: the production-default 12MP configuration under \textcolor{red}{normal conditions} and a 24MP configuration under \textcolor{red}{CPU stress}.
+These are the low- and high-load endpoints of the four collected \textcolor{red}{combinations of resolution and CPU load condition}.
+\textcolor{red}{For the CPU stress condition, we run} AnTuTu Benchmark~11.1.4 concurrently with capture.
 The 24MP condition denotes the requested capture mode.
 At overheat level~5 and above, the production camera stack falls back to 12MP.
 

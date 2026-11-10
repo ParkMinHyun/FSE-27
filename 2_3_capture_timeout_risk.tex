@@ -28,7 +28,7 @@ To examine the timeout risk of enabling lightweight multi-frame composition in t
 We bypassed the thermal guard so that configured optional stages could execute regardless of the overheat level.
 The optional stages are the multi-frame composition stage (\(M\)) and the deployed single-frame stages (collectively \(S\)).
 Both \(M\) alone and \(M+S\) retain the same mandatory encoding and saving stages.
-We tested 12MP and 24MP capture under normal memory conditions and under memory pressure.
+We tested 12MP and 24MP capture under \textcolor{red}{normal conditions} and under \textcolor{red}{CPU stress}.
 For each condition in Table~\ref{tab:timeout_index}, we ran ten trials of up to 30 consecutive captures.
 We chose 30 captures to extend testing beyond the earlier level-4 validation failure near the 20th consecutive capture.
 The table reports the earliest timeout capture index across the ten trials, grouped by starting overheat level.
@@ -37,6 +37,6 @@ The table reports the earliest timeout capture index across the ten trials, grou
 
 With the thermal guard bypassed, \(M+S\) timed out in 13 of the 16 conditions with starting levels below the guard's cutoff.
 Every \(M+S\) trial starting at level~4 or higher nevertheless completed its first capture without a timeout, even though the guard would have skipped the optional stages for that capture.
-Even at the same starting level, the earliest timeout varied with resolution, memory pressure, and draft configuration.
+Even at the same starting level, the earliest timeout varied with resolution, \textcolor{red}{CPU load condition}, and draft configuration.
 In conditions where \(M+S\) timed out, reducing optional work to \(M\) alone delayed the earliest timeout or resulted in no observed timeout within 30 captures.
 Together, these observations motivate runtime control of optional-stage execution based on each capture's remaining timeout budget and draft workload, rather than the overheat level alone.
