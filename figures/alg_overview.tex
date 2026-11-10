@@ -1,5 +1,5 @@
 \begin{algorithm}[t]
-\caption{Capture Workflow with Admission and Pacing}
+\caption{Budget-Aware Draft Controller}
 \label{alg:overview}
 \footnotesize
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -11,7 +11,7 @@
 \begin{algorithmic}[1]
 \Require Shutter inputs for captures $1,\ldots,N$
 \Ensure Draft images $\mathit{draft}_1,\ldots,\mathit{draft}_N$
-\State $\mathcal K_i\gets(k_1,\ldots,k_m)\;(\forall i),\quad\mathcal D\gets\emptyset,\quad\mathit{deadline}_{\mathrm{queue}}\gets0$ \label{alg:ov:configure}\label{alg:ov:history}\label{alg:ov:queue-init}
+\State $\mathcal K\gets(k_1,\ldots,k_m),\quad\mathcal D\gets\emptyset,\quad\mathit{deadline}_{\mathrm{queue}}\gets0$ \label{alg:ov:configure}\label{alg:ov:history}\label{alg:ov:queue-init}
 \State
 \For{$i=1$ \textbf{to} $N$}
   \State $\mathit{deadline}_i\gets\textsf{Now}()+\eta_{\mathrm{timeout}}$ \Comment{$\eta_{\mathrm{timeout}}=$ fixed timeout duration} \label{alg:ov:timeout}
@@ -20,15 +20,15 @@
   \State
   \State $\mathit{deadline}_{\mathrm{queue}}\gets\mathit{deadline}_i$ \label{alg:ov:queue-update}
   \AsyncDraft \label{alg:ov:async}
-    \For{each optional stage $k_j\in\mathcal K_i$}
+    \For{each optional stage $k_j\in\mathcal K$}
       \State $\mathcal K_{i,j}\gets(k_j,\ldots,k_m)$ \label{alg:ov:remaining}
-      \State $T_{i,j}\gets\mathit{deadline}_i-\textsf{Now}()$
+      \State $T_{i,j}\gets\mathit{deadline}_i-\textsf{Now}()$ \label{alg:ov:remaining-budget}
       \If{$\Call{DecideAdmission}{\mathcal D,\mathcal K_{i,j},T_{i,j}}=\textsc{admit}$} \label{alg:ov:admission}
         \State $\textsf{Execute}(k_j)$
       \EndIf
     \EndFor
     \State $(\mathit{draft}_i,p_i,C_i)\gets\textsf{EncodeAndSave}(i)$ \label{alg:ov:publish}
-    \State $\mathcal D\gets\Call{Update}{\mathcal D\cup\{(\mathcal K_i,p_i,C_i)\}}$ \label{alg:ov:record}\label{alg:ov:update}
+    \State $\mathcal D\gets\Call{Update}{\mathcal D\cup\{(\mathcal K,p_i,C_i)\}}$ \label{alg:ov:record}\label{alg:ov:update}
   \EndAsyncDraft
   \State $\textsf{Wait}(\mathit{delay}_i)$ \label{alg:ov:wait}
 \EndFor
