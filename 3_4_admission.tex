@@ -13,7 +13,7 @@ Admission therefore uses an empirical upper estimate \(U(\mathcal K_{i,j})\) of 
   \quad\text{or}\quad
   \hat P(\mathcal{K}_{i,j})=0.
 \end{equation*}
-When \(\hat P(\mathcal K_{i,j})=0\), the predictor has no prior timing measurements for the remaining enabled stages, so the optional stage is admitted to collect initial measurements.
+When \(\hat P(\mathcal K_{i,j})=0\), the controller has no prior timing measurements for the remaining enabled stages, so the optional stage is admitted to collect initial measurements.
 This rule assumes that each configuration can complete an isolated first capture within the Capture Timeout, a capture-level requirement enforced by release validation (Section~\ref{sec:release-process}).
 
 Admission treats \(M\) and \(S\) as separate groups.
@@ -28,7 +28,7 @@ Admission computes the upper estimate by multiplying the point estimate \(\hat P
   U(\mathcal{K})
   =\hat P(\mathcal{K})\,\phi_{\tau}(\mathcal{K}).
 \end{equation*}
-After the shared predictor is updated at draft completion, admission calibrates \(\phi_\tau\) for later decisions from observed stage overruns (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}).
+At draft completion, admission calibrates the residual factor \(\phi_\tau\) for subsequent decisions using observed stage overruns.
 For each remaining sequence \(\mathcal K_{i,j}\), it forms a measured subsequence \(\mathcal K\) containing only executed stages (\(p_i(k)>0\)).
 If \(\mathcal K\) contains a previously measured stage, admission computes a residual factor using the stage-duration predictions \(\hat p_i(k)\) retained before execution:
 \begin{equation*}

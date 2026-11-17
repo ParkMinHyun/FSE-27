@@ -25,5 +25,5 @@ It then uses the duration history \(\mathcal D\) to compute an empirical upper e
 
 To complete the draft sequence, the draft worker performs mandatory encoding and saving through \textsf{EncodeAndSave}, which returns \(\mathit{draft}_i\) and the collected duration measurements (line~\ref{alg:ov:publish}).
 These measurements include the stage durations \(p_i\), with \(p_i(k)\) denoting the processing duration of each executed stage \(k\), and the draft sequence duration \(C_i\).
-The controller records these measurements with \(\mathcal K\) in \(\mathcal D\) and updates the shared duration predictor and the admission and pacing states through \textsc{Update} for subsequent decisions (line~\ref{alg:ov:update}).
+The controller records these measurements with \(\mathcal K\) in \(\mathcal D\) and refreshes its duration estimates and admission and pacing states through \textsc{Update} for subsequent decisions (line~\ref{alg:ov:update}).
 

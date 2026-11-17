@@ -68,7 +68,7 @@ The extension thus accounts for the possibility that capture \(i\)'s draft seque
 
 \myparagraph{Backlog rebase}
 Pacing rebases \(\hat t_{\mathrm{drain}}\) at each draft completion because provisional backlog extensions use earlier point estimates that can become stale as durations and admission state change.
-After the shared predictor and admission update their states (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:update}), pacing re-anchors the drain forecast at \(\mathit{now}\):
+Using the updated point estimate \(\hat P(\mathcal K^{\mathrm{adm}})\), pacing re-anchors the drain forecast at \(\mathit{now}\):
 \begin{equation}
   \hat t_{\mathrm{drain}}
   \gets

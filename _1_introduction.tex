@@ -32,7 +32,7 @@ In this paper, we present the Budget-Aware Draft Controller, which coordinates t
 A major challenge is deciding how much time to reserve for draft work: too little risks a Capture Timeout, whereas too much needlessly suppresses optional processing or prolongs shot-to-shot intervals.
 To address this, \emph{Remaining-Sequence Admission} uses recent duration residuals to calibrate an empirical upper estimate for the entire remaining draft sequence and admits an optional stage when this estimate fits within the capture's remaining timeout budget.
 \emph{Capture-Availability Pacing} delays the next capture opportunity when projected draft workload exceeds the remaining timeout budget of the most recently enqueued capture.
-Both use a shared duration predictor updated from measured durations in the current camera session, without per-device timing tables.
+Both use duration estimates updated online from measurements in the current camera session, without per-device timing tables.
 
 Across 28 settings spanning two devices, two capture conditions, and seven starting overheat levels, with the guard bypassed, the controller completed all 280 runs without Capture Timeout, whereas uncontrolled execution of all optional stages timed out in 225 runs.
 Multi-frame composition executed on an average of at least 4.5 of the first five captures per run in every setting, including those starting at or above the guard's cutoff.
