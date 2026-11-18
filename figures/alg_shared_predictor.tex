@@ -11,15 +11,15 @@
 \State $\hat b\gets\emptyset,\quad \gamma\gets1$ \label{alg:pe:init}
 \State
 \Procedure{Update}{$\mathcal K,p$}
-  \State $\gamma_{\mathrm{old}}\gets\gamma,\quad \mathit{ratios}\gets\emptyset$ \label{alg:pe:snapshot}
+  \State $\gamma_{\mathrm{old}}\gets\gamma,\quad \Gamma\gets\emptyset$ \label{alg:pe:snapshot}
   \For{each executed stage $k\in\mathcal K$} \label{alg:pe:loop}
     \If{$\hat b(k)>0$} \label{alg:pe:observed}
-      \State $\mathit{ratios}\gets\mathit{ratios}\uplus\{p(k)/\hat b(k)\}$ \label{alg:pe:ratio}
+      \State $\Gamma\gets\Gamma\uplus\{p(k)/\hat b(k)\}$ \label{alg:pe:ratio}
     \EndIf
     \State $\hat b(k)\gets$ cumulative average including $p(k)/\gamma_{\mathrm{old}}$ \label{alg:pe:base}
   \EndFor
-  \If{$\mathit{ratios}\neq\emptyset$} \label{alg:pe:condition}
-    \State $\gamma\gets\operatorname{median}(\mathit{ratios})$ \label{alg:pe:gamma}
+  \If{$\Gamma\neq\emptyset$} \label{alg:pe:condition}
+    \State $\gamma\gets\operatorname{median}(\Gamma)$ \label{alg:pe:gamma}
   \EndIf
   \State \Return $(\hat b,\gamma)$ \label{alg:pe:return}
 \EndProcedure

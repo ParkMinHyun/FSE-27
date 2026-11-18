@@ -1,8 +1,6 @@
 \subsection{Experimental Setup}
 \label{sec:setup}
 
-\input{tables/tab_setup.tex}
-
 \myparagraph{Platforms and control configurations}
 The draft sequence's lightweight multi-frame composition targets Portrait mode and requires coordinated support from the HAL and image-processing components.
 We evaluate end-to-end binaries incorporating this support on the Galaxy S26 Ultra and Galaxy S26.
@@ -11,6 +9,8 @@ To isolate controller behavior, both evaluation binaries bypass the static therm
 The Exynos-based Galaxy S26 also bypasses its parallel-capture restriction when either \(M\) or \(S\) is enabled.
 Within each experimental condition, all control configurations use the same production-derived capture implementation and differ only in policy.
 Optional-stage skipping and pacing delays therefore reflect controller policy.
+
+\input{tables/tab_setup.tex}
 
 \myparagraph{Workload conditions}
 On each device, we evaluate two operating points: the production-default 12MP configuration under \textcolor{red}{normal conditions} and a 24MP configuration under \textcolor{red}{CPU stress}.

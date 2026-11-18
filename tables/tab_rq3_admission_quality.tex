@@ -11,10 +11,13 @@
   \newlength{\rqnfswidth}\settowidth{\rqnfswidth}{\textbf{4.4\% (157)}}%
   \newlength{\rqnuawidth}\settowidth{\rqnuawidth}{23.6\% (42)}%
   \newlength{\rqnuswidth}\settowidth{\rqnuswidth}{\textbf{97.2\% (173)}}%
-  \newcommand{\rqnfa}[1]{\makebox[\rqnfawidth][r]{#1}}%
+  % The two error columns (feasible skipped, unsafe admitted) stay black;
+  % their complements are dimmed so the errors read first.
+  \newcommand{\rqndim}[1]{\textcolor{black!60}{#1}}%
+  \newcommand{\rqnfa}[1]{\makebox[\rqnfawidth][r]{\rqndim{#1}}}%
   \newcommand{\rqnfs}[1]{\makebox[\rqnfswidth][r]{#1}}%
   \newcommand{\rqnua}[1]{\makebox[\rqnuawidth][r]{#1}}%
-  \newcommand{\rqnus}[1]{\makebox[\rqnuswidth][r]{#1}}%
+  \newcommand{\rqnus}[1]{\makebox[\rqnuswidth][r]{\rqndim{#1}}}%
   \newsavebox{\rqnbox}%
 
   \newcommand{\rqntabular}{%
@@ -29,10 +32,10 @@
       & \multicolumn{2}{c|}{\textbf{Feasible decisions}}
       & \multicolumn{2}{c}{\textbf{Unsafe decisions}} \\
     \cmidrule(lr){2-3}\cmidrule(l){4-5}
-      & \multicolumn{1}{c}{\textbf{Admitted}}
-      & \multicolumn{1}{c|}{\textbf{Skipped}}
-      & \multicolumn{1}{c}{\textbf{Admitted}}
-      & \multicolumn{1}{c}{\textbf{Skipped}} \\
+      & \multicolumn{1}{c}{\rqndim{\textbf{Admitted}}}
+      & \multicolumn{1}{c|}{\textbf{Skipped}\,\(\downarrow\)}
+      & \multicolumn{1}{c}{\textbf{Admitted}\,\(\downarrow\)}
+      & \multicolumn{1}{c}{\rqndim{\textbf{Skipped}}} \\
     \midrule
 
     \multicolumn{5}{@{}l}{\textbf{Naive approaches}} \\
@@ -43,12 +46,12 @@
     \midrule
 
     \textbf{Our approach}
-      & \rqnfa{\textbf{97.3\% (3{,}470)}} & \rqnfs{\textbf{2.7\% (98)}}
-      & \cellcolor{gray!20}\rqnua{\textbf{2.8\% (5)}} & \rqnus{\textbf{97.2\% (173)}} \\
-    \hspace{8pt}12MP normal, \(M\)       & \rqnfa{98.1\% (831)} & \rqnfs{1.9\% (16)} & \rqnua{\textbf{5.7\% (2)}} & \rqnus{94.3\% (33)} \\
-    \hspace{8pt}12MP normal, \(S\)       & \rqnfa{99.4\% (842)} & \rqnfs{0.6\% (5)} & \rqnua{\textbf{0.0\% (0)}} & \rqnus{100.0\% (35)} \\
-    \hspace{8pt}24MP \textcolor{red}{CPU stress}, \(M\)   & \rqnfa{94.7\% (892)} & \rqnfs{5.3\% (50)} & \rqnua{\textbf{1.9\% (1)}} & \rqnus{98.1\% (53)} \\
-    \hspace{8pt}24MP \textcolor{red}{CPU stress}, \(S\)   & \rqnfa{97.1\% (905)} & \rqnfs{2.9\% (27)} & \rqnua{\textbf{3.7\% (2)}} & \rqnus{96.3\% (52)} \\
+      & \rqnfa{97.3\% (3{,}470)} & \rqnfs{\textbf{2.7\% (98)}}
+      & \cellcolor{gray!20}\rqnua{\textbf{2.8\% (5)}} & \rqnus{97.2\% (173)} \\
+    \hspace{8pt}12MP normal, \(M\)       & \rqnfa{98.1\% (831)} & \rqnfs{1.9\% (16)} & \rqnua{5.7\% (2)} & \rqnus{94.3\% (33)} \\
+    \hspace{8pt}12MP normal, \(S\)       & \rqnfa{99.4\% (842)} & \rqnfs{0.6\% (5)} & \rqnua{0.0\% (0)} & \rqnus{100.0\% (35)} \\
+    \hspace{8pt}24MP \textcolor{red}{CPU stress}, \(M\)   & \rqnfa{94.7\% (892)} & \rqnfs{5.3\% (50)} & \rqnua{1.9\% (1)} & \rqnus{98.1\% (53)} \\
+    \hspace{8pt}24MP \textcolor{red}{CPU stress}, \(S\)   & \rqnfa{97.1\% (905)} & \rqnfs{2.9\% (27)} & \rqnua{3.7\% (2)} & \rqnus{96.3\% (52)} \\
     \bottomrule
   \end{tabular}}%
   \fittabcolsep{\rqnbox}{\rqntabular}{\columnwidth}{10}%

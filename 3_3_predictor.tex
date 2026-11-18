@@ -1,33 +1,32 @@
 \subsection{Online Stage-Duration Estimation}
 \label{sec:model}
 
-The controller estimates individual stage durations from measurements collected during the current camera session.
+Because draft processing time varies across devices and runtime conditions, the controller estimates individual stage durations online from measurements collected during the current camera session.
 Admission uses these estimates to assess the processing time of the remaining sequence \(\mathcal K_{i,j}\), while pacing uses them to forecast queued and upcoming draft work.
 
-\myparagraph{Point estimates}
-For each workload key \(k\), the controller computes a stage-duration estimate \(\hat p(k)\) from a base duration \(\hat b(k)\) and a shared condition factor \(\gamma\).
-The processing-time point estimate \(\hat P(\mathcal K)\) for a workload sequence \(\mathcal K\) is the sum of these stage-duration estimates:
+\myparagraph{Stage-Duration Estimates}
+For each workload key \(k\), the controller computes a stage-duration estimate \(\hat p(k)\) as the product of a base duration \(\hat b(k)\) and a shared condition factor \(\gamma\).
+For a workload sequence \(\mathcal K\), it then computes a processing-time point estimate \(\hat P(\mathcal K)\) as the sum of these stage-duration estimates:
 \begin{equation*}
   \hat p(k)=\hat b(k)\,\gamma,
   \qquad
   \hat P(\mathcal{K})
   =\sum_{k\in\mathcal{K}}\hat p(k).
 \end{equation*}
-Each base duration is maintained as a cumulative average of normalized measurements for its stage and configuration, providing a stable timing reference.
-The shared condition factor \(\gamma\) adjusts stage-duration estimates across workload keys to reflect recent runtime conditions.
-An unmeasured key contributes zero to the point estimate.
-
-\myparagraph{Online update}
-After each draft completion, the controller updates the base durations and shared condition factor using the newly measured stage durations.
-Algorithm~\ref{alg:duration-update} details this part of the controller's \textsc{Update} operation in Algorithm~\ref{alg:overview} (line~\ref{alg:ov:update}).
-The controller initializes \(\hat b\) as an empty collection and \(\gamma\) to one, then retains both across draft completions (line~\ref{alg:pe:init}).
-
-Given a workload sequence \(\mathcal K\) and measured stage durations \(p\), \textsc{Update} first saves the current shared condition factor as \(\gamma_{\mathrm{old}}\) (line~\ref{alg:pe:snapshot}).
-For each executed stage \(k\) with \(p(k)>0\), it records \(p(k)/\hat b(k)\) in \(\mathit{ratios}\) if prior measurements are available (\(\hat b(k)>0\)) (lines~\ref{alg:pe:loop}--\ref{alg:pe:ratio}).
-It then incorporates the normalized duration \(p(k)/\gamma_{\mathrm{old}}\) into the cumulative average \(\hat b(k)\), including when the stage has no prior measurements (line~\ref{alg:pe:base}).
-If \(\mathit{ratios}\) is nonempty, it sets \(\gamma\) to their median (line~\ref{alg:pe:gamma}).
-Cumulative averaging dampens isolated duration spikes as measurements accumulate.
-With three or more stage ratios, the median limits the influence of a single extreme ratio.
-Finally, the procedure returns the updated base durations and shared condition factor for subsequent stage-duration estimates (line~\ref{alg:pe:return}).
+Here, each base duration is maintained as a cumulative average of normalized measurements for its stage and configuration, while the shared condition factor \(\gamma\) scales the base durations of all workload keys.
+Intuitively, each stage-duration estimate is a stable timing reference adjusted to recent runtime conditions.
 
 \input{figures/alg_shared_predictor.tex}
+
+\myparagraph{Online Update}
+After each draft completion, the controller updates the base durations and shared condition factor using the newly measured stage durations.
+Algorithm~\ref{alg:duration-update} details this part of the controller's \textsc{Update} operation in Algorithm~\ref{alg:overview} (line~\ref{alg:ov:update}).
+The controller initializes the base durations \(\hat b\) as an empty collection and the shared condition factor \(\gamma\) to one, then retains both across draft completions (line~\ref{alg:pe:init}).
+
+Given a workload sequence \(\mathcal K\) and measured stage durations \(p\), \textsc{Update} first saves the current shared condition factor as \(\gamma_{\mathrm{old}}\) and initializes an empty collection \(\Gamma\), which is later used to update \(\gamma\) (line~\ref{alg:pe:snapshot}).
+For each executed stage \(k\) with \(p(k)>0\), if the stage has prior measurements (\(\hat b(k)>0\)), it records the ratio \(p(k)/\hat b(k)\) in \(\Gamma\) (lines~\ref{alg:pe:loop}--\ref{alg:pe:ratio}).
+It then updates the cumulative average \(\hat b(k)\) with the normalized duration \(p(k)/\gamma_{\mathrm{old}}\) (line~\ref{alg:pe:base}).
+This cumulative average dampens isolated duration spikes as measurements accumulate, keeping the base duration stable.
+After the loop, if \(\Gamma\) is nonempty, \textsc{Update} sets \(\gamma\) to the median of the recorded ratios (lines~\ref{alg:pe:condition}--\ref{alg:pe:gamma}).
+This median prevents an outlier among the ratios from skewing \(\gamma\).
+Finally, the procedure returns the updated base durations and shared condition factor for subsequent stage-duration estimates (line~\ref{alg:pe:return}).

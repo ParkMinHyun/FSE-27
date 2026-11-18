@@ -1,20 +1,21 @@
 \subsection{Remaining-Sequence Admission}
 \label{sec:admission}
 
-Immediately before each optional stage, \emph{Admission} compares the capture's remaining timeout budget with the estimated duration of the entire remaining draft sequence, including mandatory encoding and saving.
-Deciding at this point accounts for the budget consumed by queueing and earlier stages.
+The goal of \emph{Admission} is to execute as many optional stages as possible without exceeding each capture's deadline.
+To achieve this, immediately before each optional stage, admission compares the capture's remaining timeout budget with the estimated duration of the entire remaining draft sequence, including mandatory encoding and saving.
+Deciding at this point accounts for the timeout budget already consumed by queueing and earlier stages.
 
-\myparagraph{Admission rule}
+\myparagraph{Admission Rule}
 The point estimate \(\hat P(\mathcal K_{i,j})\) may underestimate the time needed to finish the remaining sequence.
 Admission therefore uses an empirical upper estimate \(U(\mathcal K_{i,j})\) of the remaining processing time for the budget comparison.
-\(\mathit{controller}.\textsc{DecideAdmission}\) (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:admission}) admits an optional stage \(k_j\) when
+Formally, \textsc{DecideAdmission} (Algorithm~\ref{alg:overview}, line~\ref{alg:ov:admission}) admits an optional stage \(k_j\) when
 \begin{equation*}
   U(\mathcal{K}_{i,j})\leq T_{i,j}
   \quad\text{or}\quad
   \hat P(\mathcal{K}_{i,j})=0.
 \end{equation*}
 When \(\hat P(\mathcal K_{i,j})=0\), the controller has no prior timing measurements for the remaining enabled stages, so the optional stage is admitted to collect initial measurements.
-This rule assumes that each configuration can complete an isolated first capture within the Capture Timeout, a capture-level requirement enforced by release validation (Section~\ref{sec:release-process}).
+This initial admission assumes that each configuration can complete an isolated first capture within the Capture Timeout, a capture-level requirement enforced by pre-release validation (Section~\ref{sec:release-process}).
 
 Admission treats \(M\) and \(S\) as separate groups.
 Once an \(M\) or \(S\) stage is rejected, admission disables the optional stages in that group.
@@ -22,7 +23,7 @@ Until the draft queue drains, admission skips those stages and excludes them fro
 This avoids repeatedly toggling the group's visual effects across consecutive draft images.
 When the queue drains, both groups are enabled again.
 
-\myparagraph{Upper-estimate calibration}
+\myparagraph{Upper-Estimate Calibration}
 Admission computes the upper estimate by multiplying the point estimate \(\hat P(\mathcal K)\) by an empirical residual factor \(\phi_\tau(\mathcal K)\geq1\):
 \begin{equation*}
   U(\mathcal{K})
@@ -44,7 +45,8 @@ When a draft completion yields any \(\phi(\mathcal K)\), admission first multipl
 We selected this decay factor at the knee of the trade-off between the rate at which \(U\) is exceeded and its magnitude.
 Admission then adds each new \(\phi(\mathcal K)\) to its history once, with unit weight.
 Finally, it selects the weighted \(\tau\)-quantile of each history as \(\phi_\tau(\mathcal K)\).
-Admission determines \(\tau\) from the Kish effective sample size \(n_{\mathrm{eff}}\) of the current weights \(w_l\in\{1,0.90,0.90^2,\ldots\}\) in that history~\cite{kish-survey-sampling}:
+
+Admission determines \(\tau\) from the Kish effective sample size \(n_{\mathrm{eff}}\) of the current weights \(w_l\in\{1,0.90,0.90^2,\ldots\}\) in each history~\cite{kish-survey-sampling}:
 \[
   n_{\mathrm{eff}}
   =\frac{(\sum_l w_l)^2}{\sum_l w_l^2},
@@ -57,9 +59,9 @@ Setting \(\tau\) this way avoids a separately tuned target percentile.
 For a sequence \(\mathcal K\) without residual history, admission selects \(\phi_\tau(\mathcal K)\) by the same rule from residual factors pooled across sequences.
 If the pool is also empty, it sets \(\phi_\tau(\mathcal K)=1\), so that \(U(\mathcal K)=\hat P(\mathcal K)\).
 
-\myparagraph{Watchdog fallback}
-An admitted stage may still run longer than predicted, and it cannot be cancelled once it enters native image processing.
-The watchdog therefore triggers fallback if the stage has not completed within the following time budget:
+\myparagraph{Watchdog Fallback}
+An admitted stage may still run longer than predicted, and it cannot be canceled once it enters native image processing.
+The controller therefore uses a watchdog that triggers fallback if the stage has not completed within the following time budget:
 \begin{equation*}
   W_{i,j}=\max\{0,T_{i,j}-U(\mathcal{K}_{i,m})\},
 \end{equation*}
