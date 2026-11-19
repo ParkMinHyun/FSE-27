@@ -3,23 +3,25 @@
 
 \input{tables/tab_rq2_ablation.tex}
 
-Table~\ref{tab:rq2_ablation} compares admission and pacing separately and together in three cells starting at the static thermal guard's level-4 cutoff.
-\emph{No control} enables neither component, the same configuration as Baseline in Table~\ref{tab:rq1_controller_behavior}.
-\emph{Admission only} and \emph{Pacing only} enable only the named component, and \emph{Full} enables both.
-The Captures column reports the percentage of the 30 planned captures per run completed on time.
-The \(M\) and \(S\) columns report the percentages completed on time with the corresponding stage executed, using the same denominator.
+To examine how admission and pacing contribute to end-to-end effectiveness, we compared four control configurations in three settings starting at the static thermal guard's level-4 cutoff.
+Specifically, \emph{No control} enables neither component and \emph{Full} enables both, the same configurations as Baseline and our controller in Table~\ref{tab:rq1_controller_behavior}, respectively.
+\emph{Admission only} and \emph{Pacing only} enable only the named component.
+In Table~\ref{tab:rq2_ablation}, the Captures column reports the percentage of the 30 planned captures per run completed on time.
+The \(M\) and \(S\) columns report the percentages of these captures completed on time with the corresponding stage executed.
+The Activated column reports the percentage of observed shot-to-shot transitions on which pacing activated, and \(\mathit{delay}\)~P50 is the median of positive applied delays.
 
-\myparagraph{Limits of single-component control}
-Only \emph{Full} completed all planned captures on time in all three cells.
+\myparagraph{Limits of Single-Component Control}
+Table~\ref{tab:rq2_ablation} shows that only \emph{Full} completed all planned captures on time in all three settings.
 On-time completion rates were \mbox{24.3--42.3\%} for \emph{No control} and \mbox{28.1--61.4\%} for \emph{Pacing only}.
-\emph{Admission only} reached 100\% in the S26 Ultra 12MP cell but 87.3--90.7\% in the other two cells.
+\emph{Admission only} reached 100\% in the S26 Ultra 12MP setting but 87.3--90.7\% in the other two settings.
 
-In the S26 Ultra 12MP cell, \emph{Admission only} met every deadline while skipping each optional stage in most captures.
+In the S26 Ultra 12MP setting, \emph{Admission only} met every deadline while skipping each optional stage in most captures.
 Its \(M\) and \(S\) execution rates were 29.3\% and 33.7\%, compared with 58.0\% and 95.7\% under \emph{Full}.
-In the S26 Ultra 24MP and S26 12MP cells, \emph{Admission only} also executed both stages less often than \emph{Full}, yet Capture Timeout still occurred.
+In the S26 Ultra 24MP and S26 12MP settings, \emph{Admission only} also executed both stages less often than \emph{Full}, yet Capture Timeout still occurred.
 
-\myparagraph{Coordinated control}
-\emph{Full} executed both \(M\) and \(S\) more often than \emph{Admission only} in every cell.
-However, this retention came with a responsiveness cost.
+\myparagraph{Coordinated Control}
+\emph{Full} executed both \(M\) and \(S\) more often than \emph{Admission only} in every setting, executing \(M\) 1.3--2.0 times as often.
+However, this additional execution came with a responsiveness cost.
 \emph{Full} activated pacing on 36.7--53.1\% of transitions, with a median positive applied delay of 297--437~ms.
 These medians were 37--45\% of the corresponding shot-to-shot intervals with parallel capture disabled.
+Overall, these results indicate that admission contributes most of the deadline safety, whereas pacing enables the controller to complete every capture on time and to execute optional stages more often than admission alone.

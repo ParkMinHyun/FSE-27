@@ -1,27 +1,30 @@
-\subsection{Experimental Setup}
+\subsection{Experimental Settings}
 \label{sec:setup}
 
-\myparagraph{Platforms and control configurations}
-The draft sequence's lightweight multi-frame composition targets Portrait mode and requires coordinated support from the HAL and image-processing components.
-We evaluate end-to-end binaries incorporating this support on the Galaxy S26 Ultra and Galaxy S26.
+\myparagraph{Platforms}
+MFC in the draft sequence requires coordinated support from the HAL and image-processing components, which is currently available in Portrait mode.
+We therefore conducted all experiments in Portrait mode on the Galaxy S26 Ultra and Galaxy S26, using end-to-end binaries that incorporate this support.
 Table~\ref{tab:setup} summarizes these platforms and their common run conditions.
-To isolate controller behavior, both evaluation binaries bypass the static thermal guard.
-The Exynos-based Galaxy S26 also bypasses its parallel-capture restriction when either \(M\) or \(S\) is enabled.
-Within each experimental condition, all control configurations use the same production-derived capture implementation and differ only in policy.
+To isolate controller behavior, both evaluation binaries bypass the existing static thermal guard.
+The Exynos-based Galaxy S26 disables parallel capture when either \(M\) or \(S\) is enabled, and its evaluation binary also bypasses this restriction.
+
+\myparagraph{Control Configurations}
+We compared our controller with \emph{Baseline}, which enables \(M\) and \(S\) with admission and pacing disabled.
+To ensure a fair comparison, all control configurations use the same production-derived capture implementation within each experimental setting and differ only in policy.
 Optional-stage skipping and pacing delays therefore reflect controller policy.
 
-\input{tables/tab_setup.tex}
-
-\myparagraph{Workload conditions}
-On each device, we evaluate two operating points: the production-default 12MP configuration under \textcolor{red}{normal conditions} and a 24MP configuration under \textcolor{red}{CPU stress}.
+\myparagraph{Workload Conditions}
+On each device, we evaluated two capture conditions: the production-default 12MP configuration under \textcolor{red}{normal conditions} and a 24MP configuration under \textcolor{red}{CPU stress}.
 These are the low- and high-load endpoints of the four collected \textcolor{red}{combinations of resolution and CPU load condition}.
-\textcolor{red}{For the CPU stress condition, we run} AnTuTu Benchmark~11.1.4 concurrently with capture.
-The 24MP condition denotes the requested capture mode.
-At overheat level~5 and above, the production camera stack falls back to 12MP.
+\textcolor{red}{For the CPU stress condition, we ran} AnTuTu Benchmark~11.1.4 concurrently with capture.
+Note that 24MP denotes the requested capture resolution, because the capture pipeline falls back to 12MP at overheat level~5 and above.
+For each device and capture condition, we varied the starting overheat level (0--6), resulting in 28 experimental settings.
 
-\myparagraph{Run protocol}
-We first reach each target starting overheat level (0--6) through repeated captures or idle cooling.
-We then force-stop and relaunch the camera application to reset process-local controller state, and begin the run when the device reports that level.
-Thermal state then evolves without external intervention.
-A reproducible ADB loop issues each shutter input as soon as the application receives \texttt{captureAvailable}, saturating the exposed request rate.
-Each run targets 30 consecutive captures and terminates at the first Capture Timeout.
+\myparagraph{Run Protocol}
+Before each run, we first reached the target starting overheat level through repeated captures or idle cooling.
+We then force-stopped and relaunched the camera application to reset process-local controller state, and began the run when the device reported that level.
+Thermal state then evolved without external intervention.
+A reproducible ADB loop issued each shutter input as soon as the application received \texttt{captureAvailable}, saturating the exposed request rate.
+Each run targeted 30 consecutive captures and terminated at the first Capture Timeout.
+
+\input{tables/tab_setup.tex}
