@@ -1,12 +1,11 @@
 % Notes: docs/exhibits.md#tab_rq1_end_to_end_summary
-\begin{table*}[t]
+\begin{table}[t]
   \centering
   \setlength{\abovecaptionskip}{2pt}%
   \setlength{\belowcaptionskip}{3pt}%
   \caption{End-to-end effectiveness of our controller (RQ1).}
   \label{tab:rq1_preventive_alignment}
   \label{tab:rq1_controller_behavior}
-
   {\scriptsize
   \setlength{\arrayrulewidth}{0.35pt}%
   \setlength{\doublerulesep}{0.8pt}%
@@ -14,161 +13,128 @@
   \newlength{\rqsurvivedwidth}%
   \settowidth{\rqsurvivedwidth}{\textbf{10/10} (--)}%
   \newcommand{\rqsurvived}[1]{\makebox[\rqsurvivedwidth][r]{#1}}%
+  \newlength{\rqstageheadingwidth}%
+  \settowidth{\rqstageheadingwidth}{\textbf{Stage execution}}%
   \newsavebox{\rqtabbox}%
   \newcommand{\rqtabular}{%
-  \begin{tabular}{|c|c|c|r||c||c||rr|rr||rr|rr|}
+  \begin{tabular}{|c|c|c|r|r|r|r|r|r|}
     \hline\hline
-    \multirow{4}{*}[-1.8ex]{\textbf{Device}} &
-    \multirow{4}{*}[-1.8ex]{\textbf{Condition}} &
-    \multirow{4}{*}[-1.8ex]{\makecell[c]{\textbf{Starting}\\\textbf{overheat}\\\textbf{level}}} &
-    \multirow{4}{*}[-1.8ex]{\textbf{N}} &
-    \multicolumn{1}{c||}{\multirow{2}{*}{\makecell[c]{\textbf{Baseline}}}} &
-    \multicolumn{9}{c|}{\textbf{Our controller}} \\
-    \cline{6-14}
-    & & & &
-    \multicolumn{1}{c||}{} &
-    \multicolumn{1}{c||}{\textbf{Deadline safety}} &
-    \multicolumn{4}{c||}{\textbf{Stage execution}} &
-    \multicolumn{4}{c|}{\textbf{Pacing cost}} \\
-    \cline{5-5}\cline{6-14}
-    & & & &
-    \multicolumn{1}{c||}{\multirow{2}{*}[-0.4ex]{%
-      \makecell[c]{\textbf{Completed runs}\\\textbf{(timeout onset)}\textsuperscript{*}}}} &
-    \multicolumn{1}{c||}{\multirow{2}{*}[-0.4ex]{%
-      \makecell[c]{\textbf{Completed runs}\\\textbf{(timeout onset)}\textsuperscript{*}}}} &
-    \multicolumn{2}{c|}{\makecell[c]{\mbox{\boldmath$M$}\\\textbf{(captures)}}} &
-    \multicolumn{2}{c||}{\makecell[c]{\mbox{\boldmath$S$}\\\textbf{(captures)}}} &
-    \multicolumn{2}{c|}{\makecell[c]{\textbf{Activated}\\\textbf{(transitions)}}} &
-    \multicolumn{2}{c|}{\makecell[c]{\mbox{\boldmath$\mathit{delay}$}\textbf{ P50}\\\textbf{(ms)}}} \\
-    \cline{7-14}
-    & & & & & &
-    \multicolumn{1}{c}{\textbf{@5}} & \multicolumn{1}{c|}{@30} &
-    \multicolumn{1}{c}{\textbf{@5}} & \multicolumn{1}{c||}{@30} &
-    \multicolumn{1}{c}{\textbf{@5}} & \multicolumn{1}{c|}{@30} &
-    \multicolumn{1}{c}{\textbf{@5}} & \multicolumn{1}{c|}{@30} \\
+    \multirow[c]{3}{*}[-0.5\normalbaselineskip]{\textbf{Device}} &
+    \multirow[c]{3}{*}[-0.5\normalbaselineskip]{\textbf{Condition}} &
+    \multirow[c]{3}{*}[-0.5\normalbaselineskip]{\makecell[c]{\textbf{Starting}\\\textbf{overheat}\\\textbf{level}}} &
+    \multicolumn{2}{c|}{\textbf{Deadline safety}} &
+    \multicolumn{4}{c|}{\textbf{Our controller}} \\
+    \cline{4-9}
+    & & &
+    \multicolumn{2}{c|}{\textbf{Completed runs}} &
+    \multicolumn{2}{c|}{\textbf{Stage execution}} &
+    \multicolumn{2}{c|}{\textbf{Pacing cost}} \\
+    \cline{4-9}
+    & & &
+    \multicolumn{1}{c|}{\textbf{Baseline}} &
+    \multicolumn{1}{c|}{\textbf{Ours}} &
+    \multicolumn{1}{c|}{\makecell[c]{\makebox[.5\rqstageheadingwidth]{\boldmath$M$}\\\textbf{(\%)}}} &
+    \multicolumn{1}{c|}{\makecell[c]{\makebox[.5\rqstageheadingwidth]{\boldmath$S$}\\\textbf{(\%)}}} &
+    \multicolumn{1}{c|}{\makecell[c]{\textbf{Activation}\\\textbf{(\%)}}} &
+    \multicolumn{1}{c|}{\makecell[c]{\textbf{Delay}\\\textbf{(ms)}}} \\
     \hline\hline
     \multirow{14}{*}{\makecell[c]{S26\\Ultra}}
       & \multirow{7}{*}{\makecell[c]{12MP\\normal}}
-      & Lv0 & 10 & \rqsurvived{\textbf{10/10} (--)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 30.0 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 0.0 & \textbf{--} & -- \\
-    \cline{3-14}
-      & & Lv1 & 10 & \rqsurvived{\textbf{10/10} (--)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 29.4 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 0.2 & \textbf{--} & 127 \\
-    \cline{3-14}
-      & & Lv2 & 10 & \rqsurvived{7/10 (24)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 27.1 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 3.6 & \textbf{--} & 262 \\
-    \cline{3-14}
-      & & Lv3 & 10 & \rqsurvived{1/10 (13)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 25.6 & \textbf{5.0} & 29.4
-        & \textbf{0.0} & 10.4 & \textbf{--} & 284 \\
-    \cline{3-14}
-      & & Lv4 & 10 & \rqsurvived{0/10 (8)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 17.4 & \textbf{5.0} & 28.7
-        & \textbf{0.0} & 11.0 & \textbf{--} & 437 \\
-    \cline{3-14}
-      & & Lv5 & 10 & \rqsurvived{0/10 (8)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 13.6 & \textbf{5.0} & 28.3
-        & \textbf{0.6} & 12.2 & \textbf{547} & 470 \\
-    \cline{3-14}
-      & & Lv6 & 10 & \rqsurvived{0/10 (7)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{4.7} & 10.9 & \textbf{4.8} & 26.5
-        & \textbf{0.9} & 9.9 & \textbf{503} & 521 \\
-    \Xcline{2-14}{0.7pt}
-      & \multirow{7}{*}{\makecell[c]{24MP\\\textcolor{red}{CPU}\\\textcolor{red}{stress}}}
-      & Lv0 & 10 & \rqsurvived{7/10 (26)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 27.8 & \textbf{5.0} & 30.0
-        & \textbf{0.2} & 11.0 & \textbf{223} & 338 \\
-    \cline{3-14}
-      & & Lv1 & 10 & \rqsurvived{2/10 (19)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 20.0 & \textbf{5.0} & 27.0
-        & \textbf{0.0} & 10.2 & \textbf{--} & 470 \\
-    \cline{3-14}
-      & & Lv2 & 10 & \rqsurvived{0/10 (14)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 17.5 & \textbf{5.0} & 23.7
-        & \textbf{0.0} & 10.8 & \textbf{--} & 377 \\
-    \cline{3-14}
-      & & Lv3 & 10 & \rqsurvived{0/10 (5)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{4.7} & 10.5 & \textbf{4.7} & 16.3
-        & \textbf{1.0} & 11.0 & \textbf{616} & 418 \\
-    \cline{3-14}
-      & & Lv4 & 10 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{4.7} & 13.4 & \textbf{5.0} & 23.1
-        & \textbf{1.5} & 10.6 & \textbf{458} & 400 \\
-    \cline{3-14}
-      & & Lv5 & 10 & \rqsurvived{0/10 (4)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{4.8} & 5.2 & \textbf{5.0} & 15.8
-        & \textbf{1.6} & 8.5 & \textbf{737} & 367 \\
-    \cline{3-14}
-      & & Lv6 & 10 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{4.5} & 7.5 & \textbf{4.6} & 14.0
-        & \textbf{1.8} & 8.5 & \textbf{685} & 525 \\
-    \Xcline{1-14}{0.7pt}
+      & Lv0 & \rqsurvived{\textbf{10/10} (--)} & \rqsurvived{\textbf{10/10} (--)}
+        & 100.0 & 100.0 & 0.0 & -- \\
+    \cline{3-9}
+      & & Lv1 & \rqsurvived{\textbf{10/10} (--)} & \rqsurvived{\textbf{10/10} (--)}
+        & 98.0 & 100.0 & 0.7 & 127 \\
+    \cline{3-9}
+      & & Lv2 & \rqsurvived{7/10 (24)} & \rqsurvived{\textbf{10/10} (--)}
+        & 90.3 & 100.0 & 12.4 & 262 \\
+    \cline{3-9}
+      & & Lv3 & \rqsurvived{1/10 (13)} & \rqsurvived{\textbf{10/10} (--)}
+        & 85.3 & 98.0 & 35.9 & 284 \\
+    \cline{3-9}
+      & & Lv4 & \rqsurvived{0/10 (8)} & \rqsurvived{\textbf{10/10} (--)}
+        & 58.0 & 95.7 & 37.9 & 437 \\
+    \cline{3-9}
+      & & Lv5 & \rqsurvived{0/10 (8)} & \rqsurvived{\textbf{10/10} (--)}
+        & 45.3 & 94.3 & 42.1 & 470 \\
+    \cline{3-9}
+      & & Lv6 & \rqsurvived{0/10 (7)} & \rqsurvived{\textbf{10/10} (--)}
+        & 36.3 & 88.3 & 34.1 & 521 \\
+    \Xcline{2-9}{0.7pt}
+      & \multirow{7}{*}{\makecell[c]{24MP\\CPU\\stress}}
+      & Lv0 & \rqsurvived{7/10 (26)} & \rqsurvived{\textbf{10/10} (--)}
+        & 92.7 & 100.0 & 37.9 & 338 \\
+    \cline{3-9}
+      & & Lv1 & \rqsurvived{2/10 (19)} & \rqsurvived{\textbf{10/10} (--)}
+        & 66.7 & 90.0 & 35.2 & 470 \\
+    \cline{3-9}
+      & & Lv2 & \rqsurvived{0/10 (14)} & \rqsurvived{\textbf{10/10} (--)}
+        & 58.3 & 79.0 & 37.2 & 377 \\
+    \cline{3-9}
+      & & Lv3 & \rqsurvived{0/10 (5)} & \rqsurvived{\textbf{10/10} (--)}
+        & 35.0 & 54.3 & 37.9 & 418 \\
+    \cline{3-9}
+      & & Lv4 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}
+        & 44.7 & 77.0 & 36.6 & 400 \\
+    \cline{3-9}
+      & & Lv5 & \rqsurvived{0/10 (4)} & \rqsurvived{\textbf{10/10} (--)}
+        & 17.3 & 52.7 & 29.3 & 367 \\
+    \cline{3-9}
+      & & Lv6 & \rqsurvived{0/10 (3)} & \rqsurvived{\textbf{10/10} (--)}
+        & 25.0 & 46.7 & 29.3 & 525 \\
+    \Xcline{1-9}{0.7pt}
     \multirow{14}{*}{S26}
       & \multirow{7}{*}{\makecell[c]{12MP\\normal}}
-      & Lv0 & 10 & \rqsurvived{7/10 (28)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 30.0 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 2.6 & \textbf{--} & 159 \\
-    \cline{3-14}
-      & & Lv1 & 10 & \rqsurvived{5/10 (26)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 30.0 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 3.7 & \textbf{--} & 241 \\
-    \cline{3-14}
-      & & Lv2 & 10 & \rqsurvived{4/10 (22)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 30.0 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 5.3 & \textbf{--} & 256 \\
-    \cline{3-14}
-      & & Lv3 & 10 & \rqsurvived{0/10 (15)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 26.9 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 11.8 & \textbf{--} & 277 \\
-    \cline{3-14}
-      & & Lv4 & 10 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 16.8 & \textbf{5.0} & 22.4
-        & \textbf{0.1} & 15.4 & \textbf{31} & 297 \\
-    \cline{3-14}
-      & & Lv5 & 10 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 13.7 & \textbf{5.0} & 23.7
-        & \textbf{0.2} & 12.7 & \textbf{183} & 392 \\
-    \cline{3-14}
-      & & Lv6 & 10 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 12.4 & \textbf{5.0} & 19.9
-        & \textbf{0.4} & 15.1 & \textbf{237} & 410 \\
-    \Xcline{2-14}{0.7pt}
-      & \multirow{7}{*}{\makecell[c]{24MP\\\textcolor{red}{CPU}\\\textcolor{red}{stress}}}
-      & Lv0 & 10 & \rqsurvived{1/10 (23)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 30.0 & \textbf{5.0} & 30.0
-        & \textbf{0.0} & 15.2 & \textbf{--} & 330 \\
-    \cline{3-14}
-      & & Lv1 & 10 & \rqsurvived{1/10 (21)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 28.0 & \textbf{5.0} & 28.6
-        & \textbf{0.0} & 12.4 & \textbf{--} & 255 \\
-    \cline{3-14}
-      & & Lv2 & 10 & \rqsurvived{0/10 (19)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 17.8 & \textbf{5.0} & 23.0
-        & \textbf{0.0} & 14.2 & \textbf{--} & 419 \\
-    \cline{3-14}
-      & & Lv3 & 10 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 21.5 & \textbf{5.0} & 29.1
-        & \textbf{0.3} & 17.4 & \textbf{96} & 466 \\
-    \cline{3-14}
-      & & Lv4 & 10 & \rqsurvived{0/10 (6)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 22.2 & \textbf{5.0} & 27.4
-        & \textbf{0.1} & 17.7 & \textbf{31} & 458 \\
-    \cline{3-14}
-      & & Lv5 & 10 & \rqsurvived{0/10 (5)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 7.2 & \textbf{5.0} & 9.2
-        & \textbf{0.9} & 7.3 & \textbf{397} & 538 \\
-    \cline{3-14}
-      & & Lv6 & 10 & \rqsurvived{0/10 (6)} & \rqsurvived{\textbf{10/10} (--)}
-        & \textbf{5.0} & 6.5 & \textbf{5.0} & 7.8
-        & \textbf{1.5} & 6.4 & \textbf{367} & 467 \\
+      & Lv0 & \rqsurvived{7/10 (28)} & \rqsurvived{\textbf{10/10} (--)}
+        & 100.0 & 100.0 & 9.0 & 159 \\
+    \cline{3-9}
+      & & Lv1 & \rqsurvived{5/10 (26)} & \rqsurvived{\textbf{10/10} (--)}
+        & 100.0 & 100.0 & 12.8 & 241 \\
+    \cline{3-9}
+      & & Lv2 & \rqsurvived{4/10 (22)} & \rqsurvived{\textbf{10/10} (--)}
+        & 100.0 & 100.0 & 18.3 & 256 \\
+    \cline{3-9}
+      & & Lv3 & \rqsurvived{0/10 (15)} & \rqsurvived{\textbf{10/10} (--)}
+        & 89.7 & 100.0 & 40.7 & 277 \\
+    \cline{3-9}
+      & & Lv4 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
+        & 56.0 & 74.7 & 53.1 & 297 \\
+    \cline{3-9}
+      & & Lv5 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
+        & 45.7 & 79.0 & 43.8 & 392 \\
+    \cline{3-9}
+      & & Lv6 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
+        & 41.3 & 66.3 & 52.1 & 410 \\
+    \Xcline{2-9}{0.7pt}
+      & \multirow{7}{*}{\makecell[c]{24MP\\CPU\\stress}}
+      & Lv0 & \rqsurvived{1/10 (23)} & \rqsurvived{\textbf{10/10} (--)}
+        & 100.0 & 100.0 & 52.4 & 330 \\
+    \cline{3-9}
+      & & Lv1 & \rqsurvived{1/10 (21)} & \rqsurvived{\textbf{10/10} (--)}
+        & 93.3 & 95.3 & 42.8 & 255 \\
+    \cline{3-9}
+      & & Lv2 & \rqsurvived{0/10 (19)} & \rqsurvived{\textbf{10/10} (--)}
+        & 59.3 & 76.7 & 49.0 & 419 \\
+    \cline{3-9}
+      & & Lv3 & \rqsurvived{0/10 (9)} & \rqsurvived{\textbf{10/10} (--)}
+        & 71.7 & 97.0 & 60.0 & 466 \\
+    \cline{3-9}
+      & & Lv4 & \rqsurvived{0/10 (6)} & \rqsurvived{\textbf{10/10} (--)}
+        & 74.0 & 91.3 & 61.0 & 458 \\
+    \cline{3-9}
+      & & Lv5 & \rqsurvived{0/10 (5)} & \rqsurvived{\textbf{10/10} (--)}
+        & 24.0 & 30.7 & 25.2 & 538 \\
+    \cline{3-9}
+      & & Lv6 & \rqsurvived{0/10 (6)} & \rqsurvived{\textbf{10/10} (--)}
+        & 21.7 & 26.0 & 22.1 & 467 \\
     \hline\hline
   \end{tabular}}%
-  \fittabcolsep{\rqtabbox}{\rqtabular}{\textwidth}{28}%
-  \rqtabular
-  \par
-  \makebox[\textwidth][l]{\textsuperscript{*}Timeout onset (in parentheses) is the earliest capture number at which a Capture Timeout occurred across the ten runs.}
+  \fittabcolsep{\rqtabbox}{\rqtabular}{\columnwidth}{18}%
+  \rqtabular\par
+  \raggedright
+  \textbf{Completed runs} -- How many of the ten runs finished all 30 captures.\newline
+  The number in parentheses identifies the earliest capture number at which any run timed out.\par
+  \textbf{Stage execution} -- For each stage (\(M\) or \(S\)), the percentage of captures in which it ran.\par
+  \textbf{Pacing cost} -- Activation is the percentage of transitions paced. Delay is their median delay.\par
   }
-\end{table*}
+\end{table}
