@@ -3,10 +3,8 @@
 
 \input{tables/tab_rq1_end_to_end_summary.tex}
 
-Table~\ref{tab:rq1_controller_behavior} shows that our controller completed every run without Capture Timeout in all 28 settings while still executing optional stages.
-Each row reports one setting, with stage-execution and pacing-activation counts averaged over its ten analyzed runs.
-The \texttt{@5} and \texttt{@30} columns cover the first five and all 30 captures, respectively.
-Here, \(\mathit{delay}\)~P50 is the median of positive applied delays, measuring delay size only when pacing activates.
+Table~\ref{tab:rq1_controller_behavior} shows that our controller completed every run without Capture Timeout in all 28 settings while still executing optional stages, at the cost of pacing delays.
+Each row reports one setting, with stage-execution and pacing-activation percentages computed over all 30 captures of its ten analyzed runs.
 
 \myparagraph{Deadline Safety}
 Our controller completed all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
@@ -14,15 +12,15 @@ In particular, Baseline timed out in 14 of the 16 settings starting below the th
 In contrast, our controller avoided these timeouts, and watchdog fallback occurred during \(M\) in only 2 of the 280 runs (0.7\%), both under \textcolor{red}{CPU stress}.
 
 \myparagraph{Stage Execution}
-During the first five captures, the average execution counts per run were at least 4.5 for \(M\) and 4.6 for \(S\) in every setting.
-Both stages executed on all five captures in 23 of the 28 settings.
 Over all 30 captures, stage execution generally decreased as the starting overheat level increased for each device and capture condition.
-Notably, in the twelve settings starting at or above the guard's level-4 cutoff, \(M\) still executed on 5.2--22.2 of 30 captures per run on average.
+Notably, in the twelve settings starting at or above the guard's level-4 cutoff, \(M\) still executed on 17.3--74.0\% of captures.
+To examine camera usability during early consecutive captures, we further analyzed the first five captures of each run.
+In these captures, the average execution counts per run were at least 4.5 for \(M\) and 4.6 for \(S\) in every setting.
 These results indicate that our controller executed optional stages even in settings where the static thermal guard would skip them at the first capture.
 
 \myparagraph{Pacing Cost}
-Pacing was inactive during the first five captures on both devices in the 12MP normal settings starting below overheat level~4.
-Of the four shot-to-shot transitions among the first five captures, pacing activated on none in 14 of the 28 settings and on at most 1.8 per run on average in any setting.
-Across settings, the maximum \(\mathit{delay}\)~P50 for the first five captures was 737~ms, about 55\% of the corresponding shot-to-shot interval with parallel capture disabled.
-Over all 30 captures, pacing activated on up to 17.7 of the 29 transitions per run on average, with \(\mathit{delay}\)~P50 of 127--538~ms in settings where pacing activated.
-These results indicate that pacing's responsiveness cost remained limited during early consecutive captures.
+On average, pacing activated on 33.9\% of the 29 shot-to-shot transitions, with median delays of 127--538~ms in settings where pacing activated.
+Even with these delays, the mean shot-to-shot interval was 21--54\% of the estimated interval with parallel capture disabled.
+This estimate is the time from request acceptance to the completion of a draft sequence that executes both \(M\) and \(S\) in the same setting.
+Moreover, during the first five captures, pacing did not activate in any of the eight production-default 12MP normal settings starting below the guard's level-4 cutoff.
+These findings show that our controller retained the responsiveness benefit of parallel capture despite pacing delays.
