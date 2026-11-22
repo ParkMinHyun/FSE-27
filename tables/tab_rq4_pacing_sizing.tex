@@ -8,31 +8,42 @@
 
   {\scriptsize
   \renewcommand{\arraystretch}{1.08}%
-  \setlength{\tabcolsep}{8pt}%
+  \setlength{\aboverulesep}{0pt}%
+  \setlength{\belowrulesep}{0pt}%
+  \newsavebox{\rqpacingbox}%
+  \newcommand{\rqpacingtabular}{%
   \begin{tabular}{@{}%
       l|%
       l|%
       r|r|r%
-    @{}}
+    }
     \toprule
-    \multicolumn{2}{@{}c|}{\makecell[c]{\textbf{Group}\\\textbf{(\% of budget)}}}
-      & \multicolumn{1}{c|}{\makecell[c]{\mbox{\boldmath$n$}}}
-      & \multicolumn{1}{c|}{\makecell[c]{\textbf{Pacing activated}\\\textbf{\% (\mbox{\boldmath$n$})}}}
-      & \multicolumn{1}{c}{\makecell[c]{\mbox{\boldmath$\mathit{delay}/B$}\\\textbf{P50}}} \\
+    \multicolumn{2}{@{}c@{}|}{\multirow[c]{2}{*}[-0.5\normalbaselineskip]{\makecell[c]{\textbf{Group}\\\textbf{(\% of timeout budget)}}}}
+      & \multicolumn{3}{c}{\textbf{Pacing cost}} \\
+    \cline{3-5}
+    \multicolumn{2}{@{}c@{}|}{}
+      & \multicolumn{1}{c|}{\makecell[c]{\textbf{Activation}\\\textbf{(\%)}}}
+      & \multicolumn{1}{c|}{\makecell[c]{\textbf{Delay}\\\textbf{(ms)}}}
+      & \multicolumn{1}{c}{\makecell[c]{\textbf{Delay}\\\textbf{(\% of backlog)}}} \\
     \midrule
 
-    \multirow{4}{*}{\makecell[l]{\textbf{(a)} Backlog \(B\)\\at the decision}}
-      & \(<10\%\)     & 556 &  \phantom{0}0.0\% \phantom{00}(0) &    --  \\
-      & 10--30\%      & 894 &  \phantom{0}8.2\% \phantom{0}(73)  & 29.1\% \\
-      & 30--50\%      & 912 &           45.0\% (410)             & 13.0\% \\
-      & \(\geq 50\%\) & 688 &  \cellcolor{gray!20}\textbf{83.4\% (574)} &  8.3\% \\
+    \multirow{4}{*}{\textbf{(a)} Backlog}
+      & \(<10\%\)     &  0.0 &  -- &    --  \\
+      & 10--30\%      &  8.2 & 419 & 29.1\% \\
+      & 30--50\%      & 45.0 & 377 & 13.0\% \\
+      & \(\geq 50\%\) & 83.4 & 348 & 8.3\% \\
     \midrule
 
-    \multirow{3}{*}{\makecell[l]{\textbf{(b)} Slack at\\draft sequence\\completion}}
-      & \(<20\%\)     & 869 & 85.4\% (742)          & 10.1\% \\
-      & \(<10\%\)     & 392 & 92.3\% (362)          & 10.7\% \\
-      & \(<5\%\)      & 139 & \cellcolor{gray!20}\textbf{95.7\% (133)} & 11.2\% \\
+    \multirow{3}{*}{\textbf{(b)} Slack}
+      & \(<20\%\)     & 85.4 & 375 & 10.1\% \\
+      & \(<10\%\)     & 92.3 & 439 & 10.7\% \\
+      & \(<5\%\)      & 95.7 & 474 & 11.2\% \\
     \bottomrule
-  \end{tabular}%
+  \end{tabular}}%
+  \fittabcolsep{\rqpacingbox}{\rqpacingtabular}{\columnwidth}{10}%
+  \rqpacingtabular\par
+  \raggedright
+  \textbf{Backlog} -- Time needed at the pacing decision to complete remaining draft work from earlier captures, reconstructed from the completed trace.\par
+  \textbf{Slack} -- Time remaining before Capture Timeout when the capture's draft sequence completes.\par
   }
 \end{table}

@@ -136,9 +136,8 @@ def cell(x):
                             still outstanding, so it says the delay did not idle
                             the worker.  Keep the two apart in prose.
 
-    The absolute delay is deliberately absent from the RQ4 table: RQ1 and RQ2
-    both print d P50, RQ1 per thermal level, so repeating it here would spend a
-    column on a number the reader already has.
+    The RQ4 table prints delayP50Ms alongside dOverBacklogP50Percent to show
+    both absolute and backlog-relative pacing delay.
     """
     paced = x[x['paced']]
     d_i, b_i = paced['delay'], paced['realBacklogMs']

@@ -3,19 +3,21 @@
 
 \input{tables/tab_rq4_pacing_sizing.tex}
 
-To examine how queue pressure and deadline margins affect pacing, we analyzed 3{,}050 pacing decisions recorded under \emph{Full} in the production-default 12MP normal condition on both devices.
+To examine how queue pressure and deadline margins affect pacing, we analyzed pacing decisions recorded under \emph{Full} in the production-default 12MP normal condition on both devices.
 Table~\ref{tab:rq4_pacing_sizing} groups these decisions by percentages of the Capture Timeout budget: Panel~(a) by the backlog \(B_i\) measured from the completed trace, and Panel~(b) by slack, the deadline margin at draft sequence completion.
-The ratio \(\mathit{delay}_i/B_i\) includes only paced decisions (\(\mathit{delay}_i>0\)).
+The Activation column reports the percentage of decisions on which pacing activated.
+For these decisions, the Delay columns report the median applied delay in milliseconds and the median ratio of delay to backlog as a percentage.
 
 \myparagraph{Backlog Response}
 Table~\ref{tab:rq4_pacing_sizing} shows that pacing activated more often as measured backlog increased, while its median delay relative to backlog decreased.
 Activation increased from 0\% in the \(<10\%\) backlog group to 83.4\% in the \(\geq 50\%\) group.
-Among paced decisions, the median \(\mathit{delay}_i/B_i\) fell from 29.1\% in the 10--30\% group to 8.3\% in the \(\geq 50\%\) group.
-Note that this falling ratio describes relative delay and does not imply a decrease in absolute delay.
+Between the 10--30\% and \(\geq 50\%\) backlog groups, the median applied delay and the median ratio of delay to backlog decreased from 419 to 348~ms and from 29.1\% to 8.3\%, respectively.
+Pacing determines the delay from the excess of projected draft workload over the remaining queue-level budget (Section~\ref{sec:pacing}).
+Admission skips reduce the workload included in subsequent projections and can therefore shorten pacing delays even when measured backlog is high.
 
 \myparagraph{Selective Pacing}
 High measured backlog alone was not sufficient to trigger pacing.
-In the \(\geq 50\%\) backlog group, 574 of 688 decisions were paced, leaving 114 unpaced.
+In the \(\geq 50\%\) backlog group, 83.4\% of decisions (574 of 688) were paced, leaving 114 unpaced.
 Of these 114, 58 had no projected excess over the queue-level budget used by pacing and occurred predominantly at lower overheat levels.
 For the other 56, an earlier admission skip had reduced the projected draft work to within this budget.
 
