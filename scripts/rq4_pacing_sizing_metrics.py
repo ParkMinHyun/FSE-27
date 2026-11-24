@@ -1,12 +1,16 @@
 """RQ4 evidence: pacing response to Draft queue pressure, and coverage of the
 captures that still finished close to the deadline.
 
-Emits the inputs of tables/tab_rq4_pacing_sizing.tex.  See docs/exhibits.md for
-that entry.  RQ4 ships no figure: a capture-aligned episode figure was drafted
-and withdrawn because fig_casestudy_12mp already plots a per-capture trace of
-the same shape.  The episode pass is kept because the prose quotes the per-run
-peak backlog it produces; episode_aligned.csv is a by-product and nothing reads
-it.
+Emits the inputs of figures/fig_rq4_pacing_activation.tex (slack_profile.csv,
+12MP normal rows) and of the backlog groups the RQ4 prose quotes
+(pressure_response.csv).  tables/tab_rq4_pacing_sizing.tex, which printed the
+backlog groups and the cumulative <20/<10/<5 slack groups, is no longer input
+by the manuscript; its values remain reproducible from pressure_response.csv
+and thin_margin_coverage.csv.
+A capture-aligned episode figure was drafted and withdrawn because
+fig_casestudy_12mp already plots a per-capture trace of the same shape.  The
+episode pass is kept because the prose quotes the per-run peak backlog it
+produces; episode_aligned.csv is a by-product and nothing reads it.
 
 Row semantics, from the workbooks' own ReplayNotes sheet
 --------------------------------------------------------
@@ -78,6 +82,13 @@ BANDS = ((0.0, 10.0, '<10'), (10.0, 30.0, '10-30'),
          (30.0, 50.0, '30-50'), (50.0, 1e9, '>=50'))
 # Realized-margin thresholds the coverage panel reports, in percent of budget.
 THIN = (5.0, 10.0, 20.0)
+# Width of the slack groups in the RQ4 figure, in percent of budget.  The
+# groups are half-open [lo, lo + SLACK_STEP) and tile the whole realized range.
+SLACK_STEP = 5.0
+# The figure draws a group's median delay only when the group has at least
+# this many paced decisions; above about 45% slack a group holds five or fewer,
+# too few for a stable median.  The quartiles stay in the CSV as context.
+DELAY_MIN_PACED = 10
 # Margin below which a decision joins the tail the prose has to characterize.
 TAIL = 1.0
 # A pressure episode opens when measured backlog reaches ON percent of the
@@ -136,8 +147,8 @@ def cell(x):
                             still outstanding, so it says the delay did not idle
                             the worker.  Keep the two apart in prose.
 
-    The RQ4 table prints delayP50Ms alongside dOverBacklogP50Percent to show
-    both absolute and backlog-relative pacing delay.
+    The RQ4 prose quotes delayP50Ms alongside dOverBacklogP50Percent for the
+    backlog groups to show both absolute and backlog-relative pacing delay.
     """
     paced = x[x['paced']]
     d_i, b_i = paced['delay'], paced['realBacklogMs']
@@ -150,8 +161,8 @@ def cell(x):
         'delayP50Ms': d_i.median() if len(paced) else np.nan,
         'slackP5Percent': x['slack'].quantile(0.05),
         'slackMinPercent': x['slack'].min(),
-        # Admission is RQ3's subject, and none of the four below are printed by
-        # the RQ4 table.  They stay in the CSV because the coordination note
+        # Admission is RQ3's subject, and none of the four below are quoted in
+        # RQ4.  They stay in the CSV because the coordination note
         # and the thin-margin prose need them, and because delayP50Ms and
         # slackP5Percent remain the cross-check against RQ1.
         'skippedPercent': 100.0 * x['skipped'].mean(),
@@ -160,7 +171,8 @@ def cell(x):
 
 
 def response(d):
-    """Panel (a): the deployed response across the queue-pressure bands."""
+    """Backlog groups quoted in the RQ4 prose (formerly Table 6(a)): the
+    deployed response across the queue-pressure bands."""
     rows = []
     for condition in CONDITIONS:
         part = d[d['condition'] == condition]
@@ -171,8 +183,9 @@ def response(d):
 
 
 def coverage(d):
-    """Panel (b): what the controller was doing on the captures that still
-    finished close to the deadline, and how the untouched decisions ended."""
+    """Cumulative thin-slack groups (formerly Table 6(b), kept for provenance):
+    what the controller was doing on the captures that still finished close to
+    the deadline, and how the untouched decisions ended."""
     rows = []
     for condition in CONDITIONS:
         part = d[d['condition'] == condition]
@@ -183,6 +196,25 @@ def coverage(d):
         x = part[~part['either']]
         rows.append({'condition': condition, 'group': 'no intervention',
                      **cell(x), 'noActionCount': len(x)})
+    return pd.DataFrame(rows)
+
+
+def slack_profile(d):
+    """Figure: activation over the whole realized slack range, one row per
+    SLACK_STEP-wide group.  The first group equals the slack<5 row of
+    coverage(), and the cumulative slack<10 and slack<20 rows are its prefixes."""
+    rows = []
+    for condition in CONDITIONS:
+        part = d[d['condition'] == condition]
+        top = SLACK_STEP * np.ceil(part['slack'].max() / SLACK_STEP)
+        for lo in np.arange(0.0, top, SLACK_STEP):
+            x = part[(part['slack'] >= lo) & (part['slack'] < lo + SLACK_STEP)]
+            delay = x.loc[x['paced'], 'delay']
+            rows.append({'condition': condition, 'slackLo': lo,
+                         'slackHi': lo + SLACK_STEP, **cell(x),
+                         'delayP25Ms': delay.quantile(0.25) if len(delay) else np.nan,
+                         'delayP75Ms': delay.quantile(0.75) if len(delay) else np.nan,
+                         'delayShown': len(delay) >= DELAY_MIN_PACED})
     return pd.DataFrame(rows)
 
 
@@ -298,10 +330,16 @@ def main():
                              len(CONDITIONS), int((d['captureTimedOut'] == True).sum())))
 
     resp, cov = response(d), coverage(d)
-    print('\n=== panel (a) response by Draft queue pressure ===')
+    print('\n=== backlog groups (prose) response by Draft queue pressure ===')
     print(resp.round(1).to_string(index=False))
-    print('\n=== panel (b) coverage of the thin-margin captures ===')
+    print('\n=== cumulative thin-slack groups (former panel b) coverage ===')
     print(cov.round(1).to_string(index=False))
+
+    prof = slack_profile(d)
+    print('\n=== figure: activation by %g%% slack group ===' % SLACK_STEP)
+    print(prof[['condition', 'slackLo', 'slackHi', 'n', 'pacedCount', 'pacedPercent',
+                'delayP25Ms', 'delayP50Ms', 'delayP75Ms',
+                'delayShown']].round(2).to_string(index=False))
 
     ld = lead(d)
     print('\n=== lead over the first capture of a run under 10% margin ===')
@@ -327,15 +365,16 @@ def main():
         print('%s: %s' % (condition, tail(d, condition)))
 
     if write:
-        # Only the two frames behind the printed cells are written.  No .tex
-        # reads them -- the table's values are typed in -- so they exist as the
-        # provenance of those values, one row per printed row, cheap to diff.
+        # Only the frames behind the quoted values and the figure are written.
+        # No .tex reads them -- the prose and figure values are typed in -- so
+        # they exist as the provenance of those values, cheap to diff.
         # The episode and per-run peak frames stay on stdout: the prose quotes
         # three numbers from them and the frames themselves are not worth
         # carrying in the repository.
         os.makedirs(OUT, exist_ok=True)
         resp.to_csv(os.path.join(OUT, 'pressure_response.csv'), index=False)
         cov.to_csv(os.path.join(OUT, 'thin_margin_coverage.csv'), index=False)
+        prof.to_csv(os.path.join(OUT, 'slack_profile.csv'), index=False)
         print('\nwrote %s' % OUT)
 
 
