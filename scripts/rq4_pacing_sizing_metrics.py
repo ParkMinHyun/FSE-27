@@ -1,12 +1,10 @@
 """RQ4 evidence: pacing response to Draft queue pressure, and coverage of the
 captures that still finished close to the deadline.
 
-Emits the inputs of figures/fig_rq4_pacing_activation.tex (slack_profile.csv,
-12MP normal rows) and of the backlog groups the RQ4 prose quotes
-(pressure_response.csv).  tables/tab_rq4_pacing_sizing.tex, which printed the
-backlog groups and the cumulative <20/<10/<5 slack groups, is no longer input
-by the manuscript; its values remain reproducible from pressure_response.csv
-and thin_margin_coverage.csv.
+Emits the device-specific inputs of figures/fig_rq4_pacing_activation.tex
+(slack_profile_by_device.csv, 12MP normal rows), pooled slack profiles
+(slack_profile.csv), and the table inputs (pressure_response.csv and
+thin_margin_coverage.csv).
 A capture-aligned episode figure was drafted and withdrawn because
 fig_casestudy_12mp already plots a per-capture trace of the same shape.  The
 episode pass is kept because the prose quotes the per-run peak backlog it
@@ -47,8 +45,9 @@ intervention is bounded separately by the delay columns and by RQ1.
 
 Population
 ----------
-The four full-controller workbooks, pooled by capture condition over the two
-devices.  Runs whose runStatus is CAPTURE_TIMEOUT are excluded: the author
+The four full-controller workbooks.  Pooled summaries combine the two devices
+by capture condition; device-specific slack profiles keep them separate.
+Runs whose runStatus is CAPTURE_TIMEOUT are excluded: the author
 confirmed on 2026-09-08 that they are operator test captures, not evaluation
 runs.  Rows without a recorded pacing decision, or without a reconstructed
 backlog, are excluded per decision, not per run.
@@ -85,9 +84,9 @@ THIN = (5.0, 10.0, 20.0)
 # Width of the slack groups in the RQ4 figure, in percent of budget.  The
 # groups are half-open [lo, lo + SLACK_STEP) and tile the whole realized range.
 SLACK_STEP = 5.0
-# The figure draws a group's median delay only when the group has at least
-# this many paced decisions; above about 45% slack a group holds five or fewer,
-# too few for a stable median.  The quartiles stay in the CSV as context.
+# The figure connects medians for all nonempty groups. Groups with fewer than
+# this many paced decisions use open markers and show their paced counts.
+# The quartiles stay in the CSV as context.
 DELAY_MIN_PACED = 10
 # Margin below which a decision joins the tail the prose has to characterize.
 TAIL = 1.0
@@ -214,8 +213,19 @@ def slack_profile(d):
                          'slackHi': lo + SLACK_STEP, **cell(x),
                          'delayP25Ms': delay.quantile(0.25) if len(delay) else np.nan,
                          'delayP75Ms': delay.quantile(0.75) if len(delay) else np.nan,
-                         'delayShown': len(delay) >= DELAY_MIN_PACED})
+                         'delayShown': len(delay) > 0,
+                         'delaySmallSample': 0 < len(delay) < DELAY_MIN_PACED})
     return pd.DataFrame(rows)
+
+
+def slack_profile_by_device(d):
+    """The same slack groups and delay statistics, separately for each device."""
+    frames = []
+    for device, part in d.groupby('device', sort=True):
+        frame = slack_profile(part)
+        frame.insert(0, 'device', device)
+        frames.append(frame)
+    return pd.concat(frames, ignore_index=True)
 
 
 def lead(d):
@@ -339,7 +349,13 @@ def main():
     print('\n=== figure: activation by %g%% slack group ===' % SLACK_STEP)
     print(prof[['condition', 'slackLo', 'slackHi', 'n', 'pacedCount', 'pacedPercent',
                 'delayP25Ms', 'delayP50Ms', 'delayP75Ms',
-                'delayShown']].round(2).to_string(index=False))
+                'delayShown', 'delaySmallSample']].round(2).to_string(index=False))
+
+    device_prof = slack_profile_by_device(d)
+    print('\n=== figure: slack groups by device ===')
+    print(device_prof[['device', 'condition', 'slackLo', 'slackHi', 'n',
+                       'pacedCount', 'pacedPercent', 'delayP50Ms',
+                       'delayShown', 'delaySmallSample']].round(2).to_string(index=False))
 
     ld = lead(d)
     print('\n=== lead over the first capture of a run under 10% margin ===')
@@ -375,6 +391,7 @@ def main():
         resp.to_csv(os.path.join(OUT, 'pressure_response.csv'), index=False)
         cov.to_csv(os.path.join(OUT, 'thin_margin_coverage.csv'), index=False)
         prof.to_csv(os.path.join(OUT, 'slack_profile.csv'), index=False)
+        device_prof.to_csv(os.path.join(OUT, 'slack_profile_by_device.csv'), index=False)
         print('\nwrote %s' % OUT)
 
 

@@ -3,7 +3,7 @@
   \centering
   \setlength{\abovecaptionskip}{2pt}%
   \setlength{\belowcaptionskip}{3pt}%
-  \caption{Pacing decisions by backlog and slack (RQ4).}
+  \caption{Pacing decisions by backlog and remaining timeout budget at draft completion (RQ4).}
   \label{tab:rq4_pacing_sizing}
 
   {\scriptsize
@@ -34,7 +34,7 @@
       & \(\geq 50\%\) & 83.4 & 348 & 8.3\% \\
     \midrule
 
-    \multirow{3}{*}{\textbf{(b)} Slack}
+    \multirow{3}{*}{\makecell[l]{\textbf{(b)} Remaining\\timeout budget\\at draft completion}}
       & \(<20\%\)     & 85.4 & 375 & 10.1\% \\
       & \(<10\%\)     & 92.3 & 439 & 10.7\% \\
       & \(<5\%\)      & 95.7 & 474 & 11.2\% \\
@@ -44,6 +44,6 @@
   \rqpacingtabular\par
   \raggedright
   \textbf{Backlog} -- Time needed at the pacing decision to complete remaining draft work from earlier captures, reconstructed from the completed trace.\par
-  \textbf{Slack} -- Time remaining before Capture Timeout when the capture's draft sequence completes.\par
+  \textbf{Remaining timeout budget at draft completion} -- Time remaining before Capture Timeout when the capture's draft sequence completes.\par
   }
 \end{table}
