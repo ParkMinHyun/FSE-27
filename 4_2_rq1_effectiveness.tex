@@ -9,7 +9,8 @@ Each row reports one setting, with stage-execution and pacing-activation percent
 \myparagraph{Deadline Safety}
 Our controller completed all 280 runs without Capture Timeout, whereas Baseline completed only 55 of 280 runs.
 In particular, Baseline timed out in 14 of the 16 settings starting below the thermal guard's level-4 cutoff.
-In contrast, our controller avoided these timeouts, and watchdog fallback occurred during \(M\) in only 2 of the 280 runs (0.7\%), both under \textcolor{red}{CPU stress}.
+In contrast, our controller avoided these timeouts.
+Watchdog fallback occurred during \(M\) in only 2 of the 280 runs (0.7\%), one each at starting overheat levels~4 and~6 on the S26 Ultra under 24MP \textcolor{red}{CPU stress}.
 
 \myparagraph{Stage Execution}
 Over all 30 captures, stage execution generally decreased as the starting overheat level increased for each device and capture condition.
@@ -19,7 +20,7 @@ In these captures, the average execution counts per run were at least 4.5 for \(
 These results indicate that our controller executed optional stages even in settings where the static thermal guard would skip them at the first capture.
 
 \myparagraph{Pacing Cost}
-On average, pacing activated on 33.9\% of the 29 shot-to-shot transitions, with median delays of 127--538~ms in settings where pacing activated.
+On average, pacing activated on 33.8\% of the 29 shot-to-shot transitions, with median delays of 127--538~ms in settings where pacing activated.
 Even with these delays, the mean shot-to-shot interval was 21--54\% of the estimated interval with parallel capture disabled.
 This estimate is the time from request acceptance to the completion of a draft sequence that executes both \(M\) and \(S\) in the same setting.
 Moreover, during the first five captures, pacing did not activate in any of the eight production-default 12MP normal settings starting below the guard's level-4 cutoff.
